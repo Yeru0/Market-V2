@@ -1,0 +1,52 @@
+import fs from "node:fs";
+import readline from "node:readline";
+import { Record } from "./dbObjects";
+
+// Reads any file line by line and returns them into an object
+export const readLbL: Promise<[string], Error> = (fileName: string) => {
+    return new Promise((resolve, reject) => {
+
+        try {
+            const fileStream = fs.createReadStream(`db/tables/${fileName}`);
+
+            const rl = readline.createInterface({
+                input: fileStream,
+                crlfDelay: Infinity, // To handle different line endings properly
+            });
+
+            let lines: [string] = [];
+            // Returns the line every time the a new line is read
+            rl.on("line", (line) => {
+                lines.push(line.trim());
+            });
+
+            // When the stream closes
+            rl.on("close", () => {
+                resolve(lines);
+            });
+
+        } catch (err) {
+            reject(err ? err : "An unexpected error occurred");
+        }
+
+    });
+};
+
+export const writeLbL: Promise<[string], Error> = (fileName: string, linesToWrite: [string]) => {
+    return new Promise((resolve, reject) => {
+
+
+        for (const line of linesToWrite) {
+            fs.appendFile(`db/tables/${fileName}`, `\n${line}`, (err) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve("finished");
+                }
+            });
+        }
+
+
+
+    });
+};

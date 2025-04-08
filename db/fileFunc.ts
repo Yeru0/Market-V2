@@ -3,8 +3,8 @@ import readline from "node:readline";
 import { Record } from "./dbObjects";
 
 // Reads any file line by line and returns them into an object
-export const readLbL: Promise<[string], Error> = (fileName: string) => {
-    return new Promise((resolve, reject) => {
+export function readLbL(fileName: string): Promise<string[]> {
+    return new Promise((resolve: (value: string[]) => void, reject: (value: Error) => void) => {
 
         try {
             const fileStream = fs.createReadStream(`db/tables/${fileName}`);
@@ -14,7 +14,7 @@ export const readLbL: Promise<[string], Error> = (fileName: string) => {
                 crlfDelay: Infinity, // To handle different line endings properly
             });
 
-            let lines: [string] = [];
+            let lines: string[] = [];
             // Returns the line every time the a new line is read
             rl.on("line", (line) => {
                 lines.push(line.trim());
@@ -26,13 +26,13 @@ export const readLbL: Promise<[string], Error> = (fileName: string) => {
             });
 
         } catch (err) {
-            reject(err ? err : "An unexpected error occurred");
+            reject(err);
         }
 
     });
 };
 
-export const writeLbL: Promise<[string], Error> = (fileName: string, linesToWrite: [string]) => {
+export  function writeLbL(fileName: string, linesToWrite:string[]): Promise<string> {
     return new Promise((resolve, reject) => {
 
 

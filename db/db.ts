@@ -1,15 +1,15 @@
-import { readLbL, writeLbL } from "./fileFunc";
-import { Record, Table } from "./dbObjects";
+import { readLbL } from "./fileFunc";
+import { Table } from "./dbObjects";
 
 
-const readTable: Table = async (tableName: string) => {
+const readTable: (tableName: string) => Promise<unknown> = async (tableName: string) => {
 
-    let data: [string] = await readLbL(`${tableName}.csv`);
+    let data: string[] = await readLbL(`${tableName}.csv`);
 
     // Slices off the header from data, puts the header into a separate
     // array, takes out the string from that array, then splits the
     // string apart into separate array elements into a new array
-    let header: [string] = data.splice(0, 1)[0].split(",");
+    let header: string[] = data.splice(0, 1)[0].split(",");
     let table = new Table(header);
 
     return new Promise((resolve, reject) => {

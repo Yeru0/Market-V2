@@ -32,20 +32,26 @@ export function readLbL(fileName: string): Promise<string[]> {
     });
 };
 
-export  function writeLbL(fileName: string, linesToWrite:string[]): Promise<string> {
+export function writeLbL(fileName: string, linesToWrite:string[], overwrite:boolean = false): Promise<string> {
     return new Promise((resolve, reject) => {
-
+        let header = linesToWrite.splice(0,1)
+        if(overwrite) {
+            fs.writeFile(`db/tables/${fileName}`, `${header[0]}`, (err) => {
+                if (err) {
+                    reject(err);
+                }
+            });
+        }
 
         for (const line of linesToWrite) {
             fs.appendFile(`db/tables/${fileName}`, `\n${line}`, (err) => {
                 if (err) {
                     reject(err);
-                } else {
-                    resolve("finished");
                 }
             });
         }
 
+        resolve("finished")
 
 
     });

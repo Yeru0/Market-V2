@@ -2,9 +2,16 @@ import crypto from "node:crypto";
 
 export class Record {
     id: string;
-    constructor(line: string[], header: string[]) {
+    constructor(line: string[], header: string[], needId?:boolean) {
 
-        if (!header[0].includes("id")) this.id = crypto.randomUUID();
+        if (!header[0].includes("id")) {
+            this.id = crypto.randomUUID()
+        } else if (needId) {
+            line.splice(header.indexOf("id"), 0, crypto.randomUUID())
+        };
+
+        if (header.length > line.length) throw new Error("DB ERROR: Not enough elements")
+        else if (header.length < line.length) throw new Error("DB ERROR: Too many elements")
 
         // For each field of the line it creates an object, where
         // the key is the corresponding header field, and the 
@@ -43,14 +50,27 @@ export class Record {
 export class Table {
     records: Record[];
     header: string[];
-    constructor(header: string[], records?: [Record]) {
+    constructor(header: string[], records: Record[]) {
         this.records = [];
         this.header = header;
         if (records) this.records = records;
+        if(!header.includes("id")) header.unshift("id")
     }
 
-    newRecord(line: string[]) {
-        this.records.push(new Record(line, this.header));
+
+
+    newRecord(line: string[], needID:boolean = true): Promise<string> {
+        return new Promise((resolve, reject) => {
+            if (this.header.length > line.length && !needID) reject("DB ERROR: Not enough elements")
+            else if (this.header.length < line.length) reject("DB ERROR: Too many elements")
+            else if (this.header.length > line.length + 1 && !needID) reject("DB ERROR: Not enough elements")
+        
+            let newRecord = new Record(line, this.header, needID)
+
+            this.records.push(newRecord);
+
+            resolve(`Added new record: ${newRecord}`)
+        })
     }
 
     getRecord(id: string) {
@@ -58,6 +78,14 @@ export class Table {
             if (record.getField("id") === id) return record;
         }
     };
+
+    getRecords() {
+        return this.records
+    }
+
+    getHeader () {
+        return this.header
+    }
 
     //TODO RUD accessors, for the header as well
 

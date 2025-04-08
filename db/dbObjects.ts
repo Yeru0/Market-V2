@@ -1,9 +1,10 @@
 import crypto from "node:crypto";
 
 export class Record {
-    constructor(line: [string], header: [string]) {
+    id: string;
+    constructor(line: string[], header: string[]) {
 
-        if (![header].includes("id")) this.id = crypto.randomUUID();
+        if (!header[0].includes("id")) this.id = crypto.randomUUID();
 
         // For each field of the line it creates an object, where
         // the key is the corresponding header field, and the 
@@ -40,13 +41,15 @@ export class Record {
 }
 
 export class Table {
-    constructor(header: [string], records?: [Record]) {
+    records: Record[];
+    header: string[];
+    constructor(header: string[], records?: [Record]) {
         this.records = [];
         this.header = header;
         if (records) this.records = records;
     }
 
-    newRecord(line: [string]) {
+    newRecord(line: string[]) {
         this.records.push(new Record(line, this.header));
     }
 

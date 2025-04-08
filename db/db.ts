@@ -4,7 +4,7 @@ import { Table } from "./dbObjects";
 
 const readTable: (tableName: string) => Promise<unknown> = async (tableName: string) => {
 
-    let data: [string] = await readLbL(`${tableName}.csv`);
+    let data: string[] = await readLbL(`${tableName}.csv`);
 
     // Slices off the header from data, puts the header into a separate
     // array, takes out the string from that array, then splits the

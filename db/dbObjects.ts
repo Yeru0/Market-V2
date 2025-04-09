@@ -1,6 +1,6 @@
 import crypto from "node:crypto";
 import { writeTable } from "./db";
-import { log } from "node:console";
+import { error, log } from "node:console";
 
 export class Record {
     id: string;
@@ -64,12 +64,12 @@ export class Table {
 
 
     newRecord(line: string[], needID:boolean = true): Promise<string> {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve: (value: string) => void, reject: (value: Error) => void) => {
             //Check if the length of the new record is correct
             //If it needs id, then that's an extra field
-            if (this.header.length > line.length && !needID) reject("DB ERROR: Not enough elements")
-            else if (this.header.length < line.length) reject("DB ERROR: Too many elements")
-            else if (this.header.length > line.length + 1 && !needID) reject("DB ERROR: Not enough elements")
+            if (this.header.length > line.length && !needID) reject(new Error("DB ERROR: Not enough elements"))
+            else if (this.header.length < line.length) reject(new Error("DB ERROR: Too many elements"))
+            else if (this.header.length > line.length + 1 && !needID) reject(new Error("DB ERROR: Not enough elements"))
         
             let newRecord = new Record(line, this.header, needID)
 
@@ -80,11 +80,11 @@ export class Table {
     }
 
     getRecord(id: string): Promise<Record> {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve: (value: Record) => void, reject: (value: Error) => void) => {
             for (const record of this.records) {
                 if (record.getField("id") === id) resolve(record);
             }
-            reject(`DB ERROR: Couldn't find record with id ${id}`)
+            reject(new Error(`DB ERROR: Couldn't find record with id ${id}`))
         })
     };
 
@@ -97,7 +97,7 @@ export class Table {
     }
 
     updateRecord(recordID: string, updateValue: string[]): Promise<string> {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve: (value: string) => void, reject: (value: Error) => void) => {
 
             let oldRecord: Record
             const newRecord = new Record(updateValue, this.header)
@@ -105,8 +105,8 @@ export class Table {
                 oldRecord = result
 
                 //Check if the amount of props match  
-                if(Object.keys(newRecord).length > Object.keys(oldRecord).length) reject(`DB ERROR: Too many elements`)
-                if(Object.keys(newRecord).length > Object.keys(oldRecord).length) reject(`DB ERROR: Not enough elements`)
+                if(Object.keys(newRecord).length > Object.keys(oldRecord).length) reject(new Error(`DB ERROR: Too many elements`))
+                if(Object.keys(newRecord).length > Object.keys(oldRecord).length) reject(new Error(`DB ERROR: Not enough elements`))
 
                 this.records[this.records.indexOf(oldRecord)] = newRecord
 
@@ -124,7 +124,7 @@ export class Table {
     }
 
     deleteRecord(recordID: string): Promise<string> {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve: (value: string) => void, reject: (value: Error) => void) => {
             
             this.getRecord(recordID).then((result) => {
                 let record: Record = result

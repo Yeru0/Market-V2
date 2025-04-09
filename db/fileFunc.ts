@@ -1,18 +1,13 @@
-import fs from "node:fs/promises";
+import fs from "node:fs";
 import readline from "node:readline";
 
 // Reads any file line by line and returns them into an object
 export function readLbL(fileName: string): Promise<string[]> {
-    return new Promise((resolve: (value: string[]) => void, reject: (value: Error | string) => void) => {
+    return new Promise((resolve: (value: string[]) => void, reject: (value: Error) => void) => {
 
-        fs.createReadStream(`db/tables/${fileName}`).then((result) => {
+        try {
 
-            let fileStream = result;
-
-
-        }).catch((err) => {
-            // TODO ITT TARTOTTal
-        });
+        let fileStream = fs.createReadStream(`db/tables/${fileName}`)
 
         const rl = readline.createInterface({
             input: fileStream,
@@ -30,11 +25,18 @@ export function readLbL(fileName: string): Promise<string[]> {
             resolve(lines);
         });
 
+        
+        } catch (error) {
+
+            reject(error)
+
+        }
+
     });
 };
 
 export function writeLbL(fileName: string, linesToWrite: string[], overwrite: boolean = false): Promise<string> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve: (value: string) => void, reject: (value: Error) => void) => {
         let header = linesToWrite.splice(0, 1);
         if (overwrite) {
             fs.writeFile(`db/tables/${fileName}`, `${header[0]}`, (err) => {

@@ -59,7 +59,11 @@ export const writeTable: (tableName: string, tableValue: Table, overwrite?:boole
 readTable("asd").then((result) => {
     let AsdTable = result;
 
-    AsdTable.updateRecord("67698eaa-2149-488a-be9e-7efd084759c5", ["67698eaa-2149-488a-be9e-7efd084759c5","This","Is","Sparta"])
+    AsdTable.deleteRecord("67698eaa-2149-488a-be9e-7efd084759c5").then((result) => {
+        console.log(result);
+    }).catch((result) => {
+        console.log(result);
+    })
 });
 
 /* TODO not handled empty table nonexistent */

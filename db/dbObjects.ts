@@ -1,5 +1,6 @@
 import crypto from "node:crypto";
 import { writeTable } from "./db";
+import { log } from "node:console";
 
 export class Record {
     id: string;
@@ -95,7 +96,7 @@ export class Table {
         return this.header
     }
 
-    updateRecord(recordID: string, updateValue: string[]) {
+    updateRecord(recordID: string, updateValue: string[]): Promise<string> {
         return new Promise((resolve, reject) => {
 
             let oldRecord: Record
@@ -109,17 +110,38 @@ export class Table {
 
                 this.records[this.records.indexOf(oldRecord)] = newRecord
 
-                writeTable(this.tableName, this, true)
+                writeTable(this.tableName, this, true).then(() => {
+                    resolve(`Successfully updated record with id ${recordID} in table ${this.tableName}`)
+                }).catch((err) => {
+                    reject(err)
+                })
 
             }).catch((err) => {
                 reject(err)
             })
 
-
-
         })
     }
 
-    //TODO RUD accessors, for the header as well
+    deleteRecord(recordID: string): Promise<string> {
+        return new Promise((resolve, reject) => {
+            
+            this.getRecord(recordID).then((result) => {
+                let record: Record = result
+
+                let oldRecord: Record[] = this.records.splice(this.records.indexOf(record), 1)
+              
+                writeTable(this.tableName, this, true).then((result) => {
+                    resolve(`Successfully removed record with id ${recordID}`)
+                }).catch((err) => {
+                    reject(err)
+                })
+
+            }).catch((err) => {
+                reject(err)
+            })
+
+        })
+    }
 
 }

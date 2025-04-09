@@ -4,17 +4,26 @@ import { log, table } from "node:console";
 import { resolve } from "node:path";
 
 
-export const readTable: (tableName: string) => Promise<Table> = async (tableName: string) => {
+export const readTable: (tableName: string) => Promise<Table> | any = async (tableName: string) => {
 
-    let data: string[] = await readLbL(`${tableName}.csv`);
-
+    
     // Slices off the header from data, puts the header into a separate
     // array, takes out the string from that array, then splits the
     // string apart into separate array elements into a new array
-    let header: string[] = data.splice(0, 1)[0].split(",");
     let table: Record[] = [];
-
+    
     return new Promise((resolve, reject) => {
+        
+        let data: string[] = []
+
+        readLbL(`${tableName}.csv`).then((result) => {
+            data = result
+            
+            let header: string[] = data.splice(0, 1)[0].split(",");
+
+        
+        if (data.length === 0 || data.length === 1) reject("DB ERROR: Given table empty")
+        
 
         try {
             for (const lines of data) {
@@ -27,6 +36,11 @@ export const readTable: (tableName: string) => Promise<Table> = async (tableName
         } catch (err) {
             reject(err);
         }
+
+    }).catch((err) => {
+        if (err == `DB ERROR: The file ${tableName}.csv does not exist or is not accessible.`) reject(`DB ERROR: Table with name ${tableName} doesn't exist or is not accessible.`)
+        reject(err)
+    })
 
     });
 
@@ -56,14 +70,9 @@ export const writeTable: (tableName: string, tableValue: Table, overwrite?:boole
     })
 }
 
-readTable("asd").then((result) => {
-    let AsdTable = result;
-
-    AsdTable.deleteRecord("67698eaa-2149-488a-be9e-7efd084759c5").then((result) => {
-        console.log(result);
-    }).catch((result) => {
-        console.log(result);
-    })
-});
+readTable("as").catch((err) => {
+    console.log(err);
+    
+})
 
 /* TODO not handled empty table nonexistent */

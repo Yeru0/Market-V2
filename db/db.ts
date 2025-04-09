@@ -4,7 +4,7 @@ import { log, table } from "node:console";
 import { resolve } from "node:path";
 
 
-const readTable: (tableName: string) => Promise<Table> = async (tableName: string) => {
+export const readTable: (tableName: string) => Promise<Table> = async (tableName: string) => {
 
     let data: string[] = await readLbL(`${tableName}.csv`);
 
@@ -22,7 +22,7 @@ const readTable: (tableName: string) => Promise<Table> = async (tableName: strin
                 table.push(new Record(line, header));
             }
 
-            resolve(new Table(header, table));
+            resolve(new Table(header, table, tableName));
 
         } catch (err) {
             reject(err);
@@ -32,7 +32,7 @@ const readTable: (tableName: string) => Promise<Table> = async (tableName: strin
 
 };
 
-const writeTable: (tableName: string, tableValue: Table, overwrite?:boolean) => Promise<string> = async (tableName: string, tableValue: Table, overwrite?:boolean) => {
+export const writeTable: (tableName: string, tableValue: Table, overwrite?:boolean) => Promise<string> = async (tableName: string, tableValue: Table, overwrite?:boolean) => {
     return new Promise((resolve, reject) => {
 
         let data: string[] = []
@@ -59,15 +59,7 @@ const writeTable: (tableName: string, tableValue: Table, overwrite?:boolean) => 
 readTable("asd").then((result) => {
     let AsdTable = result;
 
-    AsdTable.newRecord(["This","Is","New"], true).catch((err) => {
-        console.log(err);
-        
-    })
-
-    writeTable("asd", AsdTable, true).then((result) => {
-        console.log(result)
-    })
+    AsdTable.updateRecord("67698eaa-2149-488a-be9e-7efd084759c5", ["67698eaa-2149-488a-be9e-7efd084759c5","This","Is","Sparta"])
 });
 
-// TODO Update
 /* TODO not handled empty table nonexistent */

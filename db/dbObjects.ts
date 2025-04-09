@@ -1,4 +1,5 @@
 import crypto from "node:crypto";
+import { writeTable } from "./db";
 
 export class Record {
     id: string;
@@ -50,9 +51,11 @@ export class Record {
 export class Table {
     records: Record[];
     header: string[];
-    constructor(header: string[], records: Record[]) {
+    tableName: string
+    constructor(header: string[], records: Record[], tableName: string) {
         this.records = [];
         this.header = header;
+        this.tableName = tableName
         if (records) this.records = records;
         if(!header.includes("id")) header.unshift("id")
     }
@@ -61,6 +64,8 @@ export class Table {
 
     newRecord(line: string[], needID:boolean = true): Promise<string> {
         return new Promise((resolve, reject) => {
+            //Check if the length of the new record is correct
+            //If it needs id, then that's an extra field
             if (this.header.length > line.length && !needID) reject("DB ERROR: Not enough elements")
             else if (this.header.length < line.length) reject("DB ERROR: Too many elements")
             else if (this.header.length > line.length + 1 && !needID) reject("DB ERROR: Not enough elements")
@@ -73,10 +78,13 @@ export class Table {
         })
     }
 
-    getRecord(id: string) {
-        for (const record of this.records) {
-            if (record.getField("id") === id) return record;
-        }
+    getRecord(id: string): Promise<Record> {
+        return new Promise((resolve, reject) => {
+            for (const record of this.records) {
+                if (record.getField("id") === id) resolve(record);
+            }
+            reject(`DB ERROR: Couldn't find record with id ${id}`)
+        })
     };
 
     getRecords() {
@@ -85,6 +93,31 @@ export class Table {
 
     getHeader () {
         return this.header
+    }
+
+    updateRecord(recordID: string, updateValue: string[]) {
+        return new Promise((resolve, reject) => {
+
+            let oldRecord: Record
+            const newRecord = new Record(updateValue, this.header)
+            this.getRecord(recordID).then((result) => {
+                oldRecord = result
+
+                //Check if the amount of props match  
+                if(Object.keys(newRecord).length > Object.keys(oldRecord).length) reject(`DB ERROR: Too many elements`)
+                if(Object.keys(newRecord).length > Object.keys(oldRecord).length) reject(`DB ERROR: Not enough elements`)
+
+                this.records[this.records.indexOf(oldRecord)] = newRecord
+
+                writeTable(this.tableName, this, true)
+
+            }).catch((err) => {
+                reject(err)
+            })
+
+
+
+        })
     }
 
     //TODO RUD accessors, for the header as well

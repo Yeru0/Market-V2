@@ -18,6 +18,7 @@ export const readTable: (tableName: string) => Promise<Table> | any = async (tab
 
         readLbL(`${tableName}.csv`).then((result) => {
             data = result;
+
             if (data.length === 0) {
                 reject(`DB ERROR: Given table with name ${table} is empty`);
                 return;
@@ -25,8 +26,6 @@ export const readTable: (tableName: string) => Promise<Table> | any = async (tab
 
             let header: string[] = data.splice(0, 1)[0].split(",");
 
-
-            if (data.length === 0 || data.length === 1) reject("DB ERROR: Given table empty");
 
 
             try {

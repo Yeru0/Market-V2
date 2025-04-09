@@ -52,7 +52,7 @@ export const readTable: (tableName: string) => Promise<Table> | any = async (tab
 
 };
 
-export const writeTable: (tableName: string, tableValue: Table, overwrite?: boolean) => Promise<string> = async (tableName: string, tableValue: Table, overwrite?: boolean) => {
+export const writeTable: (tableValue: Table, overwrite?: boolean) => Promise<string> = async (tableValue: Table, overwrite?: boolean) => {
     return new Promise((resolve: (value: string) => void, reject: (value: Error) => void) => {
 
         let data: string[] = [];
@@ -67,7 +67,7 @@ export const writeTable: (tableName: string, tableValue: Table, overwrite?: bool
             data.push(properties.toString());
         }
 
-        writeLbL(`${tableName}.csv`, data, overwrite).then((result) => {
+        writeLbL(`${tableValue.tableName}.csv`, data, overwrite).then((result) => {
             resolve(result);
         }).catch((err) => {
             reject(err);
@@ -75,8 +75,3 @@ export const writeTable: (tableName: string, tableValue: Table, overwrite?: bool
 
     });
 };
-
-readTable("asd").catch((err) => {
-    console.log(err);
-
-});

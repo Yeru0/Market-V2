@@ -4,16 +4,16 @@ import { error, log } from "node:console";
 
 export class Record {
     id: string;
-    constructor(line: string[], header: string[], needId?:boolean) {
+    constructor(line: string[], header: string[], needId?: boolean) {
 
         if (!header[0].includes("id")) {
-            this.id = crypto.randomUUID()
+            this.id = crypto.randomUUID();
         } else if (needId) {
-            line.splice(header.indexOf("id"), 0, crypto.randomUUID())
+            line.splice(header.indexOf("id"), 0, crypto.randomUUID());
         };
 
-        if (header.length > line.length) throw new Error("DB ERROR: Not enough elements")
-        else if (header.length < line.length) throw new Error("DB ERROR: Too many elements")
+        if (header.length > line.length) throw new Error("DB ERROR: Not enough elements");
+        else if (header.length < line.length) throw new Error("DB ERROR: Too many elements");
 
         // For each field of the line it creates an object, where
         // the key is the corresponding header field, and the 
@@ -52,31 +52,31 @@ export class Record {
 export class Table {
     records: Record[];
     header: string[];
-    tableName: string
+    tableName: string;
     constructor(header: string[], records: Record[], tableName: string) {
         this.records = [];
         this.header = header;
-        this.tableName = tableName
+        this.tableName = tableName;
         if (records) this.records = records;
-        if(!header.includes("id")) header.unshift("id")
+        if (!header.includes("id")) header.unshift("id");
     }
 
 
 
-    newRecord(line: string[], needID:boolean = true): Promise<string> {
+    newRecord(line: string[], needID: boolean = true): Promise<string> {
         return new Promise((resolve: (value: string) => void, reject: (value: Error) => void) => {
             //Check if the length of the new record is correct
             //If it needs id, then that's an extra field
-            if (this.header.length > line.length && !needID) reject(new Error("DB ERROR: Not enough elements"))
-            else if (this.header.length < line.length) reject(new Error("DB ERROR: Too many elements"))
-            else if (this.header.length > line.length + 1 && !needID) reject(new Error("DB ERROR: Not enough elements"))
-        
-            let newRecord = new Record(line, this.header, needID)
+            if (this.header.length > line.length && !needID) reject(new Error("DB ERROR: Not enough elements"));
+            else if (this.header.length < line.length) reject(new Error("DB ERROR: Too many elements"));
+            else if (this.header.length > line.length + 1 && !needID) reject(new Error("DB ERROR: Not enough elements"));
+
+            let newRecord = new Record(line, this.header, needID);
 
             this.records.push(newRecord);
 
-            resolve(`Added new record: ${newRecord}`)
-        })
+            resolve(`Added new record: ${newRecord}`);
+        });
     }
 
     getRecord(id: string): Promise<Record> {
@@ -84,64 +84,64 @@ export class Table {
             for (const record of this.records) {
                 if (record.getField("id") === id) resolve(record);
             }
-            reject(new Error(`DB ERROR: Couldn't find record with id ${id}`))
-        })
+            reject(new Error(`DB ERROR: Couldn't find record with id ${id}`));
+        });
     };
 
     getRecords() {
-        return this.records
+        return this.records;
     }
 
-    getHeader () {
-        return this.header
+    getHeader() {
+        return this.header;
     }
 
     updateRecord(recordID: string, updateValue: string[]): Promise<string> {
         return new Promise((resolve: (value: string) => void, reject: (value: Error) => void) => {
 
-            let oldRecord: Record
-            const newRecord = new Record(updateValue, this.header)
+            let oldRecord: Record;
+            const newRecord = new Record(updateValue, this.header);
             this.getRecord(recordID).then((result) => {
-                oldRecord = result
+                oldRecord = result;
 
                 //Check if the amount of props match  
-                if(Object.keys(newRecord).length > Object.keys(oldRecord).length) reject(new Error(`DB ERROR: Too many elements`))
-                if(Object.keys(newRecord).length > Object.keys(oldRecord).length) reject(new Error(`DB ERROR: Not enough elements`))
+                if (Object.keys(newRecord).length > Object.keys(oldRecord).length) reject(new Error(`DB ERROR: Too many elements`));
+                if (Object.keys(newRecord).length > Object.keys(oldRecord).length) reject(new Error(`DB ERROR: Not enough elements`));
 
-                this.records[this.records.indexOf(oldRecord)] = newRecord
+                this.records[this.records.indexOf(oldRecord)] = newRecord;
 
                 writeTable(this.tableName, this, true).then(() => {
-                    resolve(`Successfully updated record with id ${recordID} in table ${this.tableName}`)
+                    resolve(`Successfully updated record with id ${recordID} in table ${this.tableName}`);
                 }).catch((err) => {
-                    reject(err)
-                })
+                    reject(err);
+                });
 
             }).catch((err) => {
-                reject(err)
-            })
+                reject(err);
+            });
 
-        })
+        });
     }
 
     deleteRecord(recordID: string): Promise<string> {
         return new Promise((resolve: (value: string) => void, reject: (value: Error) => void) => {
-            
-            this.getRecord(recordID).then((result) => {
-                let record: Record = result
 
-                let oldRecord: Record[] = this.records.splice(this.records.indexOf(record), 1)
-              
+            this.getRecord(recordID).then((result) => {
+                let record: Record = result;
+
+                let oldRecord: Record[] = this.records.splice(this.records.indexOf(record), 1);
+
                 writeTable(this.tableName, this, true).then((result) => {
-                    resolve(`Successfully removed record with id ${recordID}`)
+                    resolve(`Successfully removed record with id ${recordID}`);
                 }).catch((err) => {
-                    reject(err)
-                })
+                    reject(err);
+                });
 
             }).catch((err) => {
-                reject(err)
-            })
+                reject(err);
+            });
 
-        })
+        });
     }
 
 }

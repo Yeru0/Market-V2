@@ -1,0 +1,41 @@
+<!-- TODO reactivity -->
+<table>
+    <tbody>
+        <tr>
+            <td>5 Ft</td>
+            <td><button></button></td>
+            <td>500</td>
+            <td><button></button></td>
+        </tr>
+        <tr>
+            <td>10</td>
+            <td><button></button></td>
+            <td>1000</td>
+            <td><button></button></td>
+        </tr>
+        <tr>
+            <td>20</td>
+            <td><button></button></td>
+            <td>2000</td>
+            <td><button></button></td>
+        </tr>
+        <tr>
+            <td>50</td>
+            <td><button></button></td>
+            <td>5000</td>
+            <td><button></button></td>
+        </tr>
+        <tr>
+            <td>100</td>
+            <td><button></button></td>
+            <td>10000</td>
+            <td><button></button></td>
+        </tr>
+        <tr>
+            <td>200</td>
+            <td><button></button></td>
+            <td>20000</td>
+            <td><button></button></td>
+        </tr>
+    </tbody>
+</table>

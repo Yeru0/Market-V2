@@ -1,3 +1,8 @@
+<script>
+    import NoteSelectionTable from "./noteSelectionTable.svelte";
+
+</script>
+
 
 <!-- TODO Az egész oldalon aktív lesz majd a keyboard input listening a vonalkódolvasás miatt -->
 <main>
@@ -69,56 +74,25 @@
         <div>
             <div>
                 <h3>Fizetendő</h3>
+                <!-- TODO reactive -->
                 <p>400Ft</p>
                 <div>
                     <h4>Fizető címlet</h4>
-                    <!-- TODO finish table -->
-                    <!-- TODO make table a snippet or a component -->
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td>5 Ft</td>
-                                <td><button></button></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <NoteSelectionTable></NoteSelectionTable>
+                    <!-- TODO reactive -->
                     <p>400 Ft</p>
                 </div>
             </div>
             <div>
-
+                <h3>Visszajáró</h3>
+                <!-- TODO reactivity -->
+                <p>400Ft</p>
+                <div>
+                    <h4>Visszajáró címlet</h4>
+                    <NoteSelectionTable></NoteSelectionTable>
+                    <!-- TODO reactive -->
+                    <p>400 Ft</p>
+                </div>
             </div>
         </div>
     </section>

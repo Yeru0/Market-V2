@@ -4,7 +4,7 @@ import { log, table } from "node:console";
 import { resolve } from "node:path";
 
 
-export const readTable: (tableName: string) => Promise<Table> | any = async (tableName: string) => {
+export const readTable: (tableName: string) => Promise<Table> = async (tableName: string) => {
 
 
     // Slices off the header from data, puts the header into a separate

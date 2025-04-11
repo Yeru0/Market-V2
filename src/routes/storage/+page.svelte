@@ -53,7 +53,7 @@
                         <td>300 Ft</td>
                     </tr>
                     <tr>
-                        <!-- Eladott áruk beszerzési értéke -->
+                        <!-- Eladott áruk beszerzési értéke, eladott * egység beszerár -->
                         <th>ELÁBÉ</th>
                         <td>1800 Ft</td>
                         <td>900 Ft</td>

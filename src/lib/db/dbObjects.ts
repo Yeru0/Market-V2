@@ -12,7 +12,9 @@ export class Record {
             line.splice(header.indexOf("id"), 0, crypto.randomUUID());
         };
 
-        if (header.length > line.length) throw new Error("DB ERROR: Not enough elements");
+
+        if (header.length > line.length && !needId) throw new Error("DB ERROR: Not enough elements");
+        if (header.length > line.length + 1 && needId) throw new Error("DB ERROR: Not enough elements");
         else if (header.length < line.length) throw new Error("DB ERROR: Too many elements");
 
         // For each field of the line it creates an object, where
@@ -69,7 +71,7 @@ export class Table {
             //If it needs id, then that's an extra field
             if (this.header.length > line.length && !needID) reject(new Error("DB ERROR: Not enough elements"));
             else if (this.header.length < line.length) reject(new Error("DB ERROR: Too many elements"));
-            else if (this.header.length > line.length + 1 && !needID) reject(new Error("DB ERROR: Not enough elements"));
+            else if (this.header.length > line.length + 1 && needID) reject(new Error("DB ERROR: Not enough elements"));
 
             let newRecord = new Record(line, this.header, needID);
 

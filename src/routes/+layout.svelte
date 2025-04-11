@@ -7,7 +7,7 @@
 <nav>
 
     <ul>
-        <li><a href="/">Home</a></li>
+        <li><a href="/">Eladás</a></li>
         <li><a href="/dashboard">Irányítópult</a></li>
         <li><a href="/storage">Raktár</a></li>
         <li><a href="/prices">Árlista</a></li>

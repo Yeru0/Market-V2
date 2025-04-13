@@ -1,10 +1,59 @@
-<script>
+<script lang="ts">
     import NoteSelectionTable from "./noteSelectionTable.svelte";
+	import { Code } from "$lib/code-reader/codeReaderObjects";
+
+    let codeS: string = "";
+    let lastKeyPressTime = 0;
+
+    function constructCode(e: KeyboardEvent): Promise<string> {
+        return new Promise((resolve: (value: string) => void, reject: (value: void) => void) => {
+            e.preventDefault();
+
+            // Only construct code if not keyboard input
+            const currentTime = new Date().getTime();
+            const timeDifference = currentTime - lastKeyPressTime 
+            lastKeyPressTime = currentTime;
+        
+
+
+            let key: string = e.key;
+            if (
+                key == "Shift" ||
+                key == "Control" ||
+                key == "AltGraph" ||
+                key == "Alt" ||
+                key == "CapsLock" ||
+                lastKeyPressTime === 0 ||
+                timeDifference > 10 ||
+                key == "Meta"
+            ) {
+                return;
+            }
+
+
+            if (key != "Enter") {
+                codeS += key;
+            } else {
+                resolve(codeS);
+            }
+
+            // Promise end
+        });
+
+        // method constructCode END
+    };
 
 </script>
 
+<svelte:window onkeydown={(e) => {
+    constructCode(e).then((result) => {
+        let code = new Code(result)
+        codeS = ""
+        console.log(code)
+    })
+}} />
 
-<!-- TODO Az egész oldalon aktív lesz majd a keyboard input listening a vonalkódolvasás miatt -->
+
 <main>
 
     <h1>Termékek</h1>

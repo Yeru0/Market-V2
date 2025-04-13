@@ -41,8 +41,6 @@ export const readTable: (tableName: string) => Promise<Table> = async (tableName
             }
 
         }).catch((err) => {
-            console.log(err);
-
             if (err.code === "ENOENT") reject(`DB ERROR: Table with name "${tableName}" doesn't exist or is not accessible.`);
             reject(err);
         });

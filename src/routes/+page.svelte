@@ -2,6 +2,13 @@
     import NoteSelectionTable from "./noteSelectionTable.svelte";
 	import { Code } from "$lib/code-reader/codeReaderObjects";
 
+
+    let { data } = $props()
+    let products = data.products
+
+
+    // Function that listens to the code reader,
+    // and constructs the code from it's input
     let codeS: string = "";
     let lastKeyPressTime = 0;
 
@@ -45,11 +52,14 @@
 
 </script>
 
+
+
+
+
 <svelte:window onkeydown={(e) => {
     constructCode(e).then((result) => {
         let code = new Code(result)
         codeS = ""
-        console.log(code)
     })
 }} />
 
@@ -71,14 +81,15 @@
             </thead>
             <tbody>
     
-                <!-- TODO Ide jön majd az each block -->
+                {#each products as product}                    
                 <tr>
-                    <td>Chips cheetos pizzás</td>
+                    <td>{product.name}</td>
                     <td><button>400 Ft</button></td>
                     <td><button>500 Ft</button></td>
                     <td>3/10</td>
                     <td>7</td>
                 </tr>
+                {/each}
     
             </tbody>
         </table>

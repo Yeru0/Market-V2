@@ -1,1 +1,4 @@
-id,productName,organiserProfitMargin,participantProfitMargin,soldToOrgN,soldToPartN,purchasedN,purchasePriceM
+id,name,organiserProfitMargin,participantProfitMargin,soldToOrgN,soldToPartN,purchasedN,purchasePriceM
+0d45f96c-bf7e-410d-a315-6132dc88f217,Tejföl,25,95,2,21,30,8000
+06df3800-48b6-47f5-9096-4208ac1236ff,Tejföl1,25,95,2,21,30,8000
+31a1a4eb-78b1-4a44-8ffd-e4d8d7c237c1,Tejföl2,25,95,2,21,30,8000

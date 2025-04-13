@@ -1,10 +1,18 @@
 <script lang="ts">
     import NoteSelectionTable from "./noteSelectionTable.svelte";
 	import { Code } from "$lib/code-reader/codeReaderObjects";
+    import { Product } from "$lib/siteObjects"
 
 
     let { data } = $props()
-    let products = data.products
+    let products: Product[] = []
+
+    for (const product of data.products) {
+        products.push(new Product(product))
+    }
+
+    console.log(products);
+    
 
 
     // Function that listens to the code reader,
@@ -55,7 +63,7 @@
 
 
 
-
+<!-- Code-reader listening -->
 <svelte:window onkeydown={(e) => {
     constructCode(e).then((result) => {
         let code = new Code(result)

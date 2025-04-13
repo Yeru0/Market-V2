@@ -72,12 +72,3 @@ export const writeTable: (tableValue: Table, overwrite?: boolean) => Promise<str
 
     });
 };
-
-const records = [
-    new Record(["Chips cheetos sajtos", "25", "95", "4", "3", "30", "30000"], ["id", "productName", "organiserProfitMargin", "participantProfitMargin", "soldToOrgN", "soldToPartN", "purchasedN", "purchasePriceM"], true),
-    new Record(["Chips cheetos sajtos", "25", "95", "4", "3", "30", "30000"], ["id", "productName", "organiserProfitMargin", "participantProfitMargin", "soldToOrgN", "soldToPartN", "purchasedN", "purchasePriceM"], true),
-    new Record(["Chips cheetos sajtos", "25", "95", "4", "3", "30", "30000"], ["id", "productName", "organiserProfitMargin", "participantProfitMargin", "soldToOrgN", "soldToPartN", "purchasedN", "purchasePriceM"], true),
-    new Record(["Chips cheetos sajtos", "25", "95", "4", "3", "30", "30000"], ["id", "productName", "organiserProfitMargin", "participantProfitMargin", "soldToOrgN", "soldToPartN", "purchasedN", "purchasePriceM"], true)
-];
-
-const productTable = new Table(["id", "productName", "organiserProfitMargin", "participantProfitMargin", "soldToOrgN", "soldToPartN", "purchasedN", "purchasePriceM"], records, "products");

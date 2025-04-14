@@ -11,8 +11,6 @@
         products.push(new Product(product))
     }
 
-    console.log(products)
-
 
     // Function that listens to the code reader,
     // and constructs the code from it's input
@@ -91,10 +89,10 @@
                 {#each products as product}                    
                 <tr>
                     <td>{product.name}</td>
-                    <td><button>400 Ft</button></td>
-                    <td><button>500 Ft</button></td>
-                    <td>3/10</td>
-                    <td>7</td>
+                    <td><button>{product.singleOrgPriceM}</button></td>
+                    <td><button>{product.singleOrgPriceM}</button></td>
+                    <td>{product.allRemainingN}/{product.purchasedN}</td>
+                    <td>{product.allSoldN}</td>
                 </tr>
                 {/each}
     

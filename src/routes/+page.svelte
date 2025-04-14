@@ -102,7 +102,7 @@
 
     <section class="basket">
         <div class="header">
-            <!-- TODO az ikon -->
+            <span class="material-symbols-outlined"> shopping_cart </span>
             <h2>Kosár</h2>
         </div>
 

@@ -1,5 +1,4 @@
-import { writeTable, readTable } from "$lib/db/db";
-import { Table, Record } from "$lib/db/dbObjects";
+import { readTable } from "$lib/db/db";
 
 export async function load() {
 

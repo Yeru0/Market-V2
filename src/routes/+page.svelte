@@ -11,8 +11,7 @@
         products.push(new Product(product))
     }
 
-    console.log(products);
-    
+    console.log(products)
 
 
     // Function that listens to the code reader,

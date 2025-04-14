@@ -25,7 +25,7 @@ export class Product {
     singleProductValueM: number;
 
 
-    constructor(productInfo) {
+    constructor(productInfo: any) {
         this.id = productInfo.id;
         this.name = productInfo.name;
         this.organiserProfitMargin = productInfo.organiserProfitMargin;
@@ -40,19 +40,19 @@ export class Product {
             this.active = false;
         }
 
-        this.allIncomeM = this.allOrgIncomeM + this.allPartIncomeM;
-        this.allOrgIncomeM = this.singleOrgPriceM * this.soldToOrgN;
-        this.allPartIncomeM = this.singlePartPriceM * this.soldToPartN;
-        this.allProfitM = this.allOrgProfitM + this.allPartProfitM;
-        this.allOrgProfitM = this.singleOrgProfitM * soldToOrgN;
-        this.allPartProfitM = this.singlePartProfitM * soldPartOrgN;
+        this.allSoldN = this.soldToOrgN + this.soldToPartN;
         this.allRemainingN = this.purchasedN - this.allSoldN;
-        this.allSoldN = this.soldToOrgN + soldToPartN;
-        this.singleOrgPriceM = this.singleProductValueM / 100 * (100 + organiserProfitMargin);
-        this.singlePartPriceM = this.singleProductValueM / 100 * (100 + participantProfitMargin);
+        this.singleProductValueM = this.purchasePriceM / this.purchasedN;
+        this.singleOrgPriceM = this.singleProductValueM / 100 * (100 + this.organiserProfitMargin);
+        this.singlePartPriceM = this.singleProductValueM / 100 * (100 + this.participantProfitMargin);
         this.singleOrgProfitM = this.singleOrgPriceM - this.singleProductValueM;
         this.singlePartProfitM = this.singlePartPriceM - this.singleProductValueM;
-        this.singleProductValueM = this.purchasePriceM / this.purchasedN;
+        this.allOrgIncomeM = this.singleOrgPriceM * this.soldToOrgN;
+        this.allOrgProfitM = this.singleOrgProfitM * this.soldToOrgN;
+        this.allPartProfitM = this.singlePartProfitM * this.soldToOrgN;
+        this.allPartIncomeM = this.singlePartPriceM * this.soldToPartN;
+        this.allIncomeM = this.allOrgIncomeM + this.allPartIncomeM;
+        this.allProfitM = this.allOrgProfitM + this.allPartProfitM;
 
     }
 }

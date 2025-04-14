@@ -1,41 +1,56 @@
-<!-- TODO reactivity -->
+<script lang="ts">
+
+    let {sum = $bindable()} = $props()
+    let control: boolean = false 
+
+    let notes: {[key: number]: number} = $state({
+        5: 0,
+        50: 0,
+        500: 0,
+        5000: 0,
+        10: 0,
+        100: 0,
+        1000: 0,
+        10000: 0,
+        20: 0,
+        200: 0,
+        2000: 0,
+        20000: 0,
+    })
+
+    let notesKeys: string[] = Object.keys(notes)
+
+    const increment = (note: string): void => {
+        notes[parseInt(note)] += 1
+        sum = Object.entries(notes).reduce((a, [note,amount]) => a + parseInt(note)*amount, 0)
+    }
+
+    const decrement = (note: string): void => {
+        if (notes[parseInt(note)] <= 0) return
+        if (control) notes[parseInt(note)] = 0
+        else notes[parseInt(note)] -= 1
+
+        sum = Object.entries(notes).reduce((a, [note,amount]) => a + parseInt(note)*amount, 0)
+    }
+
+</script>
+
+<svelte:window 
+    onkeydown={(e) => { 
+        if (e.key == "Control") control = true
+     }}
+    onkeyup={(e) => { 
+        if (e.key == "Control") control = false
+     }}
+/>
+
 <table>
     <tbody>
+        {#each notesKeys as note}
         <tr>
-            <td>5 Ft</td>
-            <td><button></button></td>
-            <td>500</td>
-            <td><button></button></td>
+            <td><button onclick={() => { increment(note) }}>{note} Ft</button></td>
+            <td><button onclick={() => { decrement(note) }}>{notes[parseInt(note)]}</button></td>
         </tr>
-        <tr>
-            <td>10</td>
-            <td><button></button></td>
-            <td>1000</td>
-            <td><button></button></td>
-        </tr>
-        <tr>
-            <td>20</td>
-            <td><button></button></td>
-            <td>2000</td>
-            <td><button></button></td>
-        </tr>
-        <tr>
-            <td>50</td>
-            <td><button></button></td>
-            <td>5000</td>
-            <td><button></button></td>
-        </tr>
-        <tr>
-            <td>100</td>
-            <td><button></button></td>
-            <td>10000</td>
-            <td><button></button></td>
-        </tr>
-        <tr>
-            <td>200</td>
-            <td><button></button></td>
-            <td>20000</td>
-            <td><button></button></td>
-        </tr>
+        {/each}
     </tbody>
 </table>

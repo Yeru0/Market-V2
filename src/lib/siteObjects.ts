@@ -28,31 +28,31 @@ export class Product {
     constructor(productInfo) {
         this.id = productInfo.id;
         this.name = productInfo.name;
-        this.organiserProfitMargin = productInfo.organiserProfitMargin;
-        this.participantProfitMargin = productInfo.participantProfitMargin;
-        this.soldToOrgN = productInfo.soldToOrgN;
-        this.soldToPartN = productInfo.soldToPartN;
-        this.purchasedN = productInfo.purchasedN;
-        this.purchasePriceM = productInfo.purchasePriceM;
+        this.organiserProfitMargin = parseFloat(productInfo.organiserProfitMargin);
+        this.participantProfitMargin = parseFloat(productInfo.participantProfitMargin);
+        this.soldToOrgN = parseFloat(productInfo.soldToOrgN);
+        this.soldToPartN = parseFloat(productInfo.soldToPartN);
+        this.purchasedN = parseFloat(productInfo.purchasedN);
+        this.purchasePriceM = parseFloat(productInfo.purchasePriceM);
         if (productInfo.active == "true") {
             this.active = true;
         } else {
             this.active = false;
         }
 
-        this.allIncomeM = this.allOrgIncomeM + this.allPartIncomeM;
-        this.allOrgIncomeM = this.singleOrgPriceM * this.soldToOrgN;
-        this.allPartIncomeM = this.singlePartPriceM * this.soldToPartN;
-        this.allProfitM = this.allOrgProfitM + this.allPartProfitM;
-        this.allOrgProfitM = this.singleOrgProfitM * soldToOrgN;
-        this.allPartProfitM = this.singlePartProfitM * soldPartOrgN;
-        this.allRemainingN = this.purchasedN - this.allSoldN;
-        this.allSoldN = this.soldToOrgN + soldToPartN;
-        this.singleOrgPriceM = this.singleProductValueM / 100 * (100 + organiserProfitMargin);
-        this.singlePartPriceM = this.singleProductValueM / 100 * (100 + participantProfitMargin);
-        this.singleOrgProfitM = this.singleOrgPriceM - this.singleProductValueM;
-        this.singlePartProfitM = this.singlePartPriceM - this.singleProductValueM;
-        this.singleProductValueM = this.purchasePriceM / this.purchasedN;
+        this.allSoldN = Math.round(this.soldToOrgN + this.soldToPartN);
+        this.allRemainingN = Math.round(this.purchasedN - this.allSoldN);
+        this.singleProductValueM = Math.round(this.purchasePriceM / this.purchasedN);
+        this.singleOrgPriceM = Math.round(this.singleProductValueM / 100 * (100 + this.organiserProfitMargin));
+        this.allOrgIncomeM = Math.round(this.singleOrgPriceM * this.soldToOrgN);
+        this.singlePartPriceM = Math.round(this.singleProductValueM / 100 * (100 + this.participantProfitMargin));
+        this.allPartIncomeM = Math.round(this.singlePartPriceM * this.soldToPartN);
+        this.allIncomeM = Math.round(this.allOrgIncomeM + this.allPartIncomeM);
+        this.singleOrgProfitM = Math.round(this.singleOrgPriceM - this.singleProductValueM);
+        this.singlePartProfitM = Math.round(this.singlePartPriceM - this.singleProductValueM);
+        this.allOrgProfitM = Math.round(this.singleOrgProfitM * this.soldToOrgN);
+        this.allPartProfitM = Math.round(this.singlePartProfitM * this.soldToPartN);
+        this.allProfitM = Math.round(this.allOrgProfitM + this.allPartProfitM);
 
     }
 }

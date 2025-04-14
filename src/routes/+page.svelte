@@ -2,17 +2,19 @@
     import NoteSelectionTable from "./noteSelectionTable.svelte";
 	import { Code } from "$lib/code-reader/codeReaderObjects";
     import { Product } from "$lib/siteObjects"
-
+	import { changeNotes } from "$lib/siteMethods";
 
     let { data } = $props()
-    let products: Product[] = []
+
+
+
+    // Render products
+    let products: Product[] = $state([])
 
     for (const product of data.products) {
         products.push(new Product(product))
     }
 
-    console.log(products);
-    
 
 
     // Function that listens to the code reader,
@@ -58,6 +60,57 @@
         // method constructCode END
     };
 
+
+
+    // Basket
+    let basket: {prod: Product, price: "org" | "part", amt: number}[] = $state([])
+    let payingSum: number = $state(0)
+    let returnSum: number = $state(0)
+    let exchangeMoneyValue = $state(0)
+
+    // TODO EXCHANGE NOTES
+
+    const addToBasket = (prod: Product, price: "org" | "part"): void => {
+
+        for (const product of basket) {
+            if (product.prod == prod && product.price == price) {
+                product.amt += 1
+                return
+            }
+        }
+
+        basket.push({prod, price, amt: 1})
+        
+    }
+
+    const removeFromBasket = (prod: Product, price: "org" | "part"): void => {
+
+        for (const product of basket) {
+            if (product.prod == prod && product.price == price && product.amt > 1) {
+                product.amt -= 1
+                return
+            }
+        }
+
+        basket.splice(basket.indexOf({prod, price, amt: 1}), 1)
+
+    }
+
+    const finalPrice = (): number => {
+        let price: number = 0
+
+        for (const basketElement of basket) {
+            if (basketElement.price == "org") {
+                price += basketElement.prod.singleOrgPriceM * basketElement.amt
+            } else if (basketElement.price == "part") {
+                price += basketElement.prod.singlePartPriceM * basketElement.amt
+            }
+        }
+        
+        return price
+    }
+
+
 </script>
 
 
@@ -90,22 +143,27 @@
             <tbody>
     
                 {#each products as product}                    
-                <tr>
-                    <td>{product.name}</td>
-                    <td><button>400 Ft</button></td>
-                    <td><button>500 Ft</button></td>
-                    <td>3/10</td>
-                    <td>7</td>
-                </tr>
+                    <tr>
+                        <td>{product.name}</td>
+                        <td><button onclick={() => { addToBasket(product, "org") }}>{product.singleOrgPriceM} Ft</button></td>
+                        <td><button onclick={() => { addToBasket(product, "part") }}>{product.singlePartPriceM} Ft</button></td>
+                        <td>{product.allRemainingN}/{product.purchasedN}</td>
+                        <td>{product.allSoldN}</td>
+                    </tr>
+
                 {/each}
     
             </tbody>
         </table>
     </section>
 
-    <section class="basket">
+    {#if basket.length > 0}
+        
+        <section class="basket">
         <div class="header">
-            <!-- TODO az ikon -->
+            <span class="material-symbols-outlined">
+                shopping_cart
+            </span>
             <h2>Kosár</h2>
         </div>
 
@@ -122,18 +180,21 @@
                 </thead>
                 <tbody>
 
-                    <!-- TODO Ide is majd egy each jön -->
-                    <tr>
-                        <td>
-                            <button>+</button>
-                            <input type="number" value="1" min="1" required >
-                            <button>-</button>
-                        </td>
-                        <td>Chips cheetos pizzás</td>
-                        <td>400 Ft</td>
-                        <td>500 Ft</td>
-                        <td><button>Törlés</button></td>
-                    </tr>
+                    {#each basket as {prod, price, amt}}
+
+                        <tr>
+                            <td>
+                                <button onclick={() => { addToBasket(prod, price) }}>+</button>
+                                <input type="number" value="{amt}" min="1" required >
+                                <button onclick={() => { removeFromBasket(prod, price) }}>-</button>
+                            </td>
+                            <td>{prod.name}</td>
+                            <td>{prod.singlePartPriceM} Ft</td>
+                            <td>{prod.singleOrgPriceM} Ft</td>
+                            <td><button onclick={() => {removeFromBasket(prod, price)}}>Törlés</button></td>
+                        </tr>
+                                        
+                    {/each}
 
                 </tbody>
             </table>
@@ -142,28 +203,27 @@
         <div>
             <div>
                 <h3>Fizetendő</h3>
-                <!-- TODO reactive -->
-                <p>400Ft</p>
+                <p>{finalPrice()} Ft</p>
                 <div>
                     <h4>Fizető címlet</h4>
-                    <NoteSelectionTable></NoteSelectionTable>
-                    <!-- TODO reactive -->
-                    <p>400 Ft</p>
+                    <NoteSelectionTable bind:sum={payingSum}></NoteSelectionTable>
+                    <p>{payingSum} Ft</p>
                 </div>
             </div>
             <div>
                 <h3>Visszajáró</h3>
                 <!-- TODO reactivity -->
-                <p>400Ft</p>
+                <p>400 Ft</p>
                 <div>
                     <h4>Visszajáró címlet</h4>
-                    <NoteSelectionTable></NoteSelectionTable>
-                    <!-- TODO reactive -->
-                    <p>400 Ft</p>
+                    <NoteSelectionTable bind:sum={returnSum}></NoteSelectionTable>
+                    <p>{returnSum} Ft</p>
                 </div>
             </div>
         </div>
-    </section>
+        </section>
+    
+    {/if}
 
 </main>
 

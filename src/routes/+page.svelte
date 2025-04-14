@@ -3,13 +3,17 @@
 	import { Code } from "$lib/code-reader/codeReaderObjects";
     import { Product } from "$lib/siteObjects"
 
-
     let { data } = $props()
-    let products: Product[] = []
+
+
+
+    //Render products list
+    let products: Product[] = $state([])
 
     for (const product of data.products) {
         products.push(new Product(product))
     }
+
 
 
     // Function that listens to the code reader,
@@ -17,7 +21,7 @@
     let codeS: string = "";
     let lastKeyPressTime = 0;
 
-    function constructCode(e: KeyboardEvent): Promise<string> {
+    const constructCode = (e: KeyboardEvent): Promise<string> => {
         return new Promise((resolve: (value: string) => void, reject: (value: void) => void) => {
             e.preventDefault();
 
@@ -55,6 +59,22 @@
         // method constructCode END
     };
 
+
+
+    //Basket
+    let basket: {prod: Product, price: "org" | "part"}[] = $state([])
+
+    const addToBasket = (prod: Product, price: "org" | "part"): undefined => {
+        basket.push({prod, price})
+        console.log(basket);
+    }
+    
+    const removeFromBasket = (prod: Product, price: "org" | "part"): undefined => {
+        basket.splice(basket.indexOf({prod, price}), 1)
+    }
+
+
+
 </script>
 
 
@@ -89,8 +109,8 @@
                 {#each products as product}                    
                 <tr>
                     <td>{product.name}</td>
-                    <td><button>{product.singleOrgPriceM}</button></td>
-                    <td><button>{product.singleOrgPriceM}</button></td>
+                    <td><button onclick={() => {addToBasket(product, "org")}}>{product.singleOrgPriceM}</button></td>
+                    <td><button onclick={() => {addToBasket(product, "part")}}>{product.singlePartPriceM}</button></td>
                     <td>{product.allRemainingN}/{product.purchasedN}</td>
                     <td>{product.allSoldN}</td>
                 </tr>
@@ -99,6 +119,8 @@
             </tbody>
         </table>
     </section>
+
+    {#if basket.length > 0}
 
     <section class="basket">
         <div class="header">
@@ -161,6 +183,7 @@
             </div>
         </div>
     </section>
+    {/if}
 
 </main>
 

@@ -71,6 +71,7 @@
 
     const addToBasket = (prod: Product, price: "org" | "part"): void => {
         
+        
         for (const product of basket) {
             if (product.prod == prod && product.price == price) {
                 product.amt += 1
@@ -109,11 +110,10 @@
         return price
     }
     
-    const calcChange = (): { [key: number]: number; } => {
-
+    const calcChange = async (): Promise<{ [key: number]: number; }>=> {
+        let change: number = finalPrice() - payingSum
+        return await changeNotes(notes, change)
     }
-    let change: number = finalPrice() - payingSum
-    changeNotes(notes, change)
 
 </script>
 
@@ -217,7 +217,7 @@
             <div>
                 <h3>Visszajáró</h3>
                 <!-- TODO reactivity -->
-                <p>400 Ft</p>
+                <p>{calcChange()}</p>
                 <div>
                     <h4>Visszajáró címlet</h4>
                     <NoteSelectionTable bind:sum={returnSum}></NoteSelectionTable>

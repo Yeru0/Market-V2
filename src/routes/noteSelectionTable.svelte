@@ -1,9 +1,8 @@
 <script lang="ts">
 
-    let {sum = $bindable()} = $props()
-    let control: boolean = false 
-
-    let notes: {[key: number]: number} = $state({
+    let {
+        sum = $bindable(),
+        notes = {
         5: 0,
         50: 0,
         500: 0,
@@ -15,8 +14,10 @@
         20: 0,
         200: 0,
         2000: 0,
-        20000: 0,
-    })
+        20000: 0
+        }
+    } = $props()
+    let control: boolean = false 
 
     let notesKeys: string[] = Object.keys(notes)
 

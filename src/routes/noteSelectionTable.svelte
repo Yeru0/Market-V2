@@ -34,6 +34,7 @@
         sum = Object.entries(notes).reduce((a, [note,amount]) => a + parseInt(note)*amount, 0)
     }
 
+
 </script>
 
 <svelte:window 

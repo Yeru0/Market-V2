@@ -6,7 +6,7 @@ export class Record {
     id: string;
     constructor(line: string[], header: string[], needId?: boolean) {
 
-        if (!header[0].includes("id")) {
+        if (!header.includes("id")) {
             this.id = crypto.randomUUID();
         } else if (needId) {
             line.splice(header.indexOf("id"), 0, crypto.randomUUID());

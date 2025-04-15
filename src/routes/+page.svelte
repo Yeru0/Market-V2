@@ -64,10 +64,10 @@
 
     // Basket
     let basket: {prod: Product, price: "org" | "part", amt: number}[] = $state([])
-    let payingSum: number = $state(0)
-    let returnSum: number = $state(0)
-    let notes: { [key: number]: number; } = data.notes
-    let exchangeMoneyValue: { [key: number]: number; } = $state({})
+    let payingSum: number = $state(0) // payed notes set by the selection table
+    let returnSum: number = $state(0) //change set by note selection table
+    let availableNotes: { [key: number]: number; } = data.notes[0]
+    let returnNotes: { [key: number]: number; } = $state({})
 
     const addToBasket = (prod: Product, price: "org" | "part"): void => {
         
@@ -109,11 +109,18 @@
         
         return price
     }
-    
-    const calcChange = async (): Promise<{ [key: number]: number; }>=> {
-        let change: number = finalPrice() - payingSum
-        return await changeNotes(notes, change)
-    }
+
+    $effect(() => {
+        changeNotes(availableNotes, finalPrice() - payingSum).then((result) => {
+                returnNotes = result
+        }).catch((err) => {
+            console.log(err);
+            
+        })
+    })
+
+    $inspect(returnNotes)
+
 
 </script>
 
@@ -215,12 +222,12 @@
                 </div>
             </div>
             <div>
+                <!-- TODO reactive -->
                 <h3>Visszajáró</h3>
-                <!-- TODO reactivity -->
-                <p>{calcChange()}</p>
+                <p>KUKI</p>
                 <div>
                     <h4>Visszajáró címlet</h4>
-                    <NoteSelectionTable bind:sum={returnSum}></NoteSelectionTable>
+                    <NoteSelectionTable bind:sum={returnNotes}></NoteSelectionTable>
                     <p>{returnSum} Ft</p>
                 </div>
             </div>

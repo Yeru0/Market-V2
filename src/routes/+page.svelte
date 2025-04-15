@@ -66,12 +66,11 @@
     let basket: {prod: Product, price: "org" | "part", amt: number}[] = $state([])
     let payingSum: number = $state(0)
     let returnSum: number = $state(0)
-    let exchangeMoneyValue = $state(0)
-
-    // TODO EXCHANGE NOTES
+    let notes: { [key: number]: number; } = data.notes
+    let exchangeMoneyValue: { [key: number]: number; } = $state({})
 
     const addToBasket = (prod: Product, price: "org" | "part"): void => {
-
+        
         for (const product of basket) {
             if (product.prod == prod && product.price == price) {
                 product.amt += 1
@@ -109,7 +108,12 @@
         
         return price
     }
+    
+    const calcChange = (): { [key: number]: number; } => {
 
+    }
+    let change: number = finalPrice() - payingSum
+    changeNotes(notes, change)
 
 </script>
 

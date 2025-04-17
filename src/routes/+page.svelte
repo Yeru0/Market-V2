@@ -1,7 +1,7 @@
 <script lang="ts">
     import NoteSelectionTable from "./noteSelectionTable.svelte";
 	import { Code } from "$lib/code-reader/codeReaderObjects";
-    import { Product } from "$lib/siteObjects"
+    import { Basket, Product } from "$lib/siteObjects.svelte"
 	import { changeNotes } from "$lib/siteMethods";
 	import { priceListStateSellingToOrg } from "./shared.svelte";
 
@@ -62,94 +62,48 @@
     };
     
     const addToBasketOnCode = (code: string):void => {
-           
+
         for(const product of products) {
-            if (product.code == code && !$priceListStateSellingToOrg) addToBasket(product, "part")            
-            if (product.code == code && $priceListStateSellingToOrg) addToBasket(product, "org")
+
+            if(!product.code) return
+
+            if (product.code == code && !$priceListStateSellingToOrg) basket.addToBasket = {prod: product, price: "part"}
+            if (product.code == code && $priceListStateSellingToOrg) basket.addToBasket = {prod: product, price: "org"}
         }
     }
     
 
 
     // Basket
-    let basket: {prod: Product, price: "org" | "part", amt: number}[] = $state([])
-    let payingSum: number = $state(0) // payed notes set by the selection table
-    let returnSum: number = $state(0) //change set by note selection table
-    let payingNotes: { [key: number]: number; } = $state({})
-    let returnNotes: { [key: number]: number; } = $state({})
-
-    let enoughNotes: boolean = $state(false) // true if the customer has given enough notes, false otherwise
-    let possibleChange: boolean = $state(true) // true if change can be given back, false otherwise
-
-    const addToBasket = (prod: Product, price: "org" | "part"): void => {
-        
-        console.log(price);
-        
-
-        for (const product of basket) {
-            if (product.prod == prod && product.price == price) {
-                product.amt += 1
-                return
-            }
-        }
-
-        basket.push({prod, price, amt: 1})
-        
-    }
-
-    const removeFromBasket = (prod: Product, price: "org" | "part", removeAll?: boolean): void => {
-
-        for (const product of basket) {
-            if (product.prod == prod && product.price == price && product.amt > 1 && !removeAll) {
-                product.amt -= 1
-                return
-            }
-        }
-
-        basket.splice(basket.indexOf({prod, price, amt: 1}) - 1, 1)
-
-    }
-
-    const finalPrice = (): number => {
-        let price: number = 0
-
-        for (const basketElement of basket) {
-            if (basketElement.price == "org") {
-                price += basketElement.prod.singleOrgPriceM * basketElement.amt
-            } else if (basketElement.price == "part") {
-                price += basketElement.prod.singlePartPriceM * basketElement.amt
-            }
-        }
-        
-        return price
-    }
+    let basket: Basket = new Basket()
 
     $effect(() => {
   
-        possibleChange = true
-        enoughNotes = true
-        changeNotes(data.notes[0], payingSum - finalPrice()).then((change) => {
-            returnNotes = change
-            enoughNotes = true
-            possibleChange = true
+        basket.possibleChange = true
+        basket.enoughNotes = true
+        changeNotes(data.notes[0], basket.payingSum - basket.finalPrice).then((change) => {
+            basket.returnNotes = change
+            basket.enoughNotes = true
+            basket.possibleChange = true
         }).catch((err) => {
             if (err == "Not enough available notes") {
-                possibleChange = false
+                basket.possibleChange = false
             } else if (err == "Not enough notes given") {
-                enoughNotes = false
+                basket.enoughNotes = false
             }
         })
 
-        if(basket.length == 0) {
-            payingSum = 0 // payed notes set by the selection table
-            returnSum = 0 //change set by note selection table
-            payingNotes = {}
-            returnNotes = {}
+        if(basket.products.length == 0) {
+            basket.payingSum = 0 // payed notes set by the selection table
+            basket.returnSum = 0 //change set by note selection table
+            basket.payingNotes = {}
+            basket.returnNotes = {}
         }
     })
 
     // TODO sell function
     // TODO make basket object
+    // TODO register sell event
 
 </script>
 
@@ -186,8 +140,9 @@
                 {#each products as product}                    
                     <tr>
                         <td>{product.name}</td>
-                        <td><button onclick={() => { addToBasket(product, "org") }}>{product.singleOrgPriceM} Ft</button></td>
-                        <td><button onclick={() => { addToBasket(product, "part") }}>{product.singlePartPriceM} Ft</button></td>
+                        <!-- TODO handle mixed product prices -->
+                        <td><button onclick={() => { basket.addToBasket = {prod: product, price: "org"} }}>{product.singleOrgPriceM} Ft</button></td>
+                        <td><button onclick={() => { basket.addToBasket = {prod: product, price: "part"} }}>{product.singlePartPriceM} Ft</button></td>
                         <td>{product.allRemainingN}/{product.purchasedN}</td>
                         <td>{product.allSoldN}</td>
                     </tr>
@@ -198,7 +153,7 @@
         </table>
     </section>
 
-    {#if basket.length > 0}
+    {#if basket.products.length > 0}
         
         <section class="basket">
         <div class="header">
@@ -221,18 +176,18 @@
                 </thead>
                 <tbody>
 
-                    {#each basket as {prod, price, amt}}
+                    {#each basket.products as {prod, price, amt}}
 
                         <tr>
                             <td>
-                                <button onclick={() => { addToBasket(prod, price) }}>+</button>
+                                <button onclick={() => { basket.removeFromBasket = {prod, price} }}>-</button>
                                 <input type="number" value="{amt}" min="1" required >
-                                <button onclick={() => { removeFromBasket(prod, price) }}>-</button>
+                                <button onclick={() => { basket.addToBasket = {prod, price} }}>+</button>
                             </td>
                             <td>{prod.name}</td>
                             <td>{prod.singleOrgPriceM} Ft</td>
                             <td>{prod.singlePartPriceM} Ft</td>
-                            <td><button onclick={() => {removeFromBasket(prod, price, true)}}>Törlés</button></td>
+                            <td><button onclick={() => {basket.removeFromBasket = {prod, price, removeAll: true}}}>Törlés</button></td>
                         </tr>
                                         
                     {/each}
@@ -244,25 +199,25 @@
         <div>
             <div>
                 <h3>Fizetendő</h3>
-                <p>{finalPrice()} Ft</p>
+                <p>{basket.finalPrice} Ft</p>
                 <div>
                     <h4>Fizető címlet</h4>
-                    <NoteSelectionTable bind:sum={payingSum} bind:notes={payingNotes}></NoteSelectionTable>
-                    <p>{payingSum} Ft</p>
+                    <NoteSelectionTable bind:sum={basket.payingSum} bind:notes={basket.payingNotes}></NoteSelectionTable>
+                    <p>{basket.payingSum} Ft</p>
                 </div>
             </div>
             <div>
                 <h3>Visszajáró</h3>
-                {#if possibleChange && enoughNotes}
-                <p>{payingSum - finalPrice()} Ft</p>
+                {#if basket.possibleChange && basket.enoughNotes}
+                <p>{basket.payingSum - basket.finalPrice} Ft</p>
                 <div>
                     <h4>Visszajáró címlet</h4>
-                    <NoteSelectionTable bind:sum={returnSum} bind:notes={returnNotes}></NoteSelectionTable>
-                    <p>{returnSum} Ft</p>
+                    <NoteSelectionTable bind:sum={basket.returnSum} bind:notes={basket.returnNotes}></NoteSelectionTable>
+                    <p>{basket.returnSum} Ft</p>
                 </div>
-                {:else if !enoughNotes}    
+                {:else if !basket.enoughNotes}    
                     <h4>A fizetett összeg még nem elég!</h4>
-                {:else if !possibleChange}
+                {:else if !basket.possibleChange}
                     <h4>Nem lehet visszajárót adni!</h4>
                 {/if}
             </div>

@@ -42,6 +42,11 @@ export class Product {
         }
         this.code = productInfo.code;
 
+        this.setProps();
+
+    }
+
+    setProps() {
         this.allSoldN = Math.round(this.soldToOrgN + this.soldToPartN);
         this.allRemainingN = Math.round(this.purchasedN - this.allSoldN);
         this.singleProductValueM = Math.round(this.purchasePriceM / this.purchasedN);
@@ -55,8 +60,38 @@ export class Product {
         this.allOrgProfitM = Math.round(this.singleOrgProfitM * this.soldToOrgN);
         this.allPartProfitM = Math.round(this.singlePartProfitM * this.soldToPartN);
         this.allProfitM = Math.round(this.allOrgProfitM + this.allPartProfitM);
-
     }
+
+    sell(to: "org" | "part") {
+        if (this.allRemainingN == 0) return;
+        else if (this.allRemainingN == 1) this.active == false;
+
+        switch (to) {
+            case "org":
+                this.soldToOrgN += 1;
+            case "part":
+                this.soldToPartN += 1;
+        }
+
+        //Recalculate all the properties based on the changes
+        this.setProps();
+
+        fetch("/api/sell/product", {
+            method: "POST",
+            body: JSON.stringify({
+                id: this.id,
+                soldToOrgN: this.soldToOrgN,
+                soldToPartN: this.soldToPartN,
+                active: this.active
+            })
+        });
+
+        // Update notes
+        // Update income or stats or whatever
+        // Register sell event
+        // Update db of notes, products, events and stats
+    };
+
 }
 
 export class Basket {

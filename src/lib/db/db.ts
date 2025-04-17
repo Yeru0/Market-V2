@@ -53,7 +53,6 @@ export const writeTable: (tableValue: Table, overwrite?: boolean) => Promise<str
 
         let data: string[] = [];
 
-
         data.push(tableValue.getHeader().toString());
 
         for (const record of tableValue.getRecords()) {

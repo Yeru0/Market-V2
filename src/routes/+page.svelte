@@ -102,18 +102,15 @@
     })
 
     const sell = () => {
-        // If last product set deactivated to true
-        // Update the amount
-        // Update notes
-        // Update income or stats or whatever
-        // Register sell event
-        // Update db of notes and products
+        for (const product of basket.products) {
+            product.prod.sell(product.price)
+            basket.products.splice(basket.products.indexOf(product), 1)
+        }
     }
 
     // TODO sell function
     // TODO register sell event
     // TODO allow sikkasztás
-    // TODO dont show when inactive
 
 </script>
 
@@ -146,18 +143,21 @@
             </thead>
             <tbody>
     
-                {#each products as product}                    
-                    <tr>
-                        <!-- TODO handle mixed product prices -->
-                        <td>{product.name}</td>
-                        {#if $priceListStateSellingToOrg}
-                            <td><button onclick={() => { basket.addToBasket = {prod: product, price: "org"} }}>{product.singleOrgPriceM} Ft</button></td>
-                        {:else}
-                            <td><button onclick={() => { basket.addToBasket = {prod: product, price: "part"} }}>{product.singlePartPriceM} Ft</button></td>
-                        {/if}
-                        <td>{product.allRemainingN}/{product.purchasedN}</td>
-                        <td>{product.allSoldN}</td>
-                    </tr>
+                {#each products as product}
+
+                    {#if product.active}
+                        <tr>
+                            <!-- TODO handle mixed product prices -->
+                            <td>{product.name}</td>
+                            {#if $priceListStateSellingToOrg}
+                                <td><button onclick={() => { basket.addToBasket = {prod: product, price: "org"} }}>{product.singleOrgPriceM} Ft</button></td>
+                            {:else}
+                                <td><button onclick={() => { basket.addToBasket = {prod: product, price: "part"} }}>{product.singlePartPriceM} Ft</button></td>
+                            {/if}
+                            <td>{product.allRemainingN}/{product.purchasedN}</td>
+                            <td>{product.allSoldN}</td>
+                        </tr>
+                    {/if}   
 
                 {/each}
     
@@ -188,22 +188,20 @@
                 <tbody>
 
                     {#each basket.products as {prod, price, amt}}
-
                         <tr>
                             <td>
-                                <button onclick={() => { basket.removeFromBasket = {prod, price} }}>-</button>
-                                <input type="number" value="{amt}" min="1" required >
-                                <button onclick={() => { basket.addToBasket = {prod, price} }}>+</button>
-                            </td>
-                            <td>{prod.name}</td>
-                            {#if $priceListStateSellingToOrg}
-                                <td>{prod.singleOrgPriceM} Ft</td>
-                            {:else}
-                                <td>{prod.singlePartPriceM} Ft</td>
-                            {/if}
-                            <td><button onclick={() => {basket.removeFromBasket = {prod, price, removeAll: true}}}>Törlés</button></td>
-                        </tr>
-                                        
+                                    <button onclick={() => { basket.removeFromBasket = {prod, price} }}>-</button>
+                                    <input type="number" value="{amt}" min="1" required >
+                                    <button onclick={() => { basket.addToBasket = {prod, price} }}>+</button>
+                                </td>
+                                <td>{prod.name}</td>
+                                {#if $priceListStateSellingToOrg}
+                                    <td>{prod.singleOrgPriceM} Ft</td>
+                                {:else}
+                                    <td>{prod.singlePartPriceM} Ft</td>
+                                {/if}
+                                <td><button onclick={() => {basket.removeFromBasket = {prod, price, removeAll: true}}}>Törlés</button></td>
+                            </tr>    
                     {/each}
 
                 </tbody>
@@ -229,31 +227,19 @@
                     <NoteSelectionTable bind:sum={basket.returnSum} bind:notes={basket.returnNotes}></NoteSelectionTable>
                     <p>{basket.returnSum} Ft</p>
 
-                    <button>Sell</button>
                 </div>
                 {:else if !basket.enoughNotes}    
                     <h4>A fizetett összeg még nem elég!</h4>
-                {:else if !basket.possibleChange}
+                    {:else if !basket.possibleChange}
                     <h4>Nem lehet visszajárót adni!</h4>
-                {/if}
+                    {/if}
+                </div>
             </div>
-        </div>
-    
-    </section>
-    
+            
+        </section>
+        
     {/if}
 
 </main>
 
-<!-- TODO delete this shit -->
- <button onclick={() => {
-    fetch("/api/sell", {
-        method: "POST",
-        body: JSON.stringify({
-            id: "31a1a4eb-78b1-4a44-8ffd-e4d8d7c237c1",
-            soldToOrgN: "1222",
-            soldToPartN: "1495",
-            active: "false"
-        })
-    })
- }}>Click This</button>
+<button onclick={sell}>Eladás</button>

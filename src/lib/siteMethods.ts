@@ -4,15 +4,21 @@ export function changeNotes(inputNotes: { [key: number]: number; }, change: numb
 
     return new Promise((resolve: (value: { [key: number]: number; }) => void, reject: (value: string) => void) => {
 
+        if (change < 0) {
+            reject("Not enough notes given");
+            return;
+        } // The customer hasn't payed enough yet
+
         let avabNotes: { [key: number]: number; } = {
             ...inputNotes
         };
 
-        for (const key in inputNotes) {
+        delete avabNotes.id;
+        for (let key in inputNotes) {
             avabNotes[key] = parseInt(avabNotes[key]);
         }
 
-        delete avabNotes.id;
+
 
         let endValues: { [key: number]: number; } = {
             5: 0,
@@ -37,12 +43,11 @@ export function changeNotes(inputNotes: { [key: number]: number; }, change: numb
 
         let currentNotePos: number = Object.keys(avabNotes).length - 1;
 
-
         while (currentNotePos >= 0) {
             let listId: string = Object.keys(avabNotes)[currentNotePos];
             let tryAmount = change - parseInt(listId); // If there is available note, then subtract the value from change
 
-            if (avabNotes[listId] >= 0 && tryAmount >= 0) { // If the note we want to use is available
+            if (avabNotes[listId] > 0 && tryAmount >= 0) { // If the note we want to use is available
                 endValues[listId]++; // We want to use this note
                 avabNotes[listId]--; // But now it is not available
                 change = tryAmount; // Repeat

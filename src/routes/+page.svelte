@@ -66,8 +66,11 @@
     let basket: {prod: Product, price: "org" | "part", amt: number}[] = $state([])
     let payingSum: number = $state(0) // payed notes set by the selection table
     let returnSum: number = $state(0) //change set by note selection table
-    let availableNotes: { [key: number]: number; } = data.notes[0]
+    let payingNotes: { [key: number]: number; } = $state({})
     let returnNotes: { [key: number]: number; } = $state({})
+
+    let enoughNotes: boolean = $state(false) // true if the customer has given enough notes, false otherwise
+    let possibleChange: boolean = $state(true) // true if change can be given back, false otherwise
 
     const addToBasket = (prod: Product, price: "org" | "part"): void => {
         
@@ -111,23 +114,29 @@
     }
 
     $effect(() => {
-        changeNotes(availableNotes, finalPrice() - payingSum).then((result) => {
-                returnNotes = result
+        possibleChange = true
+        enoughNotes = true
+        changeNotes(data.notes[0], payingSum - finalPrice()).then((change) => {
+            returnNotes = change
+            enoughNotes = true
+            possibleChange = true
         }).catch((err) => {
-            console.log(err);
-            
+            if (err == "Not enough available notes") {
+                possibleChange = false
+            } else if (err == "Not enough notes given") {
+                enoughNotes = false
+            }
         })
     })
 
-    $inspect(returnNotes)
-
+    // TODO sell function
 
 </script>
 
 
 
 
-<!-- Code-reader listening -->
+<!-- TODO Code-reader listening -->
 <svelte:window onkeydown={(e) => {
     constructCode(e).then((result) => {
         let code = new Code(result)
@@ -217,19 +226,24 @@
                 <p>{finalPrice()} Ft</p>
                 <div>
                     <h4>Fizető címlet</h4>
-                    <NoteSelectionTable bind:sum={payingSum}></NoteSelectionTable>
+                    <NoteSelectionTable bind:sum={payingSum} bind:notes={payingNotes}></NoteSelectionTable>
                     <p>{payingSum} Ft</p>
                 </div>
             </div>
             <div>
-                <!-- TODO reactive -->
                 <h3>Visszajáró</h3>
-                <p>KUKI</p>
+                {#if possibleChange && enoughNotes}
+                <p>{payingSum - finalPrice()} Ft</p>
                 <div>
                     <h4>Visszajáró címlet</h4>
-                    <NoteSelectionTable bind:sum={returnNotes}></NoteSelectionTable>
+                    <NoteSelectionTable bind:sum={returnSum} bind:notes={returnNotes}></NoteSelectionTable>
                     <p>{returnSum} Ft</p>
                 </div>
+                {:else if !enoughNotes}    
+                    <h4>A fizetett összeg még nem elég!</h4>
+                {:else if !possibleChange}
+                    <h4>Nem lehet visszajárót adni!</h4>
+                {/if}
             </div>
         </div>
         </section>

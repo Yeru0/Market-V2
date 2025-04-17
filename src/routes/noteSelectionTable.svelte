@@ -2,22 +2,26 @@
 
     let {
         sum = $bindable(),
-        notes = {
-        5: 0,
-        50: 0,
-        500: 0,
-        5000: 0,
-        10: 0,
-        100: 0,
-        1000: 0,
-        10000: 0,
-        20: 0,
-        200: 0,
-        2000: 0,
-        20000: 0
-        }
+        notes = $bindable({})
     } = $props()
-    let control: boolean = false 
+    let control: boolean = false
+
+    if (Object.keys(notes).length == 0) {
+        notes = {
+            5:0,
+            50:0,
+            500:0,
+            5000:0,
+            10:0,
+            100:0,
+            1000:0,
+            10000:0,
+            20:0,
+            200:0,
+            2000:0,
+            20000:0
+        }
+    }
 
     let notesKeys: string[] = Object.keys(notes)
 

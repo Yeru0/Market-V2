@@ -22,6 +22,10 @@
             20000:0
         }
     }
+    
+    $effect(() => {
+        sum = Object.entries(notes).reduce((a, [note,amount]) => a + parseInt(note)*amount, 0)
+    })
 
     let notesKeys: string[] = Object.keys(notes)
 

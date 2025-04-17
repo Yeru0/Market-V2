@@ -40,6 +40,7 @@ export class Record {
             for (const field in this) {
                 if (field == fieldName) {
                     this[field] = newValue;
+
                 }
             }
 
@@ -112,7 +113,7 @@ export class Table {
 
                 this.records[this.records.indexOf(oldRecord)] = newRecord;
 
-                writeTable(this.tableName, this, true).then(() => {
+                writeTable(this, true).then(() => {
                     resolve(`Successfully updated record with id ${recordID} in table ${this.tableName}`);
                 }).catch((err) => {
                     reject(err);

@@ -101,9 +101,19 @@
         }
     })
 
+    const sell = () => {
+        // If last product set deactivated to true
+        // Update the amount
+        // Update notes
+        // Update income or stats or whatever
+        // Register sell event
+        // Update db of notes and products
+    }
+
     // TODO sell function
-    // TODO make basket object
     // TODO register sell event
+    // TODO allow sikkasztás
+    // TODO dont show when inactive
 
 </script>
 
@@ -114,7 +124,7 @@
 <svelte:window onkeydown={(e) => {
     constructCode(e).then((result) => {
         let code = new Code(result)
-        codeS = ""        
+        codeS = ""
         addToBasketOnCode(code.code)
     })
 }} />
@@ -129,8 +139,7 @@
             <thead>
                 <tr>
                     <td>Teréknév</td>
-                    <td>Szervezői ár</td>
-                    <td>Részrvevői ár</td>
+                    <td>Ár</td>
                     <td>Raktár</td>
                     <td>Összesen eladott</td>
                 </tr>
@@ -139,10 +148,13 @@
     
                 {#each products as product}                    
                     <tr>
-                        <td>{product.name}</td>
                         <!-- TODO handle mixed product prices -->
-                        <td><button onclick={() => { basket.addToBasket = {prod: product, price: "org"} }}>{product.singleOrgPriceM} Ft</button></td>
-                        <td><button onclick={() => { basket.addToBasket = {prod: product, price: "part"} }}>{product.singlePartPriceM} Ft</button></td>
+                        <td>{product.name}</td>
+                        {#if $priceListStateSellingToOrg}
+                            <td><button onclick={() => { basket.addToBasket = {prod: product, price: "org"} }}>{product.singleOrgPriceM} Ft</button></td>
+                        {:else}
+                            <td><button onclick={() => { basket.addToBasket = {prod: product, price: "part"} }}>{product.singlePartPriceM} Ft</button></td>
+                        {/if}
                         <td>{product.allRemainingN}/{product.purchasedN}</td>
                         <td>{product.allSoldN}</td>
                     </tr>
@@ -169,8 +181,7 @@
                     <tr>
                         <th>Mennyiség</th>
                         <th>Terméknév</th>
-                        <th>Szervezői ár</th>
-                        <th>Résztvevői ár</th>
+                        <th>Ár</th>
                         <th>Akció</th>
                     </tr>
                 </thead>
@@ -185,8 +196,11 @@
                                 <button onclick={() => { basket.addToBasket = {prod, price} }}>+</button>
                             </td>
                             <td>{prod.name}</td>
-                            <td>{prod.singleOrgPriceM} Ft</td>
-                            <td>{prod.singlePartPriceM} Ft</td>
+                            {#if $priceListStateSellingToOrg}
+                                <td>{prod.singleOrgPriceM} Ft</td>
+                            {:else}
+                                <td>{prod.singlePartPriceM} Ft</td>
+                            {/if}
                             <td><button onclick={() => {basket.removeFromBasket = {prod, price, removeAll: true}}}>Törlés</button></td>
                         </tr>
                                         
@@ -214,6 +228,8 @@
                     <h4>Visszajáró címlet</h4>
                     <NoteSelectionTable bind:sum={basket.returnSum} bind:notes={basket.returnNotes}></NoteSelectionTable>
                     <p>{basket.returnSum} Ft</p>
+
+                    <button>Sell</button>
                 </div>
                 {:else if !basket.enoughNotes}    
                     <h4>A fizetett összeg még nem elég!</h4>
@@ -222,9 +238,22 @@
                 {/if}
             </div>
         </div>
-        </section>
+    
+    </section>
     
     {/if}
 
 </main>
 
+<!-- TODO delete this shit -->
+ <button onclick={() => {
+    fetch("/api/sell", {
+        method: "POST",
+        body: JSON.stringify({
+            id: "31a1a4eb-78b1-4a44-8ffd-e4d8d7c237c1",
+            soldToOrgN: "1222",
+            soldToPartN: "1495",
+            active: "false"
+        })
+    })
+ }}>Click This</button>

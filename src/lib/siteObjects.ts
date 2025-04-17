@@ -8,6 +8,7 @@ export class Product {
     purchasedN: number;
     purchasePriceM: number;
     active: boolean;
+    code: string;
 
     allIncomeM: number;
     allOrgIncomeM: number;
@@ -39,6 +40,7 @@ export class Product {
         } else {
             this.active = false;
         }
+        this.code = productInfo.code;
 
         this.allSoldN = Math.round(this.soldToOrgN + this.soldToPartN);
         this.allRemainingN = Math.round(this.purchasedN - this.allSoldN);

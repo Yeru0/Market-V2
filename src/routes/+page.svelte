@@ -3,6 +3,7 @@
 	import { Code } from "$lib/code-reader/codeReaderObjects";
     import { Product } from "$lib/siteObjects"
 	import { changeNotes } from "$lib/siteMethods";
+	import { priceListStateSellingToOrg } from "./shared.svelte";
 
     let { data } = $props()
 
@@ -22,7 +23,7 @@
     let codeS: string = "";
     let lastKeyPressTime = 0;
 
-    function constructCode(e: KeyboardEvent): Promise<string> {
+    const constructCode = (e: KeyboardEvent): Promise<string> => {
         return new Promise((resolve: (value: string) => void, reject: (value: void) => void) => {
             e.preventDefault();
 
@@ -59,7 +60,15 @@
 
         // method constructCode END
     };
-
+    
+    const addToBasketOnCode = (code: string):void => {
+           
+        for(const product of products) {
+            if (product.code == code && !$priceListStateSellingToOrg) addToBasket(product, "part")            
+            if (product.code == code && $priceListStateSellingToOrg) addToBasket(product, "org")
+        }
+    }
+    
 
 
     // Basket
@@ -74,7 +83,9 @@
 
     const addToBasket = (prod: Product, price: "org" | "part"): void => {
         
+        console.log(price);
         
+
         for (const product of basket) {
             if (product.prod == prod && product.price == price) {
                 product.amt += 1
@@ -86,16 +97,16 @@
         
     }
 
-    const removeFromBasket = (prod: Product, price: "org" | "part"): void => {
+    const removeFromBasket = (prod: Product, price: "org" | "part", removeAll?: boolean): void => {
 
         for (const product of basket) {
-            if (product.prod == prod && product.price == price && product.amt > 1) {
+            if (product.prod == prod && product.price == price && product.amt > 1 && !removeAll) {
                 product.amt -= 1
                 return
             }
         }
 
-        basket.splice(basket.indexOf({prod, price, amt: 1}), 1)
+        basket.splice(basket.indexOf({prod, price, amt: 1}) - 1, 1)
 
     }
 
@@ -114,6 +125,7 @@
     }
 
     $effect(() => {
+  
         possibleChange = true
         enoughNotes = true
         changeNotes(data.notes[0], payingSum - finalPrice()).then((change) => {
@@ -127,20 +139,29 @@
                 enoughNotes = false
             }
         })
+
+        if(basket.length == 0) {
+            payingSum = 0 // payed notes set by the selection table
+            returnSum = 0 //change set by note selection table
+            payingNotes = {}
+            returnNotes = {}
+        }
     })
 
     // TODO sell function
+    // TODO make basket object
 
 </script>
 
 
 
 
-<!-- TODO Code-reader listening -->
+<!-- Code-reader listening -->
 <svelte:window onkeydown={(e) => {
     constructCode(e).then((result) => {
         let code = new Code(result)
-        codeS = ""
+        codeS = ""        
+        addToBasketOnCode(code.code)
     })
 }} />
 
@@ -209,9 +230,9 @@
                                 <button onclick={() => { removeFromBasket(prod, price) }}>-</button>
                             </td>
                             <td>{prod.name}</td>
-                            <td>{prod.singlePartPriceM} Ft</td>
                             <td>{prod.singleOrgPriceM} Ft</td>
-                            <td><button onclick={() => {removeFromBasket(prod, price)}}>Törlés</button></td>
+                            <td>{prod.singlePartPriceM} Ft</td>
+                            <td><button onclick={() => {removeFromBasket(prod, price, true)}}>Törlés</button></td>
                         </tr>
                                         
                     {/each}

@@ -25,8 +25,6 @@
 
     const constructCode = (e: KeyboardEvent): Promise<string> => {
         return new Promise((resolve: (value: string) => void, reject: (value: void) => void) => {
-            e.preventDefault();
-
             // Only construct code if not keyboard input
             const currentTime = new Date().getTime();
             const timeDifference = currentTime - lastKeyPressTime 
@@ -67,8 +65,8 @@
 
             if(!product.code) return
 
-            if (product.code == code && !$priceListStateSellingToOrg) basket.addToBasket = {prod: product, price: "part"}
-            if (product.code == code && $priceListStateSellingToOrg) basket.addToBasket = {prod: product, price: "org"}
+            if (product.code == code && !$priceListStateSellingToOrg) basket.addToBasket(product, "part")
+            if (product.code == code && $priceListStateSellingToOrg) basket.addToBasket(product, "org")
         }
     }
     
@@ -99,16 +97,24 @@
             basket.payingNotes = {}
             basket.returnNotes = {}
         }
+        
     })
 
     const sell = () => {
         let soldProducts: {}[] = []
         for (const product of basket.products) {
 
+            if (product.amt > products[products.indexOf(product.prod)].allRemainingN) {
+                basket.products.splice(basket.products.indexOf(product))
+                return
+            }
+
             for (product.amt; product.amt > 0; product.amt--) {
                 product.prod.sell(product.price)
-                basket.products.splice(basket.products.indexOf(product))
             }
+            
+            basket.products.splice(basket.products.indexOf(product))
+
             soldProducts.push({
                 id: product.prod.id,
                 soldToOrgN: product.prod.soldToOrgN,
@@ -169,9 +175,9 @@
                             <!-- TODO handle mixed product prices -->
                             <td>{product.name}</td>
                             {#if $priceListStateSellingToOrg}
-                                <td><button onclick={() => { basket.addToBasket = {prod: product, price: "org"} }}>{product.singleOrgPriceM} Ft</button></td>
+                                <td><button onclick={() => { basket.addToBasket(product, "org") }}>{product.singleOrgPriceM} Ft</button></td>
                             {:else}
-                                <td><button onclick={() => { basket.addToBasket = {prod: product, price: "part"} }}>{product.singlePartPriceM} Ft</button></td>
+                                <td><button onclick={() => { basket.addToBasket(product, "part") }}>{product.singlePartPriceM} Ft</button></td>
                             {/if}
                             <td>{product.allRemainingN}/{product.purchasedN}</td>
                             <td>{product.allSoldN}</td>
@@ -186,79 +192,94 @@
 
     {#if basket.products.length > 0}
         
-    <section class="basket">
-        <div class="header">
-            <span class="material-symbols-outlined">
-                shopping_cart
-            </span>
-            <h2>Kosár</h2>
-        </div>
-
-        <div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Mennyiség</th>
-                        <th>Terméknév</th>
-                        <th>Ár</th>
-                        <th>Akció</th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                    {#each basket.products as {prod, price, amt}}
-                        <tr>
-                            <td>
-                                    <button onclick={() => { basket.removeFromBasket = {prod, price} }}>-</button>
-                                    <input type="number" value="{amt}" min="1" required >
-                                    <button onclick={() => { basket.addToBasket = {prod, price} }}>+</button>
-                                </td>
-                                <td>{prod.name}</td>
-                                {#if $priceListStateSellingToOrg}
-                                    <td>{prod.singleOrgPriceM} Ft</td>
-                                {:else}
-                                    <td>{prod.singlePartPriceM} Ft</td>
-                                {/if}
-                                <td><button onclick={() => {basket.removeFromBasket = {prod, price, removeAll: true}}}>Törlés</button></td>
-                            </tr>    
-                    {/each}
-
-                </tbody>
-            </table>
-        </div>
-
-        <div>
-            <div>
-                <h3>Fizetendő</h3>
-                <p>{basket.finalPrice} Ft</p>
-                <div>
-                    <h4>Fizető címlet</h4>
-                    <NoteSelectionTable bind:sum={basket.payingSum} bind:notes={basket.payingNotes}></NoteSelectionTable>
-                    <p>{basket.payingSum} Ft</p>
-                </div>
+        <section class="basket">
+            <div class="header">
+                <span class="material-symbols-outlined">
+                    shopping_cart
+                </span>
+                <h2>Kosár</h2>
             </div>
-            <div>
-                <h3>Visszajáró</h3>
-                {#if basket.possibleChange && basket.enoughNotes}
-                <p>{basket.payingSum - basket.finalPrice} Ft</p>
-                <div>
-                    <h4>Visszajáró címlet</h4>
-                    <NoteSelectionTable bind:sum={basket.returnSum} bind:notes={basket.returnNotes}></NoteSelectionTable>
-                    <p>{basket.returnSum} Ft</p>
 
+            <form onsubmit={sell}>
+                <div>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Mennyiség</th>
+                                <th>Terméknév</th>
+                                <th>Ár</th>
+                                <th>Akció</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            {#each basket.products as basketProduct}
+                                <tr>
+                                    <td>
+                                            <button
+                                                onclick={() => { basket.removeFromBasket(basketProduct.prod, basketProduct.price) }}
+                                                type="button"
+                                            >-</button>
+                                            <input type="number" bind:value={basketProduct.amt} min="1" max={basketProduct.prod.allRemainingN} required />
+                                            <button
+                                                onclick={() => { basket.addToBasket(basketProduct.prod, basketProduct.price) }}
+                                                disabled={basketProduct.amt >= basketProduct.prod.allRemainingN}
+                                                type="button"
+                                            >+</button>
+                                        </td>
+                                        <td>{basketProduct.prod.name}</td>
+                                        {#if $priceListStateSellingToOrg}
+                                            <td>{basketProduct.prod.singleOrgPriceM} Ft</td>
+                                        {:else}
+                                            <td>{basketProduct.prod.singlePartPriceM} Ft</td>
+                                        {/if}
+                                        <td><button onclick={() => {basket.removeFromBasket(basketProduct.prod, basketProduct.price, true)}}>Törlés</button></td>
+                                    </tr>    
+                            {/each}
+
+                        </tbody>
+                    </table>
                 </div>
-                {:else if !basket.enoughNotes}    
-                    <h4>A fizetett összeg még nem elég!</h4>
-                    {:else if !basket.possibleChange}
-                    <h4>Nem lehet visszajárót adni!</h4>
-                    {/if}
-                </div>
-            </div>
-            
+
+                <div>
+                    <div>
+                        <h3>Fizetendő</h3>
+                        <p>{basket.finalPrice} Ft</p>
+                        <div>
+                            <h4>Fizető címlet</h4>
+                            <NoteSelectionTable bind:sum={basket.payingSum} bind:notes={basket.payingNotes}></NoteSelectionTable>
+                            <p>{basket.payingSum} Ft</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h3>Visszajáró</h3>
+                        {#if basket.possibleChange && basket.enoughNotes}
+                            <p>{basket.payingSum - basket.finalPrice} Ft</p>
+                            <div>
+                                <h4>Visszajáró címlet</h4>
+                                <NoteSelectionTable bind:sum={basket.returnSum} bind:notes={basket.returnNotes}></NoteSelectionTable>
+                                <p>{basket.returnSum} Ft</p>
+
+                                <button
+                                    type="submit"
+                                    disabled={
+                                        (5 * Math.round((basket.payingSum - basket.finalPrice) / 5)) !== basket.returnSum}
+                                >Eladás</button>
+
+                            </div>
+                        {:else if !basket.enoughNotes}    
+                            <h4>A fizetett összeg még nem elég!</h4>
+                        {:else if !basket.possibleChange}
+                            <h4>Nem lehet visszajárót adni!</h4>
+                        {/if}
+                        </div>
+                    </div>
+
+            </form>
         </section>
         
     {/if}
 
-</main>
 
-<button onclick={sell}>Eladás</button>
+</main>

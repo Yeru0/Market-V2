@@ -14,6 +14,7 @@ export async function handle({ event, resolve }) {
 
         for (const product of soldProducts) {
             let sameProd = await table.getRecord(product.id);
+            if (product.soldToOrgN + product.soldToPartN > parseInt(sameProd.getField("purchasedN"))) return;
             await table.updateRecord(
                 product.id,
                 [sameProd.id, sameProd.name, sameProd.organiserProfitMargin, sameProd.participantProfitMargin, `${product.soldToOrgN}`, `${product.soldToPartN}`, sameProd.purchasedN, sameProd.purchasePriceM, `${product.active}`, sameProd.code]

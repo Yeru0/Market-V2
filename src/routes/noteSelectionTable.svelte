@@ -58,8 +58,8 @@
     <tbody>
         {#each notesKeys as note}
         <tr>
-            <td><button onclick={() => { increment(note) }}>{note} Ft</button></td>
-            <td><button onclick={() => { decrement(note) }}>{notes[parseInt(note)]}</button></td>
+            <td><button type="button" onclick={() => { increment(note) }}>{note} Ft</button></td>
+            <td><button type="button" onclick={() => { decrement(note) }}>{notes[parseInt(note)]}</button></td>
         </tr>
         {/each}
     </tbody>

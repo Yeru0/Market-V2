@@ -64,8 +64,11 @@ export class Product {
 
     sell(to: "org" | "part") {
 
-        if (this.allRemainingN <= 0) return;
-        else if (this.allRemainingN == 1) this.active == false;
+        if (this.allRemainingN <= 0) {
+            this.active = false;
+            return;
+        }
+        else if (this.allRemainingN == 1) this.active = false;
 
         switch (to) {
             case "org":
@@ -103,26 +106,26 @@ export class Basket {
 
     }
 
-    set addToBasket(prodProps: { prod: Product, price: "org" | "part"; }): void {
+    addToBasket(prod: Product, price: "org" | "part"): void {
 
         return new Promise((resolve, reject) => {
 
-            if (this.products.length == 0) this.basketType = prodProps.price;
+            if (this.products.length == 0) this.basketType = price;
 
-            if (this.basketType !== prodProps.price) {
+            if (this.basketType !== price) {
                 reject("Mixed product prices are not allowed");
                 return "Mixed product prices are not allowed";
             }
 
             for (const product of this.products) {
-                if (product.prod == prodProps.prod && product.price == prodProps.price) {
+                if (product.prod == prod && product.price == price) {
                     product.amt += 1;
                     resolve("Product added");
                     return "Product added";
                 }
             }
 
-            this.products.push({ ...prodProps, amt: 1 });
+            this.products.push({ prod, price, amt: 1 });
             resolve("Product added");
             return "Product added";
 
@@ -130,19 +133,19 @@ export class Basket {
 
     };
 
-    set removeFromBasket(prodProps: { prod: Product, price: "org" | "part", removeAll?: boolean; }): void {
+    removeFromBasket(prod: Product, price: "org" | "part", removeAll?: boolean): void {
 
         return new Promise((resolve, reject) => {
 
             for (const product of this.products) {
-                if (product.prod == prodProps.prod && product.price == prodProps.price && product.amt > 1 && !prodProps.removeAll) {
+                if (product.prod == prod && product.price == price && product.amt > 1 && !removeAll) {
                     product.amt -= 1;
                     resolve("Product removed");
                     return "Product removed";
                 }
             }
 
-            this.products.splice(this.products.indexOf({ ...prodProps, amt: 1 }) - 1, 1);
+            this.products.splice(this.products.indexOf({ prod, price, amt: 1 }) - 1, 1);
             resolve("Product removed");
             return "Product removed";
 

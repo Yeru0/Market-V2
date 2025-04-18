@@ -6,6 +6,7 @@
 	import { changeNotes } from "$lib/siteMethods";
 	import { priceListStateSellingToOrg } from "./shared.svelte";
 	import RenderBasket from "./RenderBasket.svelte";
+	import CodeReaderModule from "./CodeReaderModule.svelte";
 
 
     let { data } = $props()
@@ -17,61 +18,6 @@
 
     for (const product of data.products) {
         products.push(new Product(product))
-    }
-
-
-
-    // Function that listens to the code reader,
-    // and constructs the code from it's input
-    let codeS: string = "";
-    let lastKeyPressTime = 0;
-
-    const constructCode = (e: KeyboardEvent): Promise<string> => {
-        return new Promise((resolve: (value: string) => void, reject: (value: void) => void) => {
-            // Only construct code if not keyboard input
-            const currentTime = new Date().getTime();
-            const timeDifference = currentTime - lastKeyPressTime 
-            lastKeyPressTime = currentTime;
-        
-
-
-            let key: string = e.key;
-            if (
-                key == "Shift" ||
-                key == "Control" ||
-                key == "AltGraph" ||
-                key == "Alt" ||
-                key == "CapsLock" ||
-                lastKeyPressTime === 0 ||
-                timeDifference > 10 ||
-                key == "Meta"
-            ) {
-                return;
-            }
-
-
-            if (key != "Enter") {
-                codeS += key;
-            } else {
-                resolve(codeS);
-            }
-
-            // Promise end
-        });
-
-        // method constructCode END
-    };
-    
-    const addToBasketOnCode = (code: string):void => {
-        //TODO dont add when theres no more product
-        //TODO Export code into its own component
-        for(const product of products) {
-
-            if(!product.code) return
-
-            if (product.code == code && !$priceListStateSellingToOrg) basket.addToBasket(product, "part")
-            if (product.code == code && $priceListStateSellingToOrg) basket.addToBasket(product, "org")
-        }
     }
     
 
@@ -152,26 +98,15 @@
 
 </script>
 
-
-
-
-<!-- Code-reader listening -->
- <!--     onkeydown={(e) => {
-        constructCode(e).then((result) => {
-            let code = new Code(result)
-            codeS = ""
-            addToBasketOnCode(code.code)
-        })
-    }} -->
 <svelte:window
-
     onkeydown={(e) => { 
         if (e.key == "Control") control = true
      }}
     onkeyup={(e) => { 
         if (e.key == "Control") control = false
-     }}/>
+}}/>
 
+<CodeReaderModule {basket} {products} ></CodeReaderModule>
 
 <main>
 

@@ -162,27 +162,20 @@ export class Basket {
             for (const product of this.products) {
                 if (product.prod == prod && product.price == price && product.amt > 1 && !removeAll && !removeMost) {
                     product.amt -= 1;
-                    prod.buttonDisabling(this);
-                    resolve("Product removed");
-                    return "Product removed";
                 } else if (product.prod == prod && product.price == price && product.amt > 1 && !removeAll && removeMost) {
                     product.amt = 1;
-                    prod.buttonDisabling(this);
-                    resolve("Product removed");
-                    return "Product removed";
                 } else if (product.prod == prod && product.price == price && product.amt <= 1 || removeAll) {
-                    let amount = product.amt;
                     this.products.splice(this.products.indexOf(product), 1);
+                } else {
                     prod.buttonDisabling(this);
-                    resolve("Product removed");
-                    return "Product removed";
+                    reject("Something went wrong");
+                    return "Something went wrong";
                 }
-
             }
 
             prod.buttonDisabling(this);
-            reject("Something went wrong");
-            return "Something went wrong";
+            reject("Product deleted");
+            return "Product deleted";
 
         });
 

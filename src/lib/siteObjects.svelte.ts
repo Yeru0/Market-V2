@@ -115,8 +115,8 @@ export class Basket {
 
     payingSum: number = $state(0); // payed notes set by the selection table
     returnSum: number = $state(0); //change set by note selection table
-    payingNotes: { [key: number]: number; } = $state({});
-    returnNotes: { [key: number]: number; } = $state({});
+    payingNotes: { [key: string]: number; } = $state({});
+    returnNotes: { [key: string]: number; } = $state({});
 
     enoughNotes: boolean = $state(false); // true if the customer has given enough notes, false otherwise
     possibleChange: boolean = $state(true); // true if change can be given back, false otherwise

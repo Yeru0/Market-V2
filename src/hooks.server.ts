@@ -4,23 +4,63 @@ import { Product } from "./lib/siteObjects.svelte";
 
 export async function handle({ event, resolve }) {
 
-    if (event.url.pathname === "/api/sell/product", event.request.method === "POST") {
+    if (event.url.pathname === "/api/sell/product" && event.request.method === "POST") {
         // data expects: ID, active, soldToOrgN, soldToPartN
         let data = JSON.parse(await event.request.text());
 
         let soldProducts: {}[] = data.soldProducts;
         let table: Table = await readTable("products");
 
-
         for (const product of soldProducts) {
             let sameProd = await table.getRecord(product.id);
             if (product.soldToOrgN + product.soldToPartN > parseInt(sameProd.getField("purchasedN"))) return;
+
             await table.updateRecord(
                 product.id,
-                [sameProd.id, sameProd.name, sameProd.organiserProfitMargin, sameProd.participantProfitMargin, `${product.soldToOrgN}`, `${product.soldToPartN}`, `${product.takenOutN}`, sameProd.purchasedN, sameProd.purchasePriceM, sameProd.code]
+                [
+                    product.id,
+                    sameProd.name,
+                    sameProd.organiserProfitMargin,
+                    sameProd.participantProfitMargin,
+                    `${product.soldToOrgN}`,
+                    `${product.soldToPartN}`,
+                    `${product.takenOutN}`,
+                    sameProd.purchasedN,
+                    sameProd.purchasePriceM,
+                    sameProd.code
+                ]
             );
         }
 
+
+        writeTable(table, true);
+
+    }
+    else if (event.url.pathname === "/api/sell/notes" && event.request.method === "POST") {
+        // data expects: ID, active, soldToOrgN, soldToPartN
+        let data = JSON.parse(await event.request.text());
+
+        let notes: {}[] = data.notes;
+        let table: Table = await readTable("notes");
+
+        await table.updateRecord(
+            "a",
+            [
+                notes["5"],
+                notes["10"],
+                notes["20"],
+                notes["50"],
+                notes["100"],
+                notes["200"],
+                notes["500"],
+                notes["1000"],
+                notes["2000"],
+                notes["5000"],
+                notes["10000"],
+                notes["20000"],
+                "a"
+            ]
+        );
 
         writeTable(table, true);
 

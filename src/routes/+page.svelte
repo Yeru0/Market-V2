@@ -1,10 +1,8 @@
 <script lang="ts">
     import NoteSelectionTable from "./NoteSelectionTable.svelte";
     import RenderProds from "./RenderProds.svelte";
-	import { Code } from "$lib/code-reader/codeReaderObjects";
     import { Basket, Product } from "$lib/siteObjects.svelte"
 	import { changeNotes } from "$lib/siteMethods";
-	import { priceListStateSellingToOrg } from "./shared.svelte";
 	import RenderBasket from "./RenderBasket.svelte";
 	import CodeReaderModule from "./CodeReaderModule.svelte";
 
@@ -19,7 +17,6 @@
     for (const product of data.products) {
         products.push(new Product(product))
     }
-    
 
 
     // Basket
@@ -52,8 +49,9 @@
         }
         
     })
-
-    const sell = () => {
+        
+    const sell = async () => {
+        // Register product sale
         let soldProducts: {}[] = []
         let productsToTakeOut: { prod: Product, price: "org" | "part", amt: number; }[] = []
         for (const product of basket.products) {             
@@ -82,19 +80,33 @@
         for (const prod of productsToTakeOut) {
             basket.products.splice(basket.products.indexOf(prod))
         } 
+
+        // Register the state of the notes
+        let notes = data.notes[0]
+        for (const note in notes) {
+            if(note == "id") continue
+            notes[note] = parseInt(notes[note]) + basket.payingNotes[note] - basket.returnNotes[note]
+        }
         
-        
-        fetch("/api/sell/product", {
+    
+        // Send the product sale event to the database
+        await fetch("/api/sell/product", {
             method: "POST",
             body: JSON.stringify({
                 soldProducts
+            })
+        });
+        // Send the changed notes to the database
+        await fetch("/api/sell/notes", {
+            method: "POST",
+            body: JSON.stringify({
+                notes
             })
         });
     }
 
     // TODO sell function
     // TODO register sell event
-    // TODO allow sikkasztás
 
 </script>
 

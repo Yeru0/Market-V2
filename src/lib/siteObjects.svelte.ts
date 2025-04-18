@@ -155,13 +155,18 @@ export class Basket {
 
     };
 
-    removeFromBasket(prod: Product, price: "org" | "part", removeAll?: boolean): void {
+    removeFromBasket(prod: Product, price: "org" | "part", removeAll?: boolean, removeMost?: boolean): void {
 
         return new Promise((resolve, reject) => {
 
             for (const product of this.products) {
-                if (product.prod == prod && product.price == price && product.amt > 1 && !removeAll) {
+                if (product.prod == prod && product.price == price && product.amt > 1 && !removeAll && !removeMost) {
                     product.amt -= 1;
+                    prod.buttonDisabling(this);
+                    resolve("Product removed");
+                    return "Product removed";
+                } else if (product.prod == prod && product.price == price && product.amt > 1 && !removeAll && removeMost) {
+                    product.amt = 1;
                     prod.buttonDisabling(this);
                     resolve("Product removed");
                     return "Product removed";
@@ -172,7 +177,6 @@ export class Basket {
                     resolve("Product removed");
                     return "Product removed";
                 }
-
 
             }
 

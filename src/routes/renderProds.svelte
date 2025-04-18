@@ -1,21 +1,9 @@
 <script lang="ts">
     import { priceListStateSellingToOrg } from "./shared.svelte";
 
-    let { products, basket} = $props()
-
-    let control: boolean = $state(false)
+    let { products, basket, control} = $props()
 
 </script>
-
-<!-- Listening control pressing -->
-<svelte:window 
-    onkeydown={(e) => { 
-        if (e.key == "Control") control = true
-     }}
-    onkeyup={(e) => { 
-        if (e.key == "Control") control = false
-     }}
-/>
 
 <table>
     <thead>

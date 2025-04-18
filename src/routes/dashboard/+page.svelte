@@ -1,5 +1,5 @@
-<script>
-    import NoteSelectionTable from "../noteSelectionTable.svelte";
+<script lang="ts">
+    import NoteSelectionTable from "../NoteSelectionTable.svelte";
 </script>
 
 <!-- TODO BIG reactivity -->
@@ -69,7 +69,7 @@
 
    <section>
     <h2>Beállítások</h2>
-    <NoteSelectionTable></NoteSelectionTable>
+        <NoteSelectionTable></NoteSelectionTable>
    </section>
 
    <section>

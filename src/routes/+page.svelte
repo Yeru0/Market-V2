@@ -1,10 +1,11 @@
 <script lang="ts">
-    import NoteSelectionTable from "./noteSelectionTable.svelte";
-    import RenderProds from "./renderProds.svelte";
+    import NoteSelectionTable from "./NoteSelectionTable.svelte";
+    import RenderProds from "./RenderProds.svelte";
 	import { Code } from "$lib/code-reader/codeReaderObjects";
     import { Basket, Product } from "$lib/siteObjects.svelte"
 	import { changeNotes } from "$lib/siteMethods";
 	import { priceListStateSellingToOrg } from "./shared.svelte";
+	import RenderBasket from "./RenderBasket.svelte";
 
 
     let { data } = $props()
@@ -62,7 +63,8 @@
     };
     
     const addToBasketOnCode = (code: string):void => {
-
+        //TODO dont add when theres no more product
+        //TODO Export code into its own component
         for(const product of products) {
 
             if(!product.code) return
@@ -77,6 +79,7 @@
     // Basket
     let basket: Basket = new Basket()
     let takingOut: boolean = $state(false)
+    let control: boolean = $state(false)
 
 
     $effect(() => {
@@ -153,13 +156,21 @@
 
 
 <!-- Code-reader listening -->
-<svelte:window onkeydown={(e) => {
-    constructCode(e).then((result) => {
-        let code = new Code(result)
-        codeS = ""
-        addToBasketOnCode(code.code)
-    })
-}} />
+ <!--     onkeydown={(e) => {
+        constructCode(e).then((result) => {
+            let code = new Code(result)
+            codeS = ""
+            addToBasketOnCode(code.code)
+        })
+    }} -->
+<svelte:window
+
+    onkeydown={(e) => { 
+        if (e.key == "Control") control = true
+     }}
+    onkeyup={(e) => { 
+        if (e.key == "Control") control = false
+     }}/>
 
 
 <main>
@@ -167,7 +178,7 @@
     <h1>Termékek</h1>
 
     <section class="products">
-        <RenderProds {products} {basket}></RenderProds>
+        <RenderProds {products} {basket} {control}></RenderProds>
     </section>
 
     {#if basket.products.length > 0}
@@ -183,45 +194,8 @@
             <form onsubmit={sell}>
                 <div>
 
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Mennyiség</th>
-                                <th>Terméknév</th>
-                                <th>Ár</th>
-                                <th>Akció</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                    <RenderBasket {basket} {control}></RenderBasket>
 
-                            {#each basket.products as basketProduct (basketProduct)}
-                                <tr>
-                                    <td>
-                                        <button
-                                            onclick={() => { basket.removeFromBasket(basketProduct.prod, basketProduct.price) }}
-                                            type="button"
-                                        >-</button>
-                                        <input type="number" bind:value={basketProduct.amt} min="1" max={basketProduct.prod.allRemainingN} required />
-                                        <button
-                                            onclick={() => { basket.addToBasket(basketProduct.prod, basketProduct.price) }}
-                                            disabled={!basketProduct.prod.canAddMore}
-                                            type="button"
-                                        >+</button>
-                                        </td>
-                                        <td>{basketProduct.prod.name}</td>
-                                        {#if $priceListStateSellingToOrg}
-                                            <td>{basketProduct.prod.singleOrgPriceM} Ft</td>
-                                        {:else}
-                                            <td>{basketProduct.prod.singlePartPriceM} Ft</td>
-                                        {/if}
-                                        <td><button 
-                                            type="button"
-                                            onclick={() => {basket.removeFromBasket(basketProduct.prod, basketProduct.price, true)}}>Törlés</button></td>
-                                    </tr> 
-                            {/each}
-
-                        </tbody>
-                    </table>
                     <label for="taking-out">
                         {basket.products.length == 1 ? "Termék kivétele" : "Termékek kivétele"}
                         <input type="checkbox" name="taking-out" id="taking-out" bind:checked={takingOut}>
@@ -238,7 +212,7 @@
                             <p>{basket.finalPrice} Ft</p>
                             <div>
                                 <h4>Fizető címlet</h4>
-                                <NoteSelectionTable bind:sum={basket.payingSum} bind:notes={basket.payingNotes}></NoteSelectionTable>
+                                <NoteSelectionTable bind:sum={basket.payingSum} bind:notes={basket.payingNotes} {control}></NoteSelectionTable>
                                 <p>{basket.payingSum} Ft</p>
                             </div>
                         </div>
@@ -248,7 +222,7 @@
                                 <p>{basket.payingSum - basket.finalPrice} Ft</p>
                                 <div>
                                     <h4>Visszajáró címlet</h4>
-                                    <NoteSelectionTable bind:sum={basket.returnSum} bind:notes={basket.returnNotes}></NoteSelectionTable>
+                                    <NoteSelectionTable bind:sum={basket.returnSum} bind:notes={basket.returnNotes} {control}></NoteSelectionTable>
                                     <p>{basket.returnSum} Ft</p>
 
                                     <button

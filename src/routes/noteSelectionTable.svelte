@@ -2,10 +2,10 @@
 
     let {
         sum = $bindable(),
-        notes = $bindable({})
+        notes = $bindable({}),
+        control
     } = $props()
-    let control: boolean = false
-
+    
     if (Object.keys(notes).length == 0) {
         notes = {
             5:0,
@@ -44,15 +44,6 @@
 
 
 </script>
-
-<svelte:window 
-    onkeydown={(e) => { 
-        if (e.key == "Control") control = true
-     }}
-    onkeyup={(e) => { 
-        if (e.key == "Control") control = false
-     }}
-/>
 
 <table>
     <tbody>

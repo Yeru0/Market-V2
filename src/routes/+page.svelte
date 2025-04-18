@@ -194,7 +194,7 @@
                         </thead>
                         <tbody>
 
-                            {#each basket.products as basketProduct}
+                            {#each basket.products as basketProduct (basketProduct)}
                                 <tr>
                                     <td>
                                         <button

@@ -29,7 +29,7 @@
     </thead>
     <tbody>
 
-        {#each products as product}
+        {#each products as product (product)}
 
             {#if product.active}
                 <tr>

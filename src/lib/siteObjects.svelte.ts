@@ -99,7 +99,7 @@ export class Product {
     buttonDisabling(basket: Basket) {
         this.canAddMore = true;
         for (const basketElement of basket.products) {
-            if (basketElement.prod == this && basketElement.amt >= this.allRemainingN) {
+            if (basketElement.prod.id == this.id && basketElement.amt >= this.allRemainingN) {
                 this.canAddMore = false;
             }
         }
@@ -167,7 +167,7 @@ export class Basket {
                     return "Product removed";
                 } else if (product.prod == prod && product.price == price && product.amt <= 1 || removeAll) {
                     let amount = product.amt;
-                    this.products.splice(this.products.indexOf({ prod, price, amount }) - 1, 1);
+                    this.products.splice(this.products.indexOf(product), 1);
                     prod.buttonDisabling(this);
                     resolve("Product removed");
                     return "Product removed";
@@ -176,6 +176,7 @@ export class Basket {
 
             }
 
+            prod.buttonDisabling(this);
             reject("Something went wrong");
             return "Something went wrong";
 

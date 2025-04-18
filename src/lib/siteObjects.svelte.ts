@@ -1,29 +1,29 @@
 export class Product {
-    id: string;
-    name: string;
-    organiserProfitMargin: number;
-    participantProfitMargin: number;
-    soldToOrgN: number;
-    soldToPartN: number;
-    purchasedN: number;
-    purchasePriceM: number;
-    active: boolean;
-    code: string;
+    id: string = $state("");
+    name: string = $state("");
+    organiserProfitMargin: number = $state(0);
+    participantProfitMargin: number = $state(0);
+    soldToOrgN: number = $state(0);
+    soldToPartN: number = $state(0);
+    purchasedN: number = $state(0);
+    purchasePriceM: number = $state(0);
+    active: boolean = $state(true);
+    code: string = $state("");
 
-    allIncomeM: number;
-    allOrgIncomeM: number;
-    allPartIncomeM: number;
-    allProfitM: number;
-    allOrgProfitM: number;
-    allPartProfitM: number;
-    allRemainingN: number;
-    allSoldN: number;
+    allIncomeM: number = $state(0);
+    allOrgIncomeM: number = $state(0);
+    allPartIncomeM: number = $state(0);
+    allProfitM: number = $state(0);
+    allOrgProfitM: number = $state(0);
+    allPartProfitM: number = $state(0);
+    allRemainingN: number = $state(0);
+    allSoldN: number = $state(0);
     // modOverlay: boolean = false
-    singleOrgPriceM: number;
-    singlePartPriceM: number;
-    singleOrgProfitM: number;
-    singlePartProfitM: number;
-    singleProductValueM: number;
+    singleOrgPriceM: number = $state(0);
+    singlePartPriceM: number = $state(0);
+    singleOrgProfitM: number = $state(0);
+    singlePartProfitM: number = $state(0);
+    singleProductValueM: number = $state(0);
 
 
     constructor(productInfo) {
@@ -63,7 +63,8 @@ export class Product {
     }
 
     sell(to: "org" | "part") {
-        if (this.allRemainingN == 0) return;
+
+        if (this.allRemainingN <= 0) return;
         else if (this.allRemainingN == 1) this.active == false;
 
         switch (to) {
@@ -75,16 +76,6 @@ export class Product {
 
         //Recalculate all the properties based on the changes
         this.setProps();
-
-        fetch("/api/sell/product", {
-            method: "POST",
-            body: JSON.stringify({
-                id: this.id,
-                soldToOrgN: this.soldToOrgN,
-                soldToPartN: this.soldToPartN,
-                active: this.active
-            })
-        });
 
         // Update notes
         // Update income or stats or whatever

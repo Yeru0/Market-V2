@@ -1,5 +1,4 @@
 import crypto from "node:crypto";
-import { writeTable } from "./db";
 import { error, log } from "node:console";
 
 export class Record {
@@ -112,12 +111,8 @@ export class Table {
                 if (Object.keys(newRecord).length > Object.keys(oldRecord).length) reject(new Error(`DB ERROR: Not enough elements`));
 
                 this.records[this.records.indexOf(oldRecord)] = newRecord;
+                resolve("updated");
 
-                writeTable(this, true).then(() => {
-                    resolve(`Successfully updated record with id ${recordID} in table ${this.tableName}`);
-                }).catch((err) => {
-                    reject(err);
-                });
 
             }).catch((err) => {
                 reject(err);
@@ -133,12 +128,6 @@ export class Table {
                 let record: Record = result;
 
                 let oldRecord: Record[] = this.records.splice(this.records.indexOf(record), 1);
-
-                writeTable(this.tableName, this, true).then((result) => {
-                    resolve(`Successfully removed record with id ${recordID}`);
-                }).catch((err) => {
-                    reject(err);
-                });
 
             }).catch((err) => {
                 reject(err);

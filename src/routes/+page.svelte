@@ -102,10 +102,29 @@
     })
 
     const sell = () => {
+        let soldProducts: {}[] = []
         for (const product of basket.products) {
-            product.prod.sell(product.price)
-            basket.products.splice(basket.products.indexOf(product), 1)
+
+            for (product.amt; product.amt > 0; product.amt--) {
+                product.prod.sell(product.price)
+                basket.products.splice(basket.products.indexOf(product))
+            }
+            soldProducts.push({
+                id: product.prod.id,
+                soldToOrgN: product.prod.soldToOrgN,
+                soldToPartN: product.prod.soldToPartN,
+                active: product.prod.active,
+            })
+
         }
+        
+        
+        fetch("/api/sell/product", {
+            method: "POST",
+            body: JSON.stringify({
+                soldProducts
+            })
+        });
     }
 
     // TODO sell function
@@ -167,7 +186,7 @@
 
     {#if basket.products.length > 0}
         
-        <section class="basket">
+    <section class="basket">
         <div class="header">
             <span class="material-symbols-outlined">
                 shopping_cart

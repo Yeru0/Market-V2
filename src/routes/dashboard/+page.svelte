@@ -3,6 +3,7 @@
 </script>
 
 <!-- TODO BIG reactivity -->
+ <!-- TODO taken out resz -->
 <main>
 
     <h1>Irányítópult</h1>

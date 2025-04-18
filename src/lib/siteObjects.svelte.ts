@@ -7,8 +7,8 @@ export class Product {
     soldToPartN: number = $state(0);
     purchasedN: number = $state(0);
     purchasePriceM: number = $state(0);
-    active: boolean = $state(true);
     code: string = $state("");
+    takenOutN: number = $state(0);
 
     allIncomeM: number = $state(0);
     allOrgIncomeM: number = $state(0);
@@ -24,6 +24,8 @@ export class Product {
     singleOrgProfitM: number = $state(0);
     singlePartProfitM: number = $state(0);
     singleProductValueM: number = $state(0);
+    active: boolean = $state(true);
+    canAddMore: boolean = $state(true);
 
 
     constructor(productInfo) {
@@ -35,12 +37,8 @@ export class Product {
         this.soldToPartN = parseFloat(productInfo.soldToPartN);
         this.purchasedN = parseFloat(productInfo.purchasedN);
         this.purchasePriceM = parseFloat(productInfo.purchasePriceM);
-        if (productInfo.active == "true") {
-            this.active = true;
-        } else {
-            this.active = false;
-        }
         this.code = productInfo.code;
+        this.takenOutN = parseFloat(productInfo.takenOutN);
 
         this.setProps();
 
@@ -48,7 +46,7 @@ export class Product {
 
     setProps() {
         this.allSoldN = Math.round(this.soldToOrgN + this.soldToPartN);
-        this.allRemainingN = Math.round(this.purchasedN - this.allSoldN);
+        this.allRemainingN = Math.round(this.purchasedN - (this.allSoldN + this.takenOutN));
         this.singleProductValueM = Math.round(this.purchasePriceM / this.purchasedN);
         this.singleOrgPriceM = Math.round(this.singleProductValueM / 100 * (100 + this.organiserProfitMargin));
         this.allOrgIncomeM = Math.round(this.singleOrgPriceM * this.soldToOrgN);
@@ -60,9 +58,16 @@ export class Product {
         this.allOrgProfitM = Math.round(this.singleOrgProfitM * this.soldToOrgN);
         this.allPartProfitM = Math.round(this.singlePartProfitM * this.soldToPartN);
         this.allProfitM = Math.round(this.allOrgProfitM + this.allPartProfitM);
+        if (this.allRemainingN <= 0) {
+            this.active = false;
+            this.canAddMore = false;
+        } else {
+            this.active = true;
+            this.canAddMore = true;
+        }
     }
 
-    sell(to: "org" | "part") {
+    sell(to: "org" | "part" | "to") {
 
         if (this.allRemainingN <= 0) {
             this.active = false;
@@ -73,8 +78,13 @@ export class Product {
         switch (to) {
             case "org":
                 this.soldToOrgN += 1;
+                break;
             case "part":
                 this.soldToPartN += 1;
+                break;
+            case "to":
+                this.takenOutN += 1;
+                break;
         }
 
         //Recalculate all the properties based on the changes
@@ -84,6 +94,15 @@ export class Product {
         // Update income or stats or whatever
         // Register sell event
         // Update db of notes, products, events and stats
+    };
+
+    buttonDisabling(basket: Basket) {
+        this.canAddMore = true;
+        for (const basketElement of basket.products) {
+            if (basketElement.prod == this && basketElement.amt >= this.allRemainingN) {
+                this.canAddMore = false;
+            }
+        }
     };
 
 }
@@ -106,7 +125,7 @@ export class Basket {
 
     }
 
-    addToBasket(prod: Product, price: "org" | "part"): void {
+    addToBasket(prod: Product, price: "org" | "part", all: boolean = false): void {
 
         return new Promise((resolve, reject) => {
 
@@ -119,13 +138,16 @@ export class Basket {
 
             for (const product of this.products) {
                 if (product.prod == prod && product.price == price) {
-                    product.amt += 1;
+
+                    all ? product.amt = product.prod.allRemainingN : product.amt += 1;
+                    prod.buttonDisabling(this);
                     resolve("Product added");
                     return "Product added";
                 }
             }
 
-            this.products.push({ prod, price, amt: 1 });
+            all ? this.products.push({ prod, price, amt: prod.allRemainingN }) : this.products.push({ prod, price, amt: 1 });
+            prod.buttonDisabling(this);
             resolve("Product added");
             return "Product added";
 
@@ -140,17 +162,31 @@ export class Basket {
             for (const product of this.products) {
                 if (product.prod == prod && product.price == price && product.amt > 1 && !removeAll) {
                     product.amt -= 1;
+                    prod.buttonDisabling(this);
+                    resolve("Product removed");
+                    return "Product removed";
+                } else if (product.prod == prod && product.price == price && product.amt <= 1 || removeAll) {
+                    let amount = product.amt;
+                    this.products.splice(this.products.indexOf({ prod, price, amount }) - 1, 1);
+                    prod.buttonDisabling(this);
                     resolve("Product removed");
                     return "Product removed";
                 }
+
+
             }
 
-            this.products.splice(this.products.indexOf({ prod, price, amt: 1 }) - 1, 1);
-            resolve("Product removed");
-            return "Product removed";
+            reject("Something went wrong");
+            return "Something went wrong";
 
         });
 
+    };
+
+    getProduct(prod: Product): { prod: Product, price: "org" | "part", amt: number; } {
+        for (const product of this.products) {
+            if (product.prod == prod) return product;
+        }
     };
 
     get finalPrice(): number {
@@ -166,5 +202,7 @@ export class Basket {
 
         return price;
     };
+
+
 
 }

@@ -78,6 +78,7 @@ export async function handle({ event, resolve }) {
         let table: Table = await readTable("sellEvents");
 
 
+
         for (let i = 0; i < prodBefore.length; i++) {
             await table.newRecord(
                 [
@@ -116,9 +117,6 @@ export async function handle({ event, resolve }) {
                 true
             );
         }
-
-        console.log(table);
-
 
         writeTable(table, true);
 

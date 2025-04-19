@@ -27,3 +27,5 @@ A MARKET V-3-ra tekintettel jótanácsok:
     - Mindent a saját komponensébe
     - A Type-okat célszerű külön fájlba tárolni
     - Kommentek
+## Bugok
+    - Az adatbázis van, hogy szar, ezért érdemes git-tel is figyelni főleg az adatbázistáblák változását

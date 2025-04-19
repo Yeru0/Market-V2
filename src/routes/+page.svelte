@@ -106,23 +106,21 @@
             if(note == "id") continue
             notes[note] = parseInt(notes[note]) + basket.payingNotes[note] - basket.returnNotes[note]
         }
-
-
-    
-        // // Send the product sale event to the database
-        // await fetch("/api/product/sell", {
-        //     method: "POST",
-        //     body: JSON.stringify({
-        //         soldProducts
-        //     })
-        // });
-        // // Send the changed notes to the database
-        // await fetch("/api/notes/sell", {
-        //     method: "POST",
-        //     body: JSON.stringify({
-        //         notes
-        //     })
-        // });
+        
+        // Send the product sale event to the database
+        await fetch("/api/product/sell", {
+            method: "POST",
+            body: JSON.stringify({
+                soldProducts
+            })
+        });
+        // Send the changed notes to the database
+        await fetch("/api/notes/sell", {
+            method: "POST",
+            body: JSON.stringify({
+                notes
+            })
+        });
         // Send an events to the database
         await fetch("/api/events/sell", {
             method: "POST",

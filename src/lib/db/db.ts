@@ -19,7 +19,7 @@ export const readTable: (tableName: string) => Promise<Table> = async (tableName
             data = result;
 
             if (data.length === 0) {
-                reject(`DB ERROR: Given table with name ${table} is empty`);
+                reject(`DB ERROR: Given table with name ${tableName} is empty`);
                 return;
             }
 

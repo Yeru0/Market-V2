@@ -120,14 +120,14 @@
         });
         // Send the changed notes to the database
         await fetch("/api/notes/sell", {
-            method: "POST",
+            method: "PUT",
             body: JSON.stringify({
                 notes
             })
         });
         // Send the product sale event to the database
         await fetch("/api/product/sell", {
-            method: "POST",
+            method: "PUT",
             body: JSON.stringify({
                 soldProducts
             })

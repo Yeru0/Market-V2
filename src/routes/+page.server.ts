@@ -5,6 +5,7 @@ export async function load() {
 
     let products: any = [];
     let notes: any = [];
+    let sellEvents: any = [];
 
     const prodTable = await readTable("products");
     for (const record of prodTable.getRecords()) {
@@ -15,6 +16,11 @@ export async function load() {
     for (const record of noteTable.getRecords()) {
         notes.push({ ...record });
     }
+
+    // const sellEventTable = await readTable("sellEvents");
+    // for (const record of sellEventTable.getRecords()) {
+    //     sellEvents.push({ ...record });
+    // }
 
     return {
         products,

@@ -20,3 +20,10 @@ Ha út közben bárhol elakadsz kérdezz meg egy 11. évfolyamon felüli A oszt�
 TODO: EZT MÉG MEG KELL ÍRNI
 ## Verziók
 Ez jelenleg a büfés alkalmazás második iterációja.
+Ebben a verzióban nincs szükség internetre, mert helyileg tárol az alkalmazás.
+Itt-ott lett optimalizálva egy-két dolog az előző iterációhoz képest,
+illetve lett egy pár új kényelmi funkció is, mint például a kódbeolvasás.
+A MARKET V-3-ra tekintettel jótanácsok:
+    - Mindent a saját komponensébe
+    - A Type-okat célszerű külön fájlba tárolni
+    - Kommentek

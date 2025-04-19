@@ -10,6 +10,8 @@ export class Product {
     code: string = $state("");
     takenOutN: number = $state(0);
 
+    infoObject: {} = {};
+
     allIncomeM: number = $state(0);
     allOrgIncomeM: number = $state(0);
     allPartIncomeM: number = $state(0);
@@ -29,6 +31,7 @@ export class Product {
 
 
     constructor(productInfo) {
+        this.infoObject = productInfo;
         this.id = productInfo.id;
         this.name = productInfo.name;
         this.organiserProfitMargin = parseFloat(productInfo.organiserProfitMargin);
@@ -174,7 +177,7 @@ export class Basket {
             }
 
             prod.buttonDisabling(this);
-            reject("Product deleted");
+            resolve("Product deleted");
             return "Product deleted";
 
         });

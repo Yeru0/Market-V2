@@ -52,8 +52,17 @@
         
     const sell = async () => {
         // Register product sale
-        let soldProducts: {}[] = []
-        let productsToTakeOut: { prod: Product, price: "org" | "part", amt: number; }[] = []
+        type SellingProduct = {
+            id: string;
+            soldToOrgN: number;
+            soldToPartN: number;
+            takenOutN: number;
+        }
+        type SellingProductList = SellingProduct[]
+
+        let soldProducts: SellingProductList = []
+        let legacyProductInfo: SellingProductList = [] // This is needed for the event registry
+        let productsToRemove: { prod: Product, price: "org" | "part", amt: number; }[] = []
         for (const product of basket.products) {             
 
             if (product.amt > products[products.indexOf(product.prod)].allRemainingN) {
@@ -61,52 +70,70 @@
                 return
             }
 
+            //Push a new object to the legacy list, with the old one's properties
+            legacyProductInfo.push({
+                id: product.prod.id,
+                soldToOrgN: product.prod.soldToOrgN,
+                soldToPartN: product.prod.soldToPartN,
+                takenOutN: product.prod.takenOutN
+            })
+
             for (product.amt; product.amt > 0; product.amt--) {
                 if (!takingOut) product.prod.sell(product.price)
                 else product.prod.sell("to")
             }
             
-            productsToTakeOut.push(product)
+            productsToRemove.push(product)
 
             soldProducts.push({
                 id: product.prod.id,
                 soldToOrgN: product.prod.soldToOrgN,
                 soldToPartN: product.prod.soldToPartN,
-                takenOutN: product.prod.takenOutN,
+                takenOutN: product.prod.takenOutN
             })
 
         }
-
-        for (const prod of productsToTakeOut) {
+        
+        for (const prod of productsToRemove) {
             basket.products.splice(basket.products.indexOf(prod))
         } 
 
+
+
         // Register the state of the notes
-        let notes = data.notes[0]
+        let notes = { ...data.notes[0] }
         for (const note in notes) {
             if(note == "id") continue
             notes[note] = parseInt(notes[note]) + basket.payingNotes[note] - basket.returnNotes[note]
         }
-        
+
+
     
-        // Send the product sale event to the database
-        await fetch("/api/sell/product", {
+        // // Send the product sale event to the database
+        // await fetch("/api/product/sell", {
+        //     method: "POST",
+        //     body: JSON.stringify({
+        //         soldProducts
+        //     })
+        // });
+        // // Send the changed notes to the database
+        // await fetch("/api/notes/sell", {
+        //     method: "POST",
+        //     body: JSON.stringify({
+        //         notes
+        //     })
+        // });
+        // Send an events to the database
+        await fetch("/api/events/sell", {
             method: "POST",
             body: JSON.stringify({
-                soldProducts
-            })
-        });
-        // Send the changed notes to the database
-        await fetch("/api/sell/notes", {
-            method: "POST",
-            body: JSON.stringify({
-                notes
+                notesP: basket.payingNotes, 
+                notesC: basket.returnNotes,
+                productB: legacyProductInfo,
+                productA: soldProducts
             })
         });
     }
-
-    // TODO sell function
-    // TODO register sell event
 
 </script>
 

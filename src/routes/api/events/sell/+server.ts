@@ -5,11 +5,6 @@ import { Table } from "$lib/db/dbObjects";
 
 export const POST = async ({ request }) => {
 
-    if (request.method !== "POST") {
-        error(404, "Only POST request possible");
-    };
-
-
     // data expects: ID, active, soldToOrgN, soldToPartN
     let data = JSON.parse(await request.text());
 

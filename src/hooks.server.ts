@@ -77,6 +77,8 @@ export async function handle({ event, resolve }) {
         let prodAfter: {}[] = data.productA;
         let table: Table = await readTable("sellEvents");
 
+        console.log(payingNotes);
+
 
 
         for (let i = 0; i < prodBefore.length; i++) {

@@ -98,7 +98,7 @@
             basket.products.splice(basket.products.indexOf(prod))
         } 
 
-
+       
 
         // Register the state of the notes
         let notes = { ...data.notes[0] }
@@ -107,11 +107,15 @@
             notes[note] = parseInt(notes[note]) + basket.payingNotes[note] - basket.returnNotes[note]
         }
         
-        // Send the product sale event to the database
-        await fetch("/api/product/sell", {
+        // Send an events to the database
+        //WARNING: DO NOT CHANGE THE ORDER OF THE FETCH REQUESTS!
+        await fetch("/api/events/sell", {
             method: "POST",
             body: JSON.stringify({
-                soldProducts
+                notesP: basket.payingNotes, 
+                notesC: basket.returnNotes,
+                productB: legacyProductInfo,
+                productA: soldProducts
             })
         });
         // Send the changed notes to the database
@@ -121,14 +125,11 @@
                 notes
             })
         });
-        // Send an events to the database
-        await fetch("/api/events/sell", {
+        // Send the product sale event to the database
+        await fetch("/api/product/sell", {
             method: "POST",
             body: JSON.stringify({
-                notesP: basket.payingNotes, 
-                notesC: basket.returnNotes,
-                productB: legacyProductInfo,
-                productA: soldProducts
+                soldProducts
             })
         });
     }

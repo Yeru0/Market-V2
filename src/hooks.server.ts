@@ -83,6 +83,7 @@ export async function handle({ event, resolve }) {
             await table.newRecord(
                 [
                     basketID,
+                    new Date().getTime(),
                     prodBefore[i].soldToOrgN,
                     prodBefore[i].soldToPartN,
                     prodBefore[i].takenOutN,

@@ -19,12 +19,11 @@ export const POST = async ({ request }) => {
     let prodAfter: {}[] = data.productA;
     let table: Table = await readTable("sellEvents");
 
-
-
     for (let i = 0; i < prodBefore.length; i++) {
         await table.newRecord(
             [
                 basketID,
+                prodBefore[i].id,
                 new Date().getTime(),
                 prodBefore[i].soldToOrgN,
                 prodBefore[i].soldToPartN,

@@ -36,23 +36,24 @@ export function readLbL(fileName: string): Promise<string[]> {
 };
 
 export function writeLbL(fileName: string, linesToWrite: string[], overwrite: boolean = false): Promise<string> {
-    return new Promise((resolve: (value: string) => void, reject: (value: Error) => void) => {
+    return new Promise(async (resolve: (value: string) => void, reject: (value: Error) => void) => {
         let header = linesToWrite.splice(0, 1);
+        let file: any;
         if (overwrite) {
-            fs.writeFile(`src/lib/db/tables/${fileName}`, `${header[0]}`, (err) => {
+            await fs.writeFile(`src/lib/db/tables/${fileName}`, `${header[0]}`, (err) => {
+                if (err) {
+                    reject(err);
+                }
+            });
+        }
+        for (const line of linesToWrite) {
+            await fs.appendFile(`src/lib/db/tables/${fileName}`, `\n${line}`, (err) => {
                 if (err) {
                     reject(err);
                 }
             });
         }
 
-        for (const line of linesToWrite) {
-            fs.appendFile(`src/lib/db/tables/${fileName}`, `\n${line}`, (err) => {
-                if (err) {
-                    reject(err);
-                }
-            });
-        }
 
         resolve("finished");
 

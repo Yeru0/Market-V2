@@ -5,7 +5,7 @@ import { Table } from "$lib/db/dbObjects";
 
 export const POST = async ({ request }) => {
 
-    // data expects: ID, active, soldToOrgN, soldToPartN
+    // data expects: notesP, notesC, productA, productB
     let data = JSON.parse(await request.text());
 
 

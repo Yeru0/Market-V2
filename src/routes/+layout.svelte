@@ -5,19 +5,23 @@
 
     const { children } = $props()
     let websocket: WebSocket
-    let isConnectionOpen: boolean
 
 
     
     onMount(() => {
         websocket = new WebSocket("ws://192.168.50.81:8082/prices")
-        
-        websocket.onopen = (() => {
-            isConnectionOpen = true
-        })
+        let priceListStateLocalStorage = localStorage.getItem("priceListStateSellingToOrg")
+
+        switch (priceListStateLocalStorage) {
+            case "true":
+                $priceListStateSellingToOrg = true
+                break
+            case "false":
+                $priceListStateSellingToOrg = false
+                break
+        }
 
         websocket.onclose = (() => {
-            isConnectionOpen = false
             priceStateUnsub()
         })
 
@@ -28,9 +32,11 @@
             switch(data) {
                 case "true":
                     $priceListStateSellingToOrg = true
+                    localStorage.setItem("priceListStateSellingToOrg", `${$priceListStateSellingToOrg}`)
                     break
                 case "false":
                     $priceListStateSellingToOrg = false
+                    localStorage.setItem("priceListStateSellingToOrg", `${$priceListStateSellingToOrg}`)
                     break
                 }
         })

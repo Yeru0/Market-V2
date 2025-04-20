@@ -1,3 +1,5 @@
+import { priceListStateSellingToOrg } from "$lib/shared.svelte";
+
 export class Product {
     id: string = $state("");
     name: string = $state("");
@@ -116,6 +118,8 @@ export class Basket {
 
     basketType: "org" | "part";
 
+    finalPrice: number = $state(0); // This is needed because I need to recalculate the products' value if the price list changes
+
     payingSum: number = $state(0); // payed notes set by the selection table
     returnSum: number = $state(0); //change set by note selection table
     payingNotes: { [key: string]: number; } = $state({});
@@ -151,6 +155,7 @@ export class Basket {
 
             all ? this.products.push({ prod, price, amt: prod.allRemainingN }) : this.products.push({ prod, price, amt: 1 });
             prod.buttonDisabling(this);
+            this.calcFinalPrice();
             resolve("Product added");
             return "Product added";
 
@@ -190,18 +195,20 @@ export class Basket {
         }
     };
 
-    get finalPrice(): number {
-        let price: number = 0;
+    calcFinalPrice(): number {
+
+        let price = 0;
 
         for (const basketElement of this.products) {
-            if (basketElement.price == "org") {
+            if (this.basketType == "org") {
                 price += basketElement.prod.singleOrgPriceM * basketElement.amt;
-            } else if (basketElement.price == "part") {
+            } else if (this.basketType == "part") {
                 price += basketElement.prod.singlePartPriceM * basketElement.amt;
             }
         }
 
-        return price;
+        this.finalPrice = price;
+
     };
 
 

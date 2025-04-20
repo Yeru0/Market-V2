@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { priceListStateSellingToOrg } from "./shared.svelte";
+    import { priceListStateSellingToOrg } from "$lib/shared.svelte";
 
     let { basket, control } = $props()
 

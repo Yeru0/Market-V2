@@ -5,6 +5,7 @@
 	import { changeNotes } from "$lib/siteMethods";
 	import RenderBasket from "./RenderBasket.svelte";
 	import CodeReaderModule from "./CodeReaderModule.svelte";
+	import { priceListStateSellingToOrg } from "$lib/shared.svelte";
 
 
     let { data } = $props()
@@ -25,6 +26,19 @@
     let basket: Basket = new Basket()
     let takingOut: boolean = $state(false)
     let control: boolean = $state(false)
+
+    priceListStateSellingToOrg.subscribe((value) => {
+        switch (value) {
+            case true:
+                basket.basketType = "org"
+                break
+            case false:
+                basket.basketType = "part"
+                break
+        }
+        
+        basket.calcFinalPrice()
+    })
 
 
     $effect(() => {
@@ -184,6 +198,7 @@
                     {#if !takingOut}
                         <div>
                             <h3>Fizetendő</h3>
+                            <!-- TODO should recalc this when things change whatever -->
                             <p>{basket.finalPrice} Ft</p>
                             <div>
                                 <h4>Fizető címlet</h4>

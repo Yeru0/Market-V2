@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Code } from "$lib/code-reader/codeReaderObjects";
-    import { priceListStateSellingToOrg } from "./shared.svelte";
+    import { priceListStateSellingToOrg } from "$lib/shared.svelte";
 
     let {basket, products} = $props()
     

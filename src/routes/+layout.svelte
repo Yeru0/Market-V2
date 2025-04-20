@@ -1,10 +1,12 @@
 <script lang="ts">
-	import { priceListStateSellingToOrg } from "./shared.svelte";
+	import { priceListStateSellingToOrg } from "$lib/shared.svelte";
     import { onMount } from "svelte";
 
 
     const { children } = $props()
     let websocket: WebSocket
+
+    let shift: boolean = false
 
 
     
@@ -28,7 +30,7 @@
 
 
         websocket.onmessage = ((event) => {
-            let data = JSON.parse(event.data)
+            let data = JSON.parse(event.data)            
             switch(data) {
                 case "true":
                     $priceListStateSellingToOrg = true
@@ -50,6 +52,23 @@
 
 
 </script>
+
+<svelte:window
+    onkeypress={(e) => { 
+        if (e.code == "Space" && shift) {
+            e.preventDefault()        
+            priceListStateSellingToOrg.set(!$priceListStateSellingToOrg) 
+        }
+     }}
+
+    onkeydown={(e) => { 
+        if (e.key == "Shift") shift = true
+     }}
+    onkeyup={(e) => { 
+        if (e.key == "Shift") shift = false
+    }}
+/>
+
 
 <nav>
 

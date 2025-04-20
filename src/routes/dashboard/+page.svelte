@@ -1,9 +1,31 @@
 <script lang="ts">
-    import NoteSelectionTable from "../NoteSelectionTable.svelte";
-</script>
+	import { Product, Stats } from "$lib/siteObjects.svelte";
+    import NoteSelectionTable from "./NoteSelectionTable.svelte";
+    
+    
+    let { data } = $props()
+    let noteSum: number = $state(0)
 
-<!-- TODO BIG reactivity -->
- <!-- TODO taken out resz -->
+    // Render notes
+    let notes: {[key: string]: number} = $state({});
+
+    for (const [note, amount] of Object.entries(data.notes[0] as {[key: string]: string})) {
+        if(note == "id") continue
+        notes[note] = parseInt(amount);
+    }
+
+    // Render products
+    let products: Product[] = $state([])    
+
+    for (const product of data.products) {
+        products.push(new Product(product))
+    }
+
+    // Render stats
+    let stats: Stats = new Stats(products)
+
+
+</script>
 <main>
 
     <h1>Irányítópult</h1>
@@ -15,28 +37,36 @@
            <caption>Pénz</caption>
            <tbody>
                <tr>
-                   <td>Szervezői bevétel</td>
-                   <td></td>
+                   <td>Szervezői bevétel:</td>
+                   <td>{stats.orgIncome} Ft</td>
                </tr>
                <tr>
-                   <td>Résztvevői bevétel</td>
-                   <td></td>
+                   <td>Résztvevői bevétel:</td>
+                   <td>{stats.partIncome} Ft</td>
+                </tr>
+                <tr>
+                    <td>Szervezői profit:</td>
+                    <td>{stats.orgProfit} Ft</td>
+                </tr>
+               <tr>
+                   <td>Résztvevői profit:</td>
+                   <td>{stats.partProfit} Ft</td>
                </tr>
                <tr>
-                   <td>Összes bevétel</td>
-                   <td></td>
+                   <td>Összes bevétel:</td>
+                   <td>{stats.allIncome} Ft</td>
                </tr>
                <tr>
-                   <td>Beszerzési ár</td>
-                   <td></td>
+                   <td>Beszerzési ár:</td>
+                   <td>{stats.purchasePrice} Ft</td>
                </tr>
                <tr>
-                   <td>ELÁBÉ</td>
-                   <td></td>
+                   <td>ELÁBÉ:</td>
+                   <td>{stats.valueOfSoldProducts} Ft</td>
                </tr>
                <tr>
-                   <td>Profit</td>
-                   <td></td>
+                   <td>Profit:</td>
+                   <td>{stats.profit} Ft</td>
                </tr>
            </tbody>
         </table>
@@ -44,24 +74,28 @@
             <caption>Raktár</caption>
            <tbody>
                <tr>
-                   <td>Összes termék</td>
-                   <td></td>
+                   <td>Összes termék:</td>
+                   <td>{stats.allProducts} db</td>
                </tr>
                <tr>
-                   <td>Raktárban</td>
-                   <td></td>
+                   <td>Raktárban:</td>
+                   <td>{stats.inStorage} db</td>
                </tr>
                <tr>
-                   <td>Szervezőnek eladott</td>
-                   <td></td>
+                   <td>Szervezőnek eladott:</td>
+                   <td>{stats.soldToOrgs} db</td>
                </tr>
                <tr>
-                   <td>Résztvevőnek eladott</td>
-                   <td></td>
+                   <td>Résztvevőnek eladott:</td>
+                   <td>{stats.soldToParts} db</td>
                </tr>
                <tr>
-                   <td>Összes eladott termék</td>
-                   <td></td>
+                   <td>Összes eladott termék:</td>
+                   <td>{stats.allSoldProducts} db</td>
+                </tr>
+                <tr>
+                   <td>Kivett:</td>
+                   <td>{stats.takenOut} db</td>
                </tr>
            </tbody>
         </table>
@@ -69,7 +103,8 @@
 
    <section>
     <h2>Beállítások</h2>
-        <NoteSelectionTable></NoteSelectionTable>
+        <p>Összesen: {noteSum} Ft</p>
+        <NoteSelectionTable bind:notes={notes} bind:sum={noteSum}></NoteSelectionTable>
    </section>
 
    <section>

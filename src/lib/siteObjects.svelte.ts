@@ -22,14 +22,16 @@ export class Product {
     allPartProfitM: number = $state(0);
     allRemainingN: number = $state(0);
     allSoldN: number = $state(0);
-    // modOverlay: boolean = false
     singleOrgPriceM: number = $state(0);
     singlePartPriceM: number = $state(0);
     singleOrgProfitM: number = $state(0);
     singlePartProfitM: number = $state(0);
     singleProductValueM: number = $state(0);
+    valueOfSoldProductsM: number = $state(0);
     active: boolean = $state(true);
     canAddMore: boolean = $state(true);
+    modOverlay: boolean = $state(false);
+    delOverlay: boolean = $state(false);
 
 
     constructor(productInfo) {
@@ -63,6 +65,7 @@ export class Product {
         this.allOrgProfitM = Math.round(this.singleOrgProfitM * this.soldToOrgN);
         this.allPartProfitM = Math.round(this.singlePartProfitM * this.soldToPartN);
         this.allProfitM = Math.round(this.allOrgProfitM + this.allPartProfitM);
+        this.valueOfSoldProductsM = this.allSoldN * this.singleProductValueM; //ELÁBÉ
         if (this.allRemainingN <= 0) {
             this.active = false;
             this.canAddMore = false;
@@ -213,4 +216,43 @@ export class Basket {
 
 
 
+}
+
+export class Stats {
+    orgIncome: number = $state(0);
+    partIncome: number = $state(0);
+    orgProfit: number = $state(0);
+    partProfit: number = $state(0);
+    allIncome: number = $state(0);
+    purchasePrice: number = $state(0);
+    valueOfSoldProducts: number = $state(0);
+    profit: number = $state(0);
+
+    allProducts: number = $state(0);
+    inStorage: number = $state(0);
+    soldToOrgs: number = $state(0);
+    soldToParts: number = $state(0);
+    allSoldProducts: number = $state(0);
+    takenOut: number = $state(0);
+
+    constructor(products: Product[]) {
+        for (const product of products) {
+            this.orgIncome += product.allOrgIncomeM;
+            this.partIncome += product.allPartIncomeM;
+            this.orgProfit += product.allOrgProfitM;
+            this.partProfit += product.allPartProfitM;
+            this.allIncome += product.allIncomeM;
+            this.purchasePrice += product.purchasePriceM;
+            this.valueOfSoldProducts += product.valueOfSoldProductsM;
+            this.profit += product.allProfitM;
+
+            this.allProducts += product.purchasedN;
+            this.inStorage += product.allRemainingN;
+            this.soldToOrgs += product.soldToOrgN;
+            this.soldToParts += product.soldToPartN;
+            this.allSoldProducts += product.allSoldN;
+            this.takenOut += product.takenOutN;
+        }
+        this.profit = this.profit - this.purchasePrice;
+    }
 }

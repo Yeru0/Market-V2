@@ -8,7 +8,7 @@
 <table>
     <thead>
         <tr>
-            <td>Teréknév</td>
+            <td>Terméknév</td>
             <td>Ár</td>
             <td>Raktár</td>
             <td>Összesen eladott</td>

@@ -1,8 +1,47 @@
 <script lang="ts">
 	import { priceListStateSellingToOrg } from "./shared.svelte";
+    import { onMount } from "svelte";
 
 
     const { children } = $props()
+    let websocket: WebSocket
+    let isConnectionOpen: boolean
+
+
+    
+    onMount(() => {
+        websocket = new WebSocket("ws://192.168.50.81:8082/prices")
+        
+        websocket.onopen = (() => {
+            isConnectionOpen = true
+        })
+
+        websocket.onclose = (() => {
+            isConnectionOpen = false
+            priceStateUnsub()
+        })
+
+
+
+        websocket.onmessage = ((event) => {
+            let data = JSON.parse(event.data)
+            switch(data) {
+                case "true":
+                    $priceListStateSellingToOrg = true
+                    break
+                case "false":
+                    $priceListStateSellingToOrg = false
+                    break
+                }
+        })
+    })
+
+    let priceStateUnsub = priceListStateSellingToOrg.subscribe((value) => {
+        if(websocket && websocket.readyState === websocket.OPEN) {
+            websocket.send(JSON.stringify(value))
+        }
+    })
+
 
 </script>
 

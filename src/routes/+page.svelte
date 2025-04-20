@@ -14,9 +14,11 @@
     // Render products
     let products: Product[] = $state([])
 
+
     for (const product of data.products) {
         products.push(new Product(product))
     }
+  
 
 
     // Basket

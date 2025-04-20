@@ -1,30 +1,28 @@
-import { writeTable, readTable } from "$lib/db/db";
-import { Table, Record } from "$lib/db/dbObjects";
+import { error } from "@sveltejs/kit";
 
-export async function load() {
+export const load = async ({ fetch }) => {
+
 
     let products: any = [];
     let notes: any = [];
-    let sellEvents: any = [];
 
-    const prodTable = await readTable("products");
-    for (const record of prodTable.getRecords()) {
-        products.push({ ...record });
+    try {
+        const productFetch = await fetch("/api/product/read");
+        products = await productFetch.json();
+    } catch (err) {
+        error(500, err);
     }
 
-    const noteTable = await readTable("notes");
-    for (const record of noteTable.getRecords()) {
-        notes.push({ ...record });
+    try {
+        const notesFetch = await fetch("/api/notes/read");
+        notes = await notesFetch.json();
+    } catch (err) {
+        error(500, err);
     }
-
-    // const sellEventTable = await readTable("sellEvents");
-    // for (const record of sellEventTable.getRecords()) {
-    //     sellEvents.push({ ...record });
-    // }
 
     return {
-        products,
-        notes
+        notes,
+        products
     };
 
 };

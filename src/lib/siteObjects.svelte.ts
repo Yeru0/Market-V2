@@ -256,3 +256,24 @@ export class Stats {
         this.profit = this.profit - this.purchasePrice;
     }
 }
+
+export class SellEvent {
+    notesC: {} = $state({});
+    notesP: {} = $state({});
+    productsB: Product[] = $state([]);
+    productsA: Product[] = $state([]);
+    timestamp: number = $state(0);
+    id: string = $state("");
+
+    soldTo: string = $state();
+
+
+    constructor(notesP: {}, notesC: {}, productsB: Product[], productsA: Product[], timestamp: number, id: string) {
+
+    };
+
+    //TODO Read some, not entire db file
+    //TODO Carousel
+    //TODO Finish this shit
+    //TODO Fix the websocket issues
+}

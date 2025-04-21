@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Product, Stats } from "$lib/siteObjects.svelte";
-    import NoteSelectionTable from "./NoteSelectionTable.svelte";
+    import NoteChangeTable from "./NoteChangeTable.svelte";
+    import NoteDisplayTable from "./NoteDisplayTable.svelte";
     
     
     let { data } = $props()
@@ -11,6 +12,7 @@
 
     for (const [note, amount] of Object.entries(data.notes[0] as {[key: string]: string})) {
         if(note == "id") continue
+        // svelte-ignore state_referenced_locally
         notes[note] = parseInt(amount);
     }
 
@@ -23,6 +25,32 @@
 
     // Render stats
     let stats: Stats = new Stats(products)
+
+
+    //Take care of notes 
+    let input: boolean = $state(false)
+    let modifyNotes = async () => {
+        input = !input
+
+        if (input) return
+        // Send the changed notes to the database
+        await fetch("/api/notes/sell", {
+            method: "PUT",
+            body: JSON.stringify({
+                notes
+            })
+        });
+    }
+
+    let cancelNotes = async () => {
+        input = !input
+
+        for (const [note, amount] of Object.entries(data.notes[0] as {[key: string]: string})) {
+            if(note == "id") continue
+            // svelte-ignore state_referenced_locally
+            notes[note] = parseInt(amount);
+        }
+    }
 
 
 </script>
@@ -104,7 +132,16 @@
    <section>
     <h2>Beállítások</h2>
         <p>Összesen: {noteSum} Ft</p>
-        <NoteSelectionTable bind:notes={notes} bind:sum={noteSum}></NoteSelectionTable>
+        {#if input}
+            <NoteChangeTable bind:notes={notes} bind:sum={noteSum}></NoteChangeTable>
+            <button onclick={cancelNotes}>Mégsem</button>
+        {:else}
+            <NoteDisplayTable bind:notes={notes} bind:sum={noteSum}></NoteDisplayTable>
+        {/if}
+        <button onclick={modifyNotes}>
+            {input ? "Mentés" : "Módosítás"}
+        </button>
+
    </section>
 
    <section>

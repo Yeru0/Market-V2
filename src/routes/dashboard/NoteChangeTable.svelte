@@ -29,21 +29,6 @@
     $effect(() => {
         sum = Object.entries(notes).reduce((a, [note,amount]) => a + parseInt(note)*amount, 0)
     })
-    
-
-
-    let modifyNotes = async () => {
-        input = !input
-
-        if (input) return
-        // Send the changed notes to the database
-        await fetch("/api/notes/sell", {
-            method: "PUT",
-            body: JSON.stringify({
-                notes
-            })
-        });
-    }
 
 </script>
 
@@ -52,20 +37,12 @@
         {#each notesKeys as note}
         <tr>
             <td>
-                {#if input}
-                    <label for="amount-{note}">
-                        {note}:
-                        <input type="number" name="amount-{note}" id="amount-{note}" bind:value={notes[note]}>
-                    </label>
-                {:else}
-                    {note}: {notes[note]}
-                {/if}
+                <label for="amount-{note}">
+                    {note}:
+                    <input type="number" name="amount-{note}" id="amount-{note}" bind:value={notes[note]}>
+                </label>
             </td>
         </tr>
         {/each}
     </tbody>
 </table>
-
-<button onclick={modifyNotes}>
-    {input ? "Mentés" : "Módosítás"}
-</button>

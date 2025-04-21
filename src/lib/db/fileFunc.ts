@@ -39,6 +39,7 @@ export function writeLbL(fileName: string, linesToWrite: string[], overwrite: bo
     return new Promise(async (resolve: (value: string) => void, reject: (value: Error) => void) => {
         let header = linesToWrite.splice(0, 1);
         let file: any;
+        let linesWritten: number = 0;
         if (overwrite) {
             await fs.writeFile(`src/lib/db/tables/${fileName}`, `${header[0]}`, (err) => {
                 if (err) {
@@ -46,13 +47,18 @@ export function writeLbL(fileName: string, linesToWrite: string[], overwrite: bo
                 }
             });
         }
-        for (const line of linesToWrite) {
+
+        //I need to slow this down to avoid conflicts
+        let writingToFile = setInterval(async () => {
+            let line = linesToWrite[linesWritten];
             await fs.appendFile(`src/lib/db/tables/${fileName}`, `\n${line}`, (err) => {
                 if (err) {
                     reject(err);
                 }
+                linesWritten++;
             });
-        }
+            if (linesWritten == linesToWrite.length - 1) clearInterval(writingToFile);
+        }, 100);
 
 
         resolve("finished");

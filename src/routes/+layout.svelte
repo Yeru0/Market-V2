@@ -3,18 +3,17 @@
     import { onMount } from "svelte";
 
 
-    const { children } = $props()
+    const { children, data } = $props()
     let websocket: WebSocket
 
     let shift: boolean = false
 
 
     
-    onMount(() => {
+    onMount(async () => {
         websocket = new WebSocket("ws://192.168.50.81:8082/prices")
-        let priceListStateLocalStorage = localStorage.getItem("priceListStateSellingToOrg")
 
-        switch (priceListStateLocalStorage) {
+        switch (data.state) {
             case "true":
                 $priceListStateSellingToOrg = true
                 break
@@ -29,24 +28,22 @@
 
 
 
-        websocket.onmessage = ((event) => {
+        websocket.onmessage = (async (event) => {
             let data = JSON.parse(event.data)            
             switch(data) {
                 case "true":
                     $priceListStateSellingToOrg = true
-                    localStorage.setItem("priceListStateSellingToOrg", `${$priceListStateSellingToOrg}`)
                     break
                 case "false":
                     $priceListStateSellingToOrg = false
-                    localStorage.setItem("priceListStateSellingToOrg", `${$priceListStateSellingToOrg}`)
                     break
                 }
         })
     })
 
-    let priceStateUnsub = priceListStateSellingToOrg.subscribe((value) => {
-        if(websocket && websocket.readyState === websocket.OPEN) {
-            websocket.send(JSON.stringify(value))
+    let priceStateUnsub = priceListStateSellingToOrg.subscribe(async (value) => {
+        if(websocket && websocket.readyState === websocket.OPEN) {            
+            websocket.send(`${value}`)
         }
     })
 
@@ -81,7 +78,14 @@
 
     <label for="sell-to">
         Szervezői árlista:
-        <input type="checkbox" name="sell-to" bind:checked={$priceListStateSellingToOrg}>
+        <input type="checkbox" name="sell-to" bind:checked={$priceListStateSellingToOrg} onclick={async () => {
+            await fetch("/api/price-list/state", {
+                method: "PUT",
+                body: JSON.stringify({
+                    priceListState: `${!$priceListStateSellingToOrg}`
+                })
+            });
+        }}>
     </label>
 
 </nav>

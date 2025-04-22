@@ -36,9 +36,7 @@
                 default:
                     id = data.id
                     break
-                }
-            console.log("INCOMING!");
-            
+                }          
         })
     })
 

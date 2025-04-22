@@ -23,7 +23,7 @@
 
 
     // Basket
-    let basket: Basket = new Basket()
+    let basket: Basket = $state(new Basket())
     let takingOut: boolean = $state(false)
     let control: boolean = $state(false)
 
@@ -178,6 +178,7 @@
                     shopping_cart
                 </span>
                 <h2>Kosár</h2>
+                <button onclick={() => {basket = new Basket()}}>Kosár ürítése</button>
             </div>
 
             <form onsubmit={sell}>

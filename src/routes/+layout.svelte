@@ -36,20 +36,20 @@
                 default:
                     id = data.id
                     break
-                }          
+                }                
         })
     })
 
     let updatePriceStateValueBackend = async () => {
         
         if(websocket && websocket.readyState === websocket.OPEN) {            
-            websocket.send(JSON.stringify({value: $priceListStateSellingToOrg, id}))
+            websocket.send(JSON.stringify({value: !$priceListStateSellingToOrg, id}))
         }
 
         await fetch("/api/price-list/state", {
             method: "PUT",
             body: JSON.stringify({
-                priceListState: `${$priceListStateSellingToOrg}`
+                priceListState: `${!$priceListStateSellingToOrg}`
             })
         });
     }
@@ -61,9 +61,8 @@
     onkeypress={async (e) => { 
         if (e.code == "Space" && shift) {
             e.preventDefault()        
-            priceListStateSellingToOrg.set(!$priceListStateSellingToOrg) 
-
             updatePriceStateValueBackend()
+            priceListStateSellingToOrg.set(!$priceListStateSellingToOrg) 
         }
      }}
 
@@ -80,9 +79,9 @@
 
     <ul>
         <li><a href="/">Eladás</a></li>
+        <li><a href="/prices">Árlista</a></li>
         <li><a href="/dashboard">Irányítópult</a></li>
         <li><a href="/storage">Raktár</a></li>
-        <li><a href="/prices">Árlista</a></li>
     </ul>
 
     <label for="sell-to">

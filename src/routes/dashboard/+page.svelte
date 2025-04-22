@@ -95,11 +95,13 @@
             events.push(Object.values(IDEvents)[i])
         }
     }
-    
-    
-
 
 </script>
+
+<svelte:head>
+    <title>Market-V2: Irányítópult</title>
+</svelte:head>
+
 <main>
 
     <h1>Irányítópult</h1>

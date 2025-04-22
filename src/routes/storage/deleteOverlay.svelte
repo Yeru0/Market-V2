@@ -1,3 +1,10 @@
+<script lang="ts">
+
+    let { product } = $props()
+
+</script>
+
+
 <div>
 
     <h2>Termék törlése</h2>

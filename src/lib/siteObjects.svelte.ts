@@ -28,6 +28,8 @@ export class Product {
     singlePartProfitM: number = $state(0);
     singleProductValueM: number = $state(0);
     valueOfSoldProductsM: number = $state(0);
+    valueOfSoldProductsOrgM: number = $state(0);
+    valueOfSoldProductsPartM: number = $state(0);
     active: boolean = $state(true);
     canAddMore: boolean = $state(true);
     modOverlay: boolean = $state(false);
@@ -64,8 +66,10 @@ export class Product {
         this.singlePartProfitM = Math.round(this.singlePartPriceM - this.singleProductValueM);
         this.allOrgProfitM = Math.round(this.singleOrgProfitM * this.soldToOrgN);
         this.allPartProfitM = Math.round(this.singlePartProfitM * this.soldToPartN);
-        this.allProfitM = Math.round(this.allOrgProfitM + this.allPartProfitM);
+        this.allProfitM = Math.round(this.allIncomeM - this.purchasePriceM);
         this.valueOfSoldProductsM = this.allSoldN * this.singleProductValueM; //ELÁBÉ
+        this.valueOfSoldProductsOrgM = this.soldToOrgN * this.singleProductValueM; //ELÁBÉ
+        this.valueOfSoldProductsPartM = this.soldToPartN * this.singleProductValueM; //ELÁBÉ
         if (this.allRemainingN <= 0) {
             this.active = false;
             this.canAddMore = false;

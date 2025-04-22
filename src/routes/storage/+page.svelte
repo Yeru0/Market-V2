@@ -24,6 +24,10 @@
     })
 </script>
 
+<svelte:head>
+    <title>Market-V2: Raktár</title>
+</svelte:head>
+
 <!-- TODO BIG reactivity -->
 <main>
 
@@ -38,20 +42,23 @@
         <div class="top-stats">
             <div class="purchased stat-card">
                 <h3>Beszerzett</h3>
-                <p>12 db</p>
-            </div>
-            <div class="stored stat-card">
-                <h3>Raktározva</h3>
-                <p>3 db</p>
+                <p>{product.purchasedN} db</p>
             </div>
             <div class="purchased-price stat-card">
                 <h3>Beszerzési ár</h3>
-                <p>3600 Ft</p>
+                <p>{product.purchasePriceM} Ft</p>
+            </div>
+            <div class="single-purchased-price stat-card">
+                <h3>Beszerzési egységár</h3>
+                <p>{product.singleProductValueM} Ft</p>
+            </div>
+            <div class="stored stat-card">
+                <h3>Raktározva</h3>
+                <p>{product.allRemainingN} db</p>
             </div>
             <div class="profit stat-card">
-                <!-- Bevétel - Beszerár -->
                 <h3>Profit</h3>
-                <p>-600 Ft</p>
+                <p>{product.allProfitM} Ft</p>
             </div>
         </div>
 
@@ -67,37 +74,44 @@
             <tbody>
                     <tr>
                         <th>Eladott</th>
-                        <td>6 db</td>
-                        <td>3 db</td>
-                        <td>9 db</td>
+                        <td>{product.soldToOrgN} db</td>
+                        <td>{product.soldToPartN} db</td>
+                        <td>{product.allSoldN} db</td>
                     </tr>
                     <tr>
                         <th>Egységár</th>
-                        <td>350 Ft</td>
-                        <td>400 Ft</td>
-                        <td>300 Ft</td>
+                        <td>{product.singleOrgPriceM} Ft</td>
+                        <td>{product.singlePartPriceM} Ft</td>
+                        <td>{product.singleProductValueM} Ft</td>
+                    </tr>
+                    <tr>
+                        <th>Egységprofit</th>
+                        <td>{product.singleOrgProfitM} Ft</td>
+                        <td>{product.singlePartProfitM} Ft</td>
+                        <td>- Ft</td>
                     </tr>
                     <tr>
                         <!-- Eladott áruk beszerzési értéke, eladott * egység beszerár -->
                         <th>ELÁBÉ</th>
-                        <td>1800 Ft</td>
-                        <td>900 Ft</td>
-                        <td>2700 Ft</td>
+                        <td>{product.valueOfSoldProductsOrgM} Ft</td>
+                        <td>{product.valueOfSoldProductsPartM} Ft</td>
+                        <td>{product.valueOfSoldProductsM} Ft</td>
                     </tr>
                     <tr>
                         <th>Bevétel</th>
-                        <td>2100 Ft</td>
-                        <td>1200 Ft</td>
-                        <td>3300 Ft</td>
+                        <td>{product.allOrgIncomeM} Ft</td>
+                        <td>{product.allPartIncomeM} Ft</td>
+                        <td>{product.allIncomeM} Ft</td>
                     </tr>
             </tbody>
         </table>    
         </section>
-        
+
+        <AddOverlay {product}></AddOverlay>
+        <UpdateOverlay {product}></UpdateOverlay>
+        <DeleteOverlay {product}></DeleteOverlay>
+
     {/each}
 
 </main>
 
-<AddOverlay></AddOverlay>
-<UpdateOverlay></UpdateOverlay>
-<DeleteOverlay></DeleteOverlay>

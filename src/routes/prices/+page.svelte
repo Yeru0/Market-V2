@@ -24,6 +24,10 @@
 
 </script>
 
+<svelte:head>
+    <title>Market-V2: Árlista</title>
+</svelte:head>
+
 <main>
     <h1>Termékek</h1>
     <section>

@@ -1,3 +1,10 @@
+<script lang="ts">
+
+    let { product } = $props()
+
+</script>
+
+
 <!-- TODO Handle form -->
 <div>
 

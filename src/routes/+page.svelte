@@ -169,6 +169,10 @@
         if (e.key == "Control") control = false
 }}/>
 
+<svelte:head>
+    <title>Market-V2: Eladás</title>
+</svelte:head>
+
 <CodeReaderModule {basket} {products} ></CodeReaderModule>
 
 <main>

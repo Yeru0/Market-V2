@@ -9,7 +9,7 @@ export const load = async ({ fetch }) => {
 
     try {
         //Products
-        const productFetch = await fetch("/api/product/read");
+        const productFetch = await fetch("/api/product");
         products = await productFetch.json();
 
         // Notes

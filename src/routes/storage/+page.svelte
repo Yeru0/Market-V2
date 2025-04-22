@@ -1,14 +1,39 @@
-<script>
+<script lang="ts">
     import AddOverlay from "./addOverlay.svelte";
     import UpdateOverlay from "./updateOverlay.svelte";
     import DeleteOverlay from "./deleteOverlay.svelte";
+	import { Product } from "$lib/siteObjects.svelte";
+
+    let { data } = $props()
+
+    //Render products
+    let products: Product[] = $state([])
+
+    for (const product of data.products) {
+        products.push(new Product(product))
+    }
+
+    products.sort((a, b) => {
+        if (a.name < b.name) {
+            return -1;
+        } else if (a.name > b.name) {
+            return 1;
+        } else {
+            return 0;
+        }
+    })
 </script>
 
 <!-- TODO BIG reactivity -->
 <main>
 
-    <h2>Áruk</h2>
-    <section>    
+    <h1>Áruk</h1>
+
+    {#each products as product}
+
+        <section>    
+
+        <h2>{product.name}</h2>
 
         <div class="top-stats">
             <div class="purchased stat-card">
@@ -67,7 +92,9 @@
                     </tr>
             </tbody>
         </table>    
-    </section>
+        </section>
+        
+    {/each}
 
 </main>
 

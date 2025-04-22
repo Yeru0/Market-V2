@@ -20,8 +20,6 @@ wss.on("connection", ws => {
 
         clients.forEach(async (client) => {
             if (client.id !== wsId) {
-                console.log(JSON.parse(data));
-
                 client.ws.send(JSON.stringify(`${value}`));
             }
         });

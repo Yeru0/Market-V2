@@ -2,11 +2,11 @@
 
     let {
         notes = $bindable({}),
-        sum = $bindable(0)
+        sum = $bindable(0),
+        displayO = true
     } = $props()
     
     let notesKeys: string[] = Object.keys(notes)
-    let input = $state(false)
 
     if (Object.keys(notes).length == 0) {
         notes = {
@@ -35,14 +35,25 @@
 <table>
     <tbody>
         {#each notesKeys as note}
-        <tr>
-            <td>
-                {note}:
-            </td>
-            <td>
-                {notes[note]}
-            </td>
-        </tr>
+        {#if displayO}
+            <tr>
+                <td>
+                    {note}:
+                </td>
+                <td>
+                    {notes[note]}
+                </td>
+            </tr>
+        {:else if !displayO && notes[note] != 0}
+            <tr>
+                <td>
+                    {note}:
+                </td>
+                <td>
+                    {notes[note]}
+                </td>
+            </tr>
+        {/if}
         {/each}
     </tbody>
 </table>

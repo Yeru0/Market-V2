@@ -1,7 +1,8 @@
 <script lang="ts">
-	import { Basket, Product, SellEvent, Stats } from "$lib/siteObjects.svelte";
+	import { Product, SellEvent, Stats } from "$lib/siteObjects.svelte";
     import NoteChangeTable from "./NoteChangeTable.svelte";
-    import NoteDisplayTable from "./NoteDisplayTable.svelte";    
+    import NoteDisplayTable from "./NoteDisplayTable.svelte";
+    import BasketOverlay from "./BasketOverlay.svelte"
     
     let { data } = $props()
     let noteSum: number = $state(0)
@@ -53,7 +54,11 @@
 
 
     //Take care of events
-    let events: SellEvent[][] = $state([]) //This is a list, which stores the events, separated into baskets, which are also lists, hence the double list
+
+    let events: {
+        events: SellEvent[],
+        overlay: boolean
+    }[] = $state([]) //This is a list, which stores the events, separated into baskets, and if the overlay is visible
     const renderEvents = async () => {
         events = []
         let DBEvents: any
@@ -63,24 +68,30 @@
         } catch (error) {
             return
         }
-    
-        interface sellEventList {
-            [basketID: string]: SellEvent[]
+
+        interface SellEventList {
+            [basketID: string]: {
+                events: SellEvent[],
+                overlay: boolean
+            }
         }
-        let IDEvents: sellEventList = {} //This stores the event based on their basket ID
+        let IDEvents: SellEventList = $state({}) //This stores the event based on their basket ID
         //The ID events is needed to make the creation of events easier
         
         // Separate out the events based on which basket they were in
         for (const event of DBEvents) {
             if(!(event.basketID in IDEvents)) {
-                IDEvents[event.basketID] = [new SellEvent(products, event)]
+                IDEvents[event.basketID] = {
+                    events: [new SellEvent(products, event)],
+                    overlay: false
+                }
             } else {
-                IDEvents[event.basketID].push(new SellEvent(products, event))
+                IDEvents[event.basketID].events.push(new SellEvent(products, event))
             }
         }
 
         // Reverse the order, because this way the new events go on top
-        for (let i = Object.values(IDEvents).length - 1; i >= 0; i--) {
+        for (let i = Object.values(IDEvents).length - 1; i >= 0; i--) {   
             events.push(Object.values(IDEvents)[i])
         }
     }
@@ -182,18 +193,23 @@
    <section>
     <h2>Események</h2>
     {#if events.length !==0}
-    <button onclick={renderEvents}>Események újratöltéses</button>
+    
+        <button onclick={renderEvents}>Események újratöltéses</button>
         {#each events as basket}
-            <ol>
-                <legend>Új kosár eladás <em>{basket[0].time}</em>-kor!</legend>
-                {#each basket as event}                
-                        <!-- TODO reactivity -->
+        <ol>
+            <legend>Új kosár eladás <em>{basket.events[0].time}</em>-kor!
+                <button onclick={() => { basket.overlay = !basket.overlay }}>Részletek</button>
+            </legend>
+                {#each basket.events as event}
                         <li><strong>{event.productA.name}</strong></li>
                 {/each}
+            {#if basket.overlay}                
+                <BasketOverlay {basket}></BasketOverlay>
+            {/if}
             </ol>
         {/each}
         
-        {:else}
+    {:else}
 
         <button onclick={renderEvents}>Események betöltése</button>
 

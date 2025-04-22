@@ -5,16 +5,14 @@ export const load = async ({ fetch }) => {
 
     let notes: any = [];
     let products: any = [];
+    let events: any = [];
 
     try {
+        //Products
         const productFetch = await fetch("/api/product/read");
         products = await productFetch.json();
 
-    } catch (err) {
-        error(500, err);
-    }
-
-    try {
+        // Notes
         const notesFetch = await fetch("/api/notes/read");
         notes = await notesFetch.json();
 
@@ -24,7 +22,8 @@ export const load = async ({ fetch }) => {
 
     return {
         notes,
-        products
+        products,
+        events
     };
 
 };

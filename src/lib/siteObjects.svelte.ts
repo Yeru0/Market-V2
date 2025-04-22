@@ -260,20 +260,104 @@ export class Stats {
 export class SellEvent {
     notesC: {} = $state({});
     notesP: {} = $state({});
-    productsB: Product[] = $state([]);
-    productsA: Product[] = $state([]);
+    productB: Product = $state([]);
+    productA: Product = $state([]);
     timestamp: number = $state(0);
     id: string = $state("");
+    basketID: string = $state("");
+    productID: string = $state("");
 
-    soldTo: string = $state();
+    soldTo: "org" | "part" | "ta" = $state("");
+    dateTime: string = $state("");
+    time: string = $state("");
 
 
-    constructor(notesP: {}, notesC: {}, productsB: Product[], productsA: Product[], timestamp: number, id: string) {
+    constructor(products: Product[], event: {}) {
+
+        this.timestamp = parseInt(event.timestamp);
+        this.basketID = event.basketID;
+        this.id = event.id;
+        this.productID = event.productID;
+
+
+        //Notes
+        this.notesC = {
+            "5": event["5_C"],
+            "50": event["50_C"],
+            "500": event["500_C"],
+            "5000": event["5000_C"],
+            "10": event["10_C"],
+            "100": event["100_C"],
+            "1000": event["1000_C"],
+            "10000": event["10000_C"],
+            "20": event["20_C"],
+            "200": event["200_C"],
+            "2000": event["2000_C"],
+            "20000": event["20000_C"]
+        };
+        this.notesP = {
+            "5": event["5_P"],
+            "50": event["50_P"],
+            "500": event["500_P"],
+            "5000": event["5000_P"],
+            "10": event["10_P"],
+            "100": event["100_P"],
+            "1000": event["1000_P"],
+            "10000": event["10000_P"],
+            "20": event["20_P"],
+            "200": event["200_P"],
+            "2000": event["2000_P"],
+            "20000": event["20000_P"]
+        };
+
+
+
+        //Product
+        let product: Product;
+
+        for (const prod of products) {
+            if (prod.id !== event.productID) continue;
+
+            product = prod;
+        }
+
+        product.infoObject.soldToOrgN = event.soldToOrgN_B;
+        product.infoObject.soldToPartN = event.soldToPartN_B;
+        product.infoObject.takenOutN = event.takenOutN_B;
+
+        this.productB = new Product(product.infoObject);
+
+        product.infoObject.soldToOrgN = event.soldToOrgN_A;
+        product.infoObject.soldToPartN = event.soldToPartN_A;
+        product.infoObject.takenOutN = event.takenOutN_A;
+
+        this.productA = new Product(product.infoObject);
+
+
+
+        //Timestamp
+        let date = new Date();
+        date.setTime(this.timestamp);
+        let months = date.getMonth() > 9 ? date.getMonth() + 1 : `0${date.getMonth() + 1}`;
+        let hours = date.getHours() > 9 ? date.getHours() : `0${date.getHours()}`;
+        let minutes = date.getMinutes() > 9 ? date.getMinutes() : `0${date.getMinutes()}`;
+
+        this.dateTime = `${date.getFullYear()}-${months}-${date.getDate()} ${hours}:${minutes}`;
+
+        this.time = `${hours}:${minutes}`;
+
+        //Sold To
+        if (this.productB.soldToOrgN - this.productA.soldToOrgN !== 0) {
+            this.soldTo = "org";
+        } else if (this.productB.soldToPartN - this.productA.soldToPartN !== 0) {
+            this.soldTo = "part";
+        } else if (this.productB.takenOutN - this.productA.takenOutN !== 0) {
+            this.soldTo = "ta";
+        }
+
 
     };
 
-    //TODO Read some, not entire db file
     //TODO Carousel
     //TODO Finish this shit
-    //TODO Fix the websocket issues
 }

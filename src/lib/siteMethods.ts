@@ -1,6 +1,6 @@
 
 // A function that tells how much the change should be
-export function changeNotes(inputNotes: { [key: number]: number; }, change: number) {
+export const changeNotes = (inputNotes: { [key: number]: number; }, change: number) => {
 
     return new Promise((resolve: (value: { [key: number]: number; }) => void, reject: (value: string) => void) => {
 
@@ -66,4 +66,4 @@ export function changeNotes(inputNotes: { [key: number]: number; }, change: numb
     });
 
     //Method changeNotes END
-}
+};

@@ -198,7 +198,6 @@
                     {#if !takingOut}
                         <div>
                             <h3>Fizetendő</h3>
-                            <!-- TODO should recalc this when things change whatever -->
                             <p>{basket.finalPrice} Ft</p>
                             <div>
                                 <h4>Fizető címlet</h4>

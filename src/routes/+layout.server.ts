@@ -1,22 +1,36 @@
 import { WebSocketServer } from 'ws';
+import crypto from "node:crypto";
 
 const wss = new WebSocketServer({ port: 8082 });
-const clients = new Set();
+const clients: {
+    id: string,
+    ws: WebSocket;
+}[] = [];
 
 //Update the state across all devices using WS
 wss.on("connection", ws => {
-    clients.add(ws);
+    let id = crypto.randomUUID();
+    clients.push({ id, ws });
 
-    ws.send(JSON.stringify({ message: clients.size }));
+    ws.send(JSON.stringify({ id }));
 
     ws.on("message", async (data) => {
+        let value = JSON.parse(data).value;
+        let wsId = JSON.parse(data).id;
+
         clients.forEach(async (client) => {
-            client.send(JSON.stringify(`${data}`));
+            if (client.id !== wsId) {
+                client.ws.send(JSON.stringify(`${value}`));
+            }
         });
     });
 
     ws.on("close", () => {
-        clients.delete(ws);
+        for (const client of clients) {
+            if (client.id === id) {
+                clients.splice(client, 1);
+            }
+        }
     });
 });
 

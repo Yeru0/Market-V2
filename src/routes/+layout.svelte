@@ -8,6 +8,8 @@
 
     let shift: boolean = false
 
+    let id: string // Store the device's own websocket access 
+
 
     
     onMount(async () => {
@@ -22,12 +24,6 @@
                 break
         }
 
-        websocket.onclose = (() => {
-            priceStateUnsub()
-        })
-
-
-
         websocket.onmessage = (async (event) => {
             let data = JSON.parse(event.data)            
             switch(data) {
@@ -37,24 +33,39 @@
                 case "false":
                     $priceListStateSellingToOrg = false
                     break
+                default:
+                    id = data.id
+                    break
                 }
+            console.log("INCOMING!");
+            
         })
     })
 
-    let priceStateUnsub = priceListStateSellingToOrg.subscribe(async (value) => {
+    let updatePriceStateValueBackend = async () => {
+        
         if(websocket && websocket.readyState === websocket.OPEN) {            
-            websocket.send(`${value}`)
+            websocket.send(JSON.stringify({value: $priceListStateSellingToOrg, id}))
         }
-    })
+
+        await fetch("/api/price-list/state", {
+            method: "PUT",
+            body: JSON.stringify({
+                priceListState: `${$priceListStateSellingToOrg}`
+            })
+        });
+    }
 
 
 </script>
 
 <svelte:window
-    onkeypress={(e) => { 
+    onkeypress={async (e) => { 
         if (e.code == "Space" && shift) {
             e.preventDefault()        
             priceListStateSellingToOrg.set(!$priceListStateSellingToOrg) 
+
+            updatePriceStateValueBackend()
         }
      }}
 
@@ -78,14 +89,7 @@
 
     <label for="sell-to">
         Szervezői árlista:
-        <input type="checkbox" name="sell-to" bind:checked={$priceListStateSellingToOrg} onclick={async () => {
-            await fetch("/api/price-list/state", {
-                method: "PUT",
-                body: JSON.stringify({
-                    priceListState: `${!$priceListStateSellingToOrg}`
-                })
-            });
-        }}>
+        <input type="checkbox" name="sell-to" bind:checked={$priceListStateSellingToOrg} onclick={updatePriceStateValueBackend}>
     </label>
 
 </nav>

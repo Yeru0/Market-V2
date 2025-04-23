@@ -129,6 +129,8 @@ export class Table {
 
                 let oldRecord: Record[] = this.records.splice(this.records.indexOf(record), 1);
 
+                resolve("Success");
+
             }).catch((err) => {
                 reject(err);
             });

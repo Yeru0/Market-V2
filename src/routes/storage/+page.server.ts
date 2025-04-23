@@ -48,8 +48,8 @@ export const actions = {
                     0,
                     0,
                     0,
-                    data.get("purchase-price"),
                     data.get("purchased-amount"),
+                    data.get("purchase-price"),
                     data.get("barcode")
                 ],
                 false
@@ -77,8 +77,8 @@ export const actions = {
             data.get("product-sold-to-org") === "" ||
             data.get("product-sold-to-part") === "" ||
             data.get("product-taken-out") === "" ||
-            data.get("purchase-price") === "" ||
             data.get("purchased-amount") === "" ||
+            data.get("purchase-price") === "" ||
             data.get("barcode") === ""
         ) return;
 
@@ -94,13 +94,37 @@ export const actions = {
                     data.get("product-sold-to-org"),
                     data.get("product-sold-to-part"),
                     data.get("product-taken-out"),
-                    data.get("purchase-price"),
                     data.get("purchased-amount"),
+                    data.get("purchase-price"),
                     data.get("barcode")
                 ]
             );
 
             await writeTable(table, true);
+
+        } catch (error) {
+            console.error(error);
+            error(500, error);
+        }
+
+    },
+
+    delete: async ({ request }) => {
+        // data expects: name, organiserProfitMargin, participantProfitMargin, purchasePriceM, purchasePriceN and barcode
+        let data = await request.formData();
+        let table: Table = await readTable("products");
+
+        if (
+            data.get("product-id") === ""
+        ) return;
+
+        try {
+
+            await table.deleteRecord(data.get("product-id"));
+
+            await writeTable(table, true);
+
+            return { success: true };
 
         } catch (error) {
             console.error(error);

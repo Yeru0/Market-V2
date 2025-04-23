@@ -47,7 +47,7 @@
 
     <h2>Termék módosítása</h2>
 
-    <form method="post" action="?/update" onsubmit={handleSubmit} use:enhance>
+    <form method="POST" action="?/update" onsubmit={handleSubmit} use:enhance>
 
         <input type="hidden" name="product-id" id="product-id" value="{product.id}">
         <input type="hidden" name="product-sold-to-org" id="product-sold-to-org" value="{product.soldToOrgN}">
@@ -87,8 +87,8 @@
 
 
         <div class="submit-buttons">
-            <button type="submit" class="submit">Termék módosítása</button>
-            <button type="reset" class="cancel" onclick={() => { product.modOverlay = !product.modOverlay }}>Mégsem</button>
+            <button type="submit" class="submit" onclick={() => { product.modOverlay = false }}>Termék módosítása</button>
+            <button type="reset" class="cancel" onclick={() => { product.modOverlay = false }}>Mégsem</button>
         </div>
     </form>
 

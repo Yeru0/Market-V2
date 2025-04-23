@@ -8,15 +8,17 @@
     let products: Product[] = $state([])    
 
     for (const product of data.products) {
+        // svelte-ignore state_referenced_locally
         products.push(new Product(product))
     }
 
-    products.sort((a, b) => {
-        if (a.name < b.name) {
+    // svelte-ignore state_referenced_locally
+    products = [...products].sort((a: Product, b: Product) => {
+        if (a.name.toUpperCase() < b.name.toUpperCase()) {                
             return -1;
-        } else if (a.name > b.name) {
+        } else if (a.name.toUpperCase() > b.name.toUpperCase()) {
             return 1;
-        } else {
+        } else {           
             return 0;
         }
     })

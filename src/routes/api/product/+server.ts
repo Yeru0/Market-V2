@@ -12,14 +12,3 @@ export const GET = async () => {
 
     return json(products);
 };
-
-export const POST = async () => {
-    let products: { [key: any]: string; }[] = [];
-
-    const prodTable = await readTable("products");
-    for (const record of prodTable.getRecords()) {
-        products.push({ ...record });
-    }
-
-    return json(products);
-};

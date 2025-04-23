@@ -29,13 +29,19 @@
 
         <label for="organiser-profit-margin" class="organiser-profit-margin">
             Szervezői haszonkulcs
-            <input type="text" name="purchase-price"> %
+            <input type="text" name="organiser-profit-margin"> %
         </label>
 
         <label for="participant-profit-margin" class="participant-profit-margin">
             Résztvevői haszonkulcs
-            <input type="text" name="purchase-price"> %
+            <input type="text" name="participant-profit-margin"> %
         </label>
+
+        <label for="barcode" class="barcode">
+            Vonalkód
+            <input type="text" name="barcode">
+        </label>
+
 
 
         <div class="submit-buttons">

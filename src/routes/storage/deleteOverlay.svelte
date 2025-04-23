@@ -1,7 +1,10 @@
 <script lang="ts">
 
-    let { product } = $props()
-
+    let {
+            product,
+            products = $bindable()
+        } = $props()
+        
 </script>
 
 

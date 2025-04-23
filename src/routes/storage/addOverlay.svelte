@@ -76,37 +76,37 @@
 
         <label for="product-name" class="product-name">
             Terméknév
-            <input type="text" name="product-name" value="asd" required>
+            <input type="text" name="product-name" required>
         </label>
         
         <label for="purchased-amount" class="purchased-amount">
             Beszerzett mennyiség
-            <input type="number" name="purchased-amount" value="23" required>
+            <input type="number" name="purchased-amount" required>
         </label>
 
         <label for="purchase-price" class="purchase-price">
             Beszerzési ár
-            <input type="number" name="purchase-price" value="23" required> Ft
+            <input type="number" name="purchase-price" required> Ft
         </label>
 
         <label for="organiser-profit-margin" class="organiser-profit-margin">
             Szervezői haszonkulcs
-            <input type="number" name="organiser-profit-margin" value="23" required> %
+            <input type="number" name="organiser-profit-margin" required> %
         </label>
 
         <label for="participant-profit-margin" class="participant-profit-margin">
             Résztvevői haszonkulcs
-            <input type="number" name="participant-profit-margin" value="23" required> %
+            <input type="number" name="participant-profit-margin" required> %
         </label>
 
         <label for="barcode" class="barcode">
             Vonalkód
-            <input type="text" name="barcode"  value="4056489584537" required>
+            <input type="text" name="barcode" required>
         </label>
 
         <div class="submit-buttons">
             <button type="submit" class="submit">Termék hozzáadása</button>
-            <button type="submit" class="cancel">Mégsem</button>
+            <button type="reset" class="cancel">Mégsem</button>
         </div>
 
     </form>

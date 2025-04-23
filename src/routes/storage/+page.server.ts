@@ -55,10 +55,55 @@ export const actions = {
                 false
             );
 
-            // TODO turn this on
             await writeTable(table, true);
 
         } catch (error) {
+            error(500, error);
+        }
+
+    },
+
+    update: async ({ request }) => {
+
+        // data expects: name, organiserProfitMargin, participantProfitMargin, purchasePriceM, purchasePriceN and barcode
+        let data = await request.formData();
+        let table: Table = await readTable("products");
+
+
+        if (
+            data.get("product-name") === "" ||
+            data.get("organiser-profit-margin") === "" ||
+            data.get("participant-profit-margin") === "" ||
+            data.get("product-sold-to-org") === "" ||
+            data.get("product-sold-to-part") === "" ||
+            data.get("product-taken-out") === "" ||
+            data.get("purchase-price") === "" ||
+            data.get("purchased-amount") === "" ||
+            data.get("barcode") === ""
+        ) return;
+
+        try {
+
+            await table.updateRecord(
+                data.get("product-id"),
+                [
+                    data.get("product-id"),
+                    data.get("product-name"),
+                    data.get("organiser-profit-margin"),
+                    data.get("participant-profit-margin"),
+                    data.get("product-sold-to-org"),
+                    data.get("product-sold-to-part"),
+                    data.get("product-taken-out"),
+                    data.get("purchase-price"),
+                    data.get("purchased-amount"),
+                    data.get("barcode")
+                ]
+            );
+
+            await writeTable(table, true);
+
+        } catch (error) {
+            console.error(error);
             error(500, error);
         }
 

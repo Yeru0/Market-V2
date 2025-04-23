@@ -25,7 +25,7 @@ export const actions = {
     create: async ({ request }) => {
 
         // data expects: name, organiserProfitMargin, participantProfitMargin, purchasePriceM, purchasePriceN and barcode
-        let data = await request.formData();
+        let data: FormData = await request.formData();
         let table: Table = await readTable("products");
 
         if (
@@ -57,8 +57,24 @@ export const actions = {
 
             await writeTable(table, true);
 
+
+            let formData: {} = {
+                id: data.get("product-id"),
+                name: data.get("product-name"),
+                organiserProfitMargin: data.get("organiser-profit-margin"),
+                participantProfitMargin: data.get("participant-profit-margin"),
+                purchasedN: data.get("purchased-amount"),
+                purchasePriceM: data.get("purchase-price"),
+                code: data.get("barcode")
+            };
+
+
+
+
+            return { success: true, formData: JSON.stringify(formData) };
+
         } catch (error) {
-            error(500, error);
+            return { success: false };
         }
 
     },
@@ -102,9 +118,11 @@ export const actions = {
 
             await writeTable(table, true);
 
+            return { success: true };
+
         } catch (error) {
             console.error(error);
-            error(500, error);
+            return { success: false };
         }
 
     },
@@ -128,7 +146,7 @@ export const actions = {
 
         } catch (error) {
             console.error(error);
-            error(500, error);
+            return { success: false };
         }
 
     }

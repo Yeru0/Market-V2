@@ -61,27 +61,27 @@
         
         <label for="purchased-amount" class="purchased-amount">
             Beszerzett mennyiség
-            <input type="text" name="purchased-amount" value={product.purchasedN}>
+            <input type="number" name="purchased-amount" value={product.purchasedN}>
         </label>
 
         <label for="purchase-price" class="purchase-price">
             Beszerzési ár
-            <input type="text" name="purchase-price" value={product.purchasePriceM}> Ft
+            <input type="number" name="purchase-price" value={product.purchasePriceM}> Ft
         </label>
 
         <label for="organiser-profit-margin" class="organiser-profit-margin">
             Szervezői haszonkulcs
-            <input type="text" name="organiser-profit-margin" value={product.organiserProfitMargin}> %
+            <input type="number" name="organiser-profit-margin" value={product.organiserProfitMargin}> %
         </label>
 
         <label for="participant-profit-margin" class="participant-profit-margin">
             Résztvevői haszonkulcs
-            <input type="text" name="participant-profit-margin" value={product.participantProfitMargin}> %
+            <input type="number" name="participant-profit-margin" value={product.participantProfitMargin}> %
         </label>
 
         <label for="barcode" class="barcode">
             Vonalkód
-            <input type="text" name="barcode" value={product.code}>
+            <input type="number" name="barcode" value={product.code}>
         </label>
 
 

@@ -6,9 +6,20 @@
 	import RenderBasket from "./RenderBasket.svelte";
 	import CodeReaderModule from "./CodeReaderModule.svelte";
 	import { priceListStateSellingToOrg } from "$lib/shared.svelte";
+	import Toast from "./Toast.svelte";
 
 
     let { data } = $props()
+
+
+
+
+    //Toast
+    let toast = $state({
+        show: false,
+        time: 1000,
+        text: ""
+    })
 
 
 
@@ -79,99 +90,116 @@
         
     const sell = async () => {        
 
-        // If selling, then invalidate if not enough notes, can't give change or the change is more than it should be
-        if (
-            !takingOut
-        ) {
+        try {
+
+            // If selling, then invalidate if not enough notes, can't give change or the change is more than it should be
             if (
-                !basket.possibleChange ||
-                !basket.enoughNotes ||
-                (5 * Math.round((basket.payingSum - basket.finalPrice) / 5)) !== basket.returnSum
-            ) return
-        }
-
-
-        // Register product sale
-        type SellingProduct = {
-            id: string;
-            soldToOrgN: number;
-            soldToPartN: number;
-            takenOutN: number;
-        }
-        type SellingProductList = SellingProduct[]
-
-        let soldProducts: SellingProductList = []
-        let legacyProductInfo: SellingProductList = [] // This is needed for the event registry
-        let productsToRemove: { prod: Product, price: "org" | "part", amt: number; }[] = []
-        for (const product of basket.products) {             
-
-            if (product.amt > products[products.indexOf(product.prod)].allRemainingN) {
-                basket.products.splice(basket.products.indexOf(product))
-                return
+                !takingOut
+            ) {
+                if (
+                    !basket.possibleChange ||
+                    !basket.enoughNotes ||
+                    (5 * Math.round((basket.payingSum - basket.finalPrice) / 5)) !== basket.returnSum
+                ) return
             }
 
-            //Push a new object to the legacy list, with the old one's properties
-            legacyProductInfo.push({
-                id: product.prod.id,
-                soldToOrgN: product.prod.soldToOrgN,
-                soldToPartN: product.prod.soldToPartN,
-                takenOutN: product.prod.takenOutN
-            })
 
-            for (product.amt; product.amt > 0; product.amt--) {                
-                if (!takingOut) product.prod.sell(product.price)
-                else product.prod.sell("to")
+            // Register product sale
+            type SellingProduct = {
+                id: string;
+                soldToOrgN: number;
+                soldToPartN: number;
+                takenOutN: number;
             }
-            
-            productsToRemove.push(product)
+            type SellingProductList = SellingProduct[]
 
-            soldProducts.push({
-                id: product.prod.id,
-                soldToOrgN: product.prod.soldToOrgN,
-                soldToPartN: product.prod.soldToPartN,
-                takenOutN: product.prod.takenOutN
-            })
+            let soldProducts: SellingProductList = []
+            let legacyProductInfo: SellingProductList = [] // This is needed for the event registry
+            let productsToRemove: { prod: Product, price: "org" | "part", amt: number; }[] = []
+            for (const product of basket.products) {             
 
-        }
+                if (product.amt > products[products.indexOf(product.prod)].allRemainingN) {
+                    basket.products.splice(basket.products.indexOf(product))
+                    return
+                }
+
+                //Push a new object to the legacy list, with the old one's properties
+                legacyProductInfo.push({
+                    id: product.prod.id,
+                    soldToOrgN: product.prod.soldToOrgN,
+                    soldToPartN: product.prod.soldToPartN,
+                    takenOutN: product.prod.takenOutN
+                })
+
+                for (product.amt; product.amt > 0; product.amt--) {                
+                    if (!takingOut) product.prod.sell(product.price)
+                    else product.prod.sell("to")
+                }
+
+                productsToRemove.push(product)
+
+                soldProducts.push({
+                    id: product.prod.id,
+                    soldToOrgN: product.prod.soldToOrgN,
+                    soldToPartN: product.prod.soldToPartN,
+                    takenOutN: product.prod.takenOutN
+                })
+
+            }
+
+            for (const prod of productsToRemove) {
+                basket.products.splice(basket.products.indexOf(prod))
+            } 
+
         
-        for (const prod of productsToRemove) {
-            basket.products.splice(basket.products.indexOf(prod))
-        } 
 
-       
+            // Register the state of the notes
+            let notes = { ...data.notes[0] }
+            for (const note in notes) {
+                if(note == "id") continue
+                notes[note] = parseInt(notes[note]) + basket.payingNotes[note] - basket.returnNotes[note]
+            }
 
-        // Register the state of the notes
-        let notes = { ...data.notes[0] }
-        for (const note in notes) {
-            if(note == "id") continue
-            notes[note] = parseInt(notes[note]) + basket.payingNotes[note] - basket.returnNotes[note]
+            // Send an events to the database
+            //WARNING: DO NOT CHANGE THE ORDER OF THE FETCH REQUESTS!
+            await fetch("/api/events/sell", {
+                method: "POST",
+                body: JSON.stringify({
+                    notesP: basket.payingNotes, 
+                    notesC: basket.returnNotes,
+                    productB: legacyProductInfo,
+                    productA: soldProducts
+                })
+            });
+            // Send the changed notes to the database
+            await fetch("/api/notes/sell", {
+                method: "PUT",
+                body: JSON.stringify({
+                    notes
+                })
+            });
+            // Send the product sale event to the database
+            await fetch("/api/product/sell", {
+                method: "PUT",
+                body: JSON.stringify({
+                    soldProducts
+                })
+            });
+
+            toast = {
+                time: 3000,
+                text: "Új kosár eladva!",
+                show: true
+            }
+
+        } catch (err) {          
+            toast = {
+                time: 3000,
+                text: "A kosár eladása sikertelen volt!",
+                show: true
+            }
         }
-        
-        // Send an events to the database
-        //WARNING: DO NOT CHANGE THE ORDER OF THE FETCH REQUESTS!
-        await fetch("/api/events/sell", {
-            method: "POST",
-            body: JSON.stringify({
-                notesP: basket.payingNotes, 
-                notesC: basket.returnNotes,
-                productB: legacyProductInfo,
-                productA: soldProducts
-            })
-        });
-        // Send the changed notes to the database
-        await fetch("/api/notes/sell", {
-            method: "PUT",
-            body: JSON.stringify({
-                notes
-            })
-        });
-        // Send the product sale event to the database
-        await fetch("/api/product/sell", {
-            method: "PUT",
-            body: JSON.stringify({
-                soldProducts
-            })
-        });
+
     }
 
 </script>
@@ -200,6 +228,9 @@
 
 <main>
 
+    {#if toast.show}
+        <Toast text={toast.text} bind:show={toast.show} time={toast.time}></Toast>
+    {/if}
 
     <h1>Termékek</h1>
 

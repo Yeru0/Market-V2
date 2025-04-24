@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { priceListStateSellingToOrg } from "$lib/shared.svelte";
     import { onMount } from "svelte";
+    import Toast from "./Toast.svelte";
 
 
     const { children, data } = $props()
@@ -9,6 +10,14 @@
     let shift: boolean = false
 
     let id: string // Store the device's own websocket access 
+
+
+    // Toast
+    let toast = $state({
+        show: false,
+        time: 1000,
+        text: ""
+    })
 
 
     
@@ -46,12 +55,40 @@
             websocket.send(JSON.stringify({value: !$priceListStateSellingToOrg, id}))
         }
 
-        await fetch("/api/price-list/state", {
-            method: "PUT",
-            body: JSON.stringify({
-                priceListState: `${!$priceListStateSellingToOrg}`
-            })
-        });
+        try {
+            await fetch("/api/price-list/state", {
+                method: "PUT",
+                body: JSON.stringify({
+                    priceListState: `${!$priceListStateSellingToOrg}`
+                })
+            });
+
+            switch ($priceListStateSellingToOrg) {
+                case true:
+                    toast.show = false
+                    toast = {
+                            time: 1000,
+                            text: "Szervezői árlista!",
+                            show: true
+                        }
+                    break
+                case false:
+                    toast.show = false
+                    toast = {
+                            time: 1000,
+                            text: "Résztvevői árlista!",
+                            show: true
+                        }
+                    break
+            }
+
+        } catch (err) {          
+                toast = {
+                    time: 3000,
+                    text: "Árlista megváltoztatása sikertelen volt!",
+                    show: true
+                }
+        }
     }
 
 
@@ -74,6 +111,9 @@
     }}
 />
 
+{#if toast.show}
+    <Toast text={toast.text} bind:show={toast.show} time={toast.time}></Toast>
+{/if}
 
 <nav>
 

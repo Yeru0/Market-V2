@@ -9,6 +9,15 @@
 
     let id: string = $state("")
 
+    let data = $state({
+        purchasedN: 0,
+        purchasedM: 0,
+        organiserProfitMargin: 0,
+        participantProfitMargin: 0,
+        organiserPrice: 0,
+        participantPrice: 0,
+    })
+
     onMount(async () => {
         //Give a random uuid from the server
         let DBUUIDResponse = (await fetch("/api/uuid", { method: "GET" }));
@@ -62,6 +71,36 @@
         
     }
 
+    const calcPrice = (to: "org" | "part" | "b") => {
+        switch (to) {
+            case "org":
+                data.organiserPrice = Math.round((data.purchasedM / data.purchasedN) / 100 * (100 + data.organiserProfitMargin));
+                break
+            case "part":
+                data.participantPrice = Math.round((data.purchasedM / data.purchasedN) / 100 * (100 + data.participantProfitMargin));
+                break
+            case "b":
+                data.participantPrice = Math.round((data.purchasedM / data.purchasedN) / 100 * (100 + data.participantProfitMargin));
+                data.organiserPrice = Math.round((data.purchasedM / data.purchasedN) / 100 * (100 + data.organiserProfitMargin));
+                break
+        }
+    }
+
+    const calcPercent = (to: "org" | "part" | "b") => {
+        switch (to) {
+            case "org":
+                data.organiserProfitMargin = (data.organiserPrice / ((data.purchasedM / data.purchasedN) / 100)) - 100
+                break
+            case "part":
+                data.participantProfitMargin = (data.participantPrice / ((data.purchasedM / data.purchasedN) / 100)) - 100
+                break
+            case "b":
+                data.participantProfitMargin = (data.participantPrice / ((data.purchasedM / data.purchasedN) / 100)) - 100
+                data.organiserProfitMargin = (data.organiserPrice / ((data.purchasedM / data.purchasedN) / 100)) - 100
+                break
+        }
+    }
+
 </script>
 
 <div>
@@ -79,22 +118,32 @@
         
         <label for="purchased-amount" class="purchased-amount">
             Beszerzett mennyiség
-            <input type="number" name="purchased-amount" required>
+            <input type="number" name="purchased-amount" required bind:value={data.purchasedN} onchange={() => { calcPrice("b"); calcPercent("b") }}> db
         </label>
 
         <label for="purchase-price" class="purchase-price">
             Beszerzési ár
-            <input type="number" name="purchase-price" required> Ft
+            <input type="number" name="purchase-price" required bind:value={data.purchasedM} onchange={() => { calcPercent("b"); calcPrice("b") }}> Ft
         </label>
 
         <label for="organiser-profit-margin" class="organiser-profit-margin">
             Szervezői haszonkulcs
-            <input type="number" name="organiser-profit-margin" required> %
+            <input type="number" name="organiser-profit-margin" required bind:value={data.organiserProfitMargin} onchange={() => {calcPrice("org")}}> %
         </label>
 
+        <label for="organiser-price" class="organiser-price">
+            Szervezői ár
+            <input type="number" name="organiser-price" required bind:value={data.organiserPrice} onchange={() => {calcPercent("org")}}> Ft
+        </label>
+        
         <label for="participant-profit-margin" class="participant-profit-margin">
             Résztvevői haszonkulcs
-            <input type="number" name="participant-profit-margin" required> %
+            <input type="number" name="participant-profit-margin" required bind:value={data.participantProfitMargin} onchange={() => {calcPrice("part")}}> %
+        </label>
+
+        <label for="participant-price" class="participant-price">
+            Résztvevői ár
+            <input type="number" name="participant-price" required bind:value={data.participantPrice} onchange={() => {calcPercent("part")}}> Ft
         </label>
 
         <label for="barcode" class="barcode">

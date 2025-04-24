@@ -161,7 +161,7 @@
             }
 
             // Send an events to the database
-            //WARNING: DO NOT CHANGE THE ORDER OF THE FETCH REQUESTS!
+            //WARNING: DO NOT CHANGE THE ORDER OF THE FETCH REQUESTS!           
             await fetch("/api/events/sell", {
                 method: "POST",
                 body: JSON.stringify({
@@ -212,12 +212,6 @@
     onkeyup={(e) => { 
         if (e.key == "Control") control = false
         if (e.key == "Shift") shift = false
-        if (
-            e.key == "Enter" && 
-            basket.possibleChange &&
-            basket.enoughNotes &&
-            (5 * Math.round((basket.payingSum - basket.finalPrice) / 5)) === basket.returnSum
-        ) sell()
 }}/>
 
 <svelte:head>

@@ -5,7 +5,8 @@
 
     let {
         product,
-        products = $bindable()
+        products = $bindable(),
+        toast = $bindable()
     } = $props()
     
 </script>
@@ -100,5 +101,5 @@
 {/if}
 
 {#if product.delOverlay}
-    <DeleteOverlay {product} bind:products></DeleteOverlay>
+    <DeleteOverlay {product} bind:toast bind:products></DeleteOverlay>
 {/if}

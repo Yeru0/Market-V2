@@ -1,7 +1,19 @@
 <script lang="ts">
     import { priceListStateSellingToOrg } from "$lib/shared.svelte";
+	import type { Product } from "$lib/siteObjects.svelte";
 
-    let { products, basket, control, shift} = $props()
+    let {
+        products,
+        basket,
+        control,
+        shift,
+        toast = $bindable()
+    } = $props()
+
+    const handleClick = (to: "org" | "part", product: Product) => {
+        if (shift) basket.removeFromBasket(product, to, control)
+        else basket.addToBasket(product, to, control)
+    }
 
 </script>
 
@@ -24,18 +36,12 @@
                     <td>{product.name}</td>
                     {#if $priceListStateSellingToOrg}
                         <td><button
-                            onclick={() => {
-                                if (shift) basket.removeFromBasket(product, "org", control)
-                                else basket.addToBasket(product, "org", control)
-                            }}
+                            onclick={() => { handleClick("org", product) }}
                             disabled={!product.canAddMore}
                             >{product.singleOrgPriceM} Ft</button></td>
                     {:else}
                         <td><button
-                            onclick={() => {
-                                if (shift) basket.removeFromBasket(product, "part", control)
-                                else basket.addToBasket(product, "part", control)
-                            }}
+                            onclick={() => { handleClick("part", product) }}
                             disabled={!product.canAddMore}
                             >{product.singlePartPriceM} Ft</button></td>
                     {/if}

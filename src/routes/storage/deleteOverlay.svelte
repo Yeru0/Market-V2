@@ -3,30 +3,27 @@
     import { Product } from "$lib/siteObjects.svelte"
     import { page } from "$app/state"
 
+    let {
+            product,
+            products = $bindable(),
+            toast = $bindable()
+        } = $props()
+
     $effect(() => {
+        if (!page.form) return
         if(page.form?.success) {
             handleSubmit()
+        } else if (!page.form?.success){
+            toast.show = true
+            toast.text = "A termék törlése nem sikerült!"
+            toast.time = 3000
         }
     })
 
-    let {
-            product,
-            products = $bindable()
-        } = $props()
 
     const handleSubmit = (): void => {
 
         products.splice(products.indexOf(product), 1)
-
-        products = [...products].sort((a: Product, b: Product) => {
-            if (a.name.toUpperCase() < b.name.toUpperCase()) {                
-                return -1;
-            } else if (a.name.toUpperCase() > b.name.toUpperCase()) {
-                return 1;
-            } else {           
-                return 0;
-            }
-        })
         
     }
 

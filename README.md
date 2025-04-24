@@ -24,8 +24,8 @@ Ebben a verzióban nincs szükség internetre, mert helyileg tárol az alkalmaz�
 Itt-ott lett optimalizálva egy-két dolog az előző iterációhoz képest,
 illetve lett egy pár új kényelmi funkció is, mint például a kódbeolvasás.
 A MARKET V-3-ra tekintettel jótanácsok:
-    - Mindent a saját komponensébe
-    - A Type-okat célszerű külön fájlba tárolni
-    - Kommentek
+- Mindent a saját komponensébe
+- A Type-okat célszerű külön fájlba tárolni
+- Kommentek
 ## Bugok
-    - Az adatbázis van, hogy szar, ezért érdemes git-tel is figyelni főleg az adatbázistáblák változását
+- Az adatbázis van, hogy szar, ezért érdemes git-tel is figyelni főleg az adatbázistáblák változását

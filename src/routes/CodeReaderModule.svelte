@@ -46,7 +46,8 @@
     };
     
     const addToBasketOnCode = (code: string):void => {
-        for(const product of products) {        
+        for(const product of products) {
+                  
             if(!product.code || !product.canAddMore) continue        
 
             if (product.code == code && !$priceListStateSellingToOrg) basket.addToBasket(product, "part")

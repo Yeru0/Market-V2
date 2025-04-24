@@ -1,3 +1,4 @@
+import { Product } from "./siteObjects.svelte";
 
 // A function that tells how much the change should be
 export const changeNotes = (inputNotes: { [key: number]: number; }, change: number) => {
@@ -66,4 +67,51 @@ export const changeNotes = (inputNotes: { [key: number]: number; }, change: numb
     });
 
     //Method changeNotes END
+};
+
+
+export const orderStorage = (products: Product[]): Product[] => {
+
+    let inactiveProducts: Product[] = [];
+    let activeProducts: Product[] = [];
+    let prods: Product[] = [];
+
+    for (const product of products) {
+        if (product.active) activeProducts.push(product);
+    }
+
+    for (const product of products) {
+        if (!product.active) inactiveProducts.push(product);
+    }
+
+    activeProducts = [...activeProducts].sort((a: Product, b: Product) => {
+        if (a.name.toUpperCase() < b.name.toUpperCase()) {
+            return -1;
+        } else if (a.name.toUpperCase() > b.name.toUpperCase()) {
+            return 1;
+        } else {
+            return 0;
+        }
+    });
+
+    inactiveProducts = [...inactiveProducts].sort((a: Product, b: Product) => {
+        if (a.name.toUpperCase() < b.name.toUpperCase()) {
+            return -1;
+        } else if (a.name.toUpperCase() > b.name.toUpperCase()) {
+            return 1;
+        } else {
+            return 0;
+        }
+    });
+
+    for (const product of activeProducts) {
+        prods.push(product);
+    }
+
+    for (const product of inactiveProducts) {
+        prods.push(product);
+    }
+
+    return prods;
+
 };

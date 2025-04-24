@@ -1,65 +1,94 @@
 <script lang="ts">
 
-    import { enhance } from "$app/forms"
     import { Product } from "$lib/siteObjects.svelte"
 
     let {
         product,
-        products = $bindable()
+        products = $bindable(),
+        toast = $bindable()
     } = $props()
 
+    const handleSubmit = async (formData: any) => {        
+
+
+        try {
+                    // Send the changed product to the database
+            await fetch("/api/product/update", {
+                method: "POST",
+                body: JSON.stringify({
+                    id: product.id,
+                    soldToOrgN: product.soldToOrgN,
+                    soldToPartN: product.soldToPartN,
+                    takenOutN: product.takenOutN,
+                    ...data
+                })
+            });
+
+
+            for (const prod of products) {
+                if (prod == product) {
+                    prod.name = data.name,
+                    prod.organiserProfitMargin = data.organiserProfitMargin,
+                    prod.participantProfitMargin = data.participantProfitMargin,
+                    prod.purchasePriceM = data.purchasePriceM,
+                    prod.purchasedN = data.purchasedN,
+                    prod.code = data.code
+                }
+            }                 
+
+
+
+            products = [...products].sort((a: Product, b: Product) => {
+                if (a.name.toUpperCase() < b.name.toUpperCase()) {                
+                    return -1;
+                } else if (a.name.toUpperCase() > b.name.toUpperCase()) {
+                    return 1;
+                } else {           
+                    return 0;
+                }
+            })
+
+            product.modOverlay = false 
+
+            toast = {
+                    time: 3000,
+                    text: "A termék módosítva!",
+                    show: true
+                }
+
+        } catch (err) {          
+                toast = {
+                    time: 3000,
+                    text: "A termék módosítása sikertelen volt!",
+                    show: true
+                }
+        }
+
+    }
+
     let data = $state({
+        name: product.name,
         purchasedN: product.purchasedN,
-        purchasedM: product.purchasePriceM,
+        purchasePriceM: product.purchasePriceM,
         organiserProfitMargin: product.organiserProfitMargin,
         participantProfitMargin: product.participantProfitMargin,
-        organiserPrice: product.singleOrgPriceM,
-        participantPrice: product.singlePartPriceM,
+        singleOrgPriceM: product.singleOrgPriceM,
+        singlePartPriceM: product.singlePartPriceM,
+        code: product.code
     })
 
-    const handleSubmit = (e: SubmitEvent): void => {
-        let form = e.target as HTMLFormElement
-        if (form === null) return
-        let formData = new FormData(form)
-
-        for (const prod of products) {
-            if (prod == product) {
-                prod.id = formData.get("product-id");
-                prod.name = formData.get("product-name");
-                prod.organiserProfitMargin = formData.get("organiser-profit-margin");
-                prod.participantProfitMargin = formData.get("participant-profit-margin");
-                prod.soldToOrgN = formData.get("product-sold-to-org");
-                prod.soldToPartN = formData.get("product-sold-to-part");
-                prod.takenOutN = formData.get("product-taken-out");
-                prod.purchasePriceM = formData.get("purchase-price");
-                prod.purchasedN = formData.get("purchased-amount");
-                prod.code = formData.get("barcode");
-            }
-        }                 
-
-        products = [...products].sort((a: Product, b: Product) => {
-            if (a.name.toUpperCase() < b.name.toUpperCase()) {                
-                return -1;
-            } else if (a.name.toUpperCase() > b.name.toUpperCase()) {
-                return 1;
-            } else {           
-                return 0;
-            }
-        })
-        
-    }
 
     const calcPrice = (to: "org" | "part" | "b") => {
         switch (to) {
             case "org":               
-                data.organiserPrice = Math.round((data.purchasedM / data.purchasedN) / 100 * (100 + data.organiserProfitMargin));
+                data.singleOrgPriceM = Math.round((data.purchasePriceM / data.purchasedN) / 100 * (100 + data.organiserProfitMargin));
                 break
             case "part":
-                data.participantPrice = Math.round((data.purchasedM / data.purchasedN) / 100 * (100 + data.participantProfitMargin));
+                data.singlePartPriceM = Math.round((data.purchasePriceM / data.purchasedN) / 100 * (100 + data.participantProfitMargin));
                 break
             case "b":
-                data.participantPrice = Math.round((data.purchasedM / data.purchasedN) / 100 * (100 + data.participantProfitMargin));
-                data.organiserPrice = Math.round((data.purchasedM / data.purchasedN) / 100 * (100 + data.organiserProfitMargin));
+                data.singlePartPriceM = Math.round((data.purchasePriceM / data.purchasedN) / 100 * (100 + data.participantProfitMargin));
+                data.singleOrgPriceM = Math.round((data.purchasePriceM / data.purchasedN) / 100 * (100 + data.organiserProfitMargin));
                 break
         }
     }
@@ -67,14 +96,14 @@
     const calcPercent = (to: "org" | "part" | "b") => {
         switch (to) {
             case "org":
-                data.organiserProfitMargin = (data.organiserPrice / ((data.purchasedM / data.purchasedN) / 100)) - 100
+                data.organiserProfitMargin = (data.singleOrgPriceM / ((data.purchasePriceM / data.purchasedN) / 100)) - 100
                 break
             case "part":
-                data.participantProfitMargin = (data.participantPrice / ((data.purchasedM / data.purchasedN) / 100)) - 100
+                data.participantProfitMargin = (data.singlePartPriceM / ((data.purchasePriceM / data.purchasedN) / 100)) - 100
                 break
             case "b":
-                data.participantProfitMargin = (data.participantPrice / ((data.purchasedM / data.purchasedN) / 100)) - 100
-                data.organiserProfitMargin = (data.organiserPrice / ((data.purchasedM / data.purchasedN) / 100)) - 100
+                data.participantProfitMargin = (data.singlePartPriceM / ((data.purchasePriceM / data.purchasedN) / 100)) - 100
+                data.organiserProfitMargin = (data.singleOrgPriceM / ((data.purchasePriceM / data.purchasedN) / 100)) - 100
                 break
         }
     }
@@ -86,7 +115,7 @@
 
     <h2>Termék módosítása</h2>
 
-    <form method="POST" action="?/update" onsubmit={handleSubmit} use:enhance>
+    <form onsubmit={handleSubmit}>
 
         <input type="hidden" name="product-id" id="product-id" value="{product.id}">
         <input type="hidden" name="product-sold-to-org" id="product-sold-to-org" value="{product.soldToOrgN}">
@@ -95,17 +124,17 @@
 
         <label for="product-name" class="product-name">
             Terméknév
-            <input type="text" name="product-name" value={product.name}>
+            <input type="text" name="product-name" bind:value={data.name} required>
         </label>
         
         <label for="purchased-amount" class="purchased-amount">
             Beszerzett mennyiség
-            <input type="number" name="purchased-amount" value={product.purchasedN}>
+            <input type="number" name="purchased-amount" bind:value={data.purchasedN} required onchange={() => { calcPercent("b"); calcPrice("b") }}>
         </label>
 
         <label for="purchase-price" class="purchase-price">
             Beszerzési ár
-            <input type="number" name="purchase-price" value={product.purchasePriceM}> Ft
+            <input type="number" name="purchase-price" bind:value={data.purchasePriceM} required onchange={() => { calcPercent("b"); calcPrice("b") }}> Ft
         </label>
 
         <label for="organiser-profit-margin" class="organiser-profit-margin">
@@ -115,7 +144,7 @@
 
         <label for="organiser-price" class="organiser-price">
             Szervezői ár
-            <input type="number" name="organiser-price" required bind:value={data.organiserPrice} onchange={() => {calcPercent("org")}}> Ft
+            <input type="number" name="organiser-price" required bind:value={data.singleOrgPriceM} onchange={() => {calcPercent("org")}}> Ft
         </label>
         
         <label for="participant-profit-margin" class="participant-profit-margin">
@@ -125,18 +154,18 @@
 
         <label for="participant-price" class="participant-price">
             Résztvevői ár
-            <input type="number" name="participant-price" required bind:value={data.participantPrice} onchange={() => {calcPercent("part")}}> Ft
+            <input type="number" name="participant-price" required bind:value={data.singlePartPriceM} onchange={() => {calcPercent("part")}}> Ft
         </label>
 
         <label for="barcode" class="barcode">
             Vonalkód
-            <input type="number" name="barcode" value={product.code}>
+            <input type="text" name="barcode" bind:value={data.code} required>
         </label>
 
 
 
         <div class="submit-buttons">
-            <button type="submit" class="submit" onclick={() => { product.modOverlay = false }}>Termék módosítása</button>
+            <button type="submit" class="submit">Termék módosítása</button>
             <button type="reset" class="cancel" onclick={() => { product.modOverlay = false }}>Mégsem</button>
         </div>
     </form>

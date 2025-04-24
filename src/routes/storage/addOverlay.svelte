@@ -4,18 +4,23 @@
     import { onMount } from "svelte";
 
     let {
-        products = $bindable()
+        products = $bindable(),
+        toast = $bindable()
     } = $props()
 
     let id: string = $state("")
 
     let data = $state({
+        // svelte-ignore state_referenced_locally
+        id,
+        name: "",
         purchasedN: 0,
         purchasedM: 0,
         organiserProfitMargin: 0,
         participantProfitMargin: 0,
         organiserPrice: 0,
         participantPrice: 0,
+        barcode: ""
     })
 
     onMount(async () => {
@@ -38,36 +43,74 @@
             }
         }
         
+        data.id = id
+        
+
     })
 
 
-    const handleSubmit = (e: SubmitEvent): void => {
-        let form = e.target as HTMLFormElement
-        if (form === null) return
-        let formData = new FormData(form)
+    const handleSubmit = async (e: SubmitEvent) => {
 
-        products.push(new Product({
-            id: id,
-            name: formData.get("product-name"),
-            organiserProfitMargin: formData.get("organiser-profit-margin"),
-            participantProfitMargin: formData.get("participant-profit-margin"),
-            soldToOrgN: 0,
-            soldToPartN: 0,
-            purchasedN: formData.get("purchased-amount"),
-            purchasePriceM: formData.get("purchase-price"),
-            code: formData.get("barcode"),
-            takenOutN: 0,
-        }))                    
+        try {
 
-        products = [...products].sort((a: Product, b: Product) => {
-            if (a.name.toUpperCase() < b.name.toUpperCase()) {                
-                return -1;
-            } else if (a.name.toUpperCase() > b.name.toUpperCase()) {
-                return 1;
-            } else {           
-                return 0;
+            // Send the added product to the database
+            await fetch("/api/product/add", {
+                method: "POST",
+                body: JSON.stringify({
+                    ...data
+                })
+            });
+            
+            let form = e.target as HTMLFormElement
+            if (form === null) return
+            let formData = new FormData(form)
+            
+            if (
+                data.id === "" ||
+                data.name === "" ||
+                data.organiserProfitMargin <= 0 ||
+                data.participantProfitMargin <= 0 ||
+                data.purchasedM <= 0 ||
+                data.purchasedN <= 0 ||
+                data.barcode === ""
+            ) return 
+            
+            products.push(new Product({
+                id: id,
+                name: formData.get("product-name"),
+                organiserProfitMargin: formData.get("organiser-profit-margin"),
+                participantProfitMargin: formData.get("participant-profit-margin"),
+                soldToOrgN: 0,
+                soldToPartN: 0,
+                takenOutN: 0,
+                purchasedN: formData.get("purchased-amount"),
+                purchasePriceM: formData.get("purchase-price"),
+                code: formData.get("barcode"),
+            }))                    
+        
+            products = [...products].sort((a: Product, b: Product) => {
+                if (a.name.toUpperCase() < b.name.toUpperCase()) {                
+                    return -1;
+                } else if (a.name.toUpperCase() > b.name.toUpperCase()) {
+                    return 1;
+                } else {           
+                    return 0;
+                }
+            })
+            
+            toast = {
+                time: 3000,
+                text: "A termék létrehozva!",
+                show: true
             }
-        })
+
+        } catch (err) {          
+                toast = {
+                    time: 3000,
+                    text: "A termék létrehozása sikertelen volt!",
+                    show: true
+                }
+        }
         
     }
 
@@ -107,13 +150,13 @@
 
     <h2>Termék hozzáadása</h2>
 
-    <form method="post" action="?/create" onsubmit={handleSubmit} use:enhance>
+    <form onsubmit={handleSubmit}>
 
         <input type="hidden" name="product-id" id="product-id" value="{id}">
 
         <label for="product-name" class="product-name">
             Terméknév
-            <input type="text" name="product-name" required>
+            <input type="text" name="product-name" required bind:value={data.name}>
         </label>
         
         <label for="purchased-amount" class="purchased-amount">
@@ -148,7 +191,7 @@
 
         <label for="barcode" class="barcode">
             Vonalkód
-            <input type="text" name="barcode" required>
+            <input type="text" name="barcode" required bind:value={data.barcode}>
         </label>
 
         <div class="submit-buttons">

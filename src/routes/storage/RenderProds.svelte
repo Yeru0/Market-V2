@@ -97,7 +97,7 @@
 
 
 {#if product.modOverlay}
-    <UpdateOverlay {product} bind:products></UpdateOverlay>
+    <UpdateOverlay {product} bind:toast bind:products></UpdateOverlay>
 {/if}
 
 {#if product.delOverlay}

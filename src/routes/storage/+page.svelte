@@ -39,7 +39,7 @@
 
     <h1>Áruk</h1>
 
-    <AddOverlay bind:products></AddOverlay>
+    <AddOverlay bind:products bind:toast></AddOverlay>
 
     {#each products as product}
 

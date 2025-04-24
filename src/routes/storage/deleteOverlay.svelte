@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
-    import { Product } from "$lib/siteObjects.svelte"
     import { page } from "$app/state"
+	import { onDestroy } from "svelte";
 
     let {
             product,
@@ -9,21 +9,31 @@
             toast = $bindable()
         } = $props()
 
-    $effect(() => {
-        if (!page.form) return
-        if(page.form?.success) {
-            handleSubmit()
-        } else if (!page.form?.success){
-            toast.show = true
-            toast.text = "A termék törlése nem sikerült!"
-            toast.time = 3000
-        }
-    })
+    const handleSubmit = async () => {
+
+        // Remove the product from the database
+        fetch("/api/product/delete", {
+            method: "POST",
+            body: JSON.stringify({
+                id: product.id,
+            })
+        }).then(() => {
+            products.splice(products.indexOf(product), 1)
+            toast = {
+                time: 3000,
+                text: "A termék törölve!",
+                show: true
+            }
+        }).catch(() => {
+            toast = {
+                time: 3000,
+                text: "A termék törlése sikertelen volt",
+                show: true
+            }
+            return
+        });
 
 
-    const handleSubmit = (): void => {
-
-        products.splice(products.indexOf(product), 1)
         
     }
 
@@ -36,7 +46,7 @@
 
     <p>Biztosan törlöd a(z) {product.name} terméket?</p>
 
-    <form method="POST" action="?/delete" use:enhance>
+    <form onsubmit={handleSubmit}>
         <input type="hidden" name="product-id" value={product.id}>
 
         <div class="submit-buttons">

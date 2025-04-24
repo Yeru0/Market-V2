@@ -30,7 +30,6 @@
     <title>Market-V2: Raktár</title>
 </svelte:head>
 
-<!-- TODO BIG reactivity -->
 <main>
 
     <h1>Áruk</h1>
@@ -91,6 +90,12 @@
                             <td>{product.singleOrgPriceM} Ft</td>
                             <td>{product.singlePartPriceM} Ft</td>
                             <td>{product.singleProductValueM} Ft</td>
+                        </tr>
+                        <tr>
+                            <th>Egységár</th>
+                            <td>{product.organiserProfitMargin} %</td>
+                            <td>{product.participantProfitMargin} %</td>
+                            <td>- %</td>
                         </tr>
                         <tr>
                             <th>Egységprofit</th>

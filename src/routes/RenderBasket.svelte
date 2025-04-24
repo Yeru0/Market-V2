@@ -1,7 +1,9 @@
 <script lang="ts">
     import { priceListStateSellingToOrg } from "$lib/shared.svelte";
 
-    let { basket, control } = $props()
+    let {
+        basket = $bindable(),
+        control } = $props()
 
 </script>
 
@@ -23,7 +25,7 @@
                         onclick={() => { basket.removeFromBasket(basketProduct.prod, basketProduct.price, false, control) }}
                         type="button"
                     >-</button>
-                    <input type="number" bind:value={basketProduct.amt} min="1" max={basketProduct.prod.allRemainingN} required />
+                    <input type="number" bind:value={basketProduct.amt} min="1" max={basketProduct.prod.allRemainingN} required onchange={() => { basket.calcFinalPrice() }}/>
                     <button
                         onclick={() => { basket.addToBasket(basketProduct.prod, basketProduct.price, control) }}
                         disabled={!basketProduct.prod.canAddMore}

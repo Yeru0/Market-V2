@@ -64,8 +64,6 @@
 
 </script>
 
-
-<!-- TODO Handle form -->
 <div>
 
     <h2>Termék hozzáadása</h2>

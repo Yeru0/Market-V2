@@ -46,12 +46,8 @@
     };
     
     const addToBasketOnCode = (code: string):void => {
-        for(const product of products) {
-
-            
-            
-
-            if(!product.code || !product.canAddMore) return
+        for(const product of products) {        
+            if(!product.code || !product.canAddMore) continue        
 
             if (product.code == code && !$priceListStateSellingToOrg) basket.addToBasket(product, "part")
             if (product.code == code && $priceListStateSellingToOrg) basket.addToBasket(product, "org")
@@ -61,7 +57,7 @@
 
 <!-- Code-reader listening -->
 <svelte:window
-    onkeydown={(e) => {
+    onkeydown={(e) => {     
             constructCode(e).then((result) => {
                 let code = new Code(result)
                 codeS = ""

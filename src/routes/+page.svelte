@@ -77,6 +77,14 @@
     })
         
     const sell = async () => {
+
+        if (
+            takingOut ||
+            basket.possibleChange ||
+            basket.enoughNotes ||
+            (5 * Math.round((basket.payingSum - basket.finalPrice) / 5)) === basket.returnSum
+        ) return
+
         // Register product sale
         type SellingProduct = {
             id: string;
@@ -194,11 +202,10 @@
                 <h2>Kosár</h2>
                 <button onclick={() => {basket = new Basket()}}>Kosár ürítése</button>
             </div>
-
             <form onsubmit={sell}>
                 <div>
 
-                    <RenderBasket {basket} {control}></RenderBasket>
+                    <RenderBasket bind:basket {control}></RenderBasket>
 
                     <label for="taking-out">
                         {basket.products.length == 1 ? "Termék kivétele" : "Termékek kivétele"}

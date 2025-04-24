@@ -155,6 +155,7 @@ export class Basket {
 
                     all ? product.amt = product.prod.allRemainingN : product.amt += 1;
                     prod.buttonDisabling(this);
+                    this.calcFinalPrice();
                     resolve("Product added");
                     return "Product added";
                 }
@@ -183,6 +184,7 @@ export class Basket {
                     this.products.splice(this.products.indexOf(product), 1);
                 } else {
                     prod.buttonDisabling(this);
+                    this.calcFinalPrice();
                     reject("Something went wrong");
                     return "Something went wrong";
                 }
@@ -363,5 +365,4 @@ export class SellEvent {
     };
 
     //TODO Carousel
-    //TODO Finish this shit
 }

@@ -192,6 +192,7 @@ export class Basket {
             }
 
             prod.buttonDisabling(this);
+            this.calcFinalPrice();
             resolve("Product deleted");
             return "Product deleted";
 

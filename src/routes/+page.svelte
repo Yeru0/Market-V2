@@ -14,6 +14,7 @@
 
     // Render products
     let products: Product[] = $state([])
+    let shift: boolean = $state(false)
 
     for (const product of data.products) {
         // svelte-ignore state_referenced_locally
@@ -178,9 +179,17 @@
 <svelte:window
     onkeydown={(e) => { 
         if (e.key == "Control") control = true
+        if (e.key == "Shift") shift = true
      }}
     onkeyup={(e) => { 
         if (e.key == "Control") control = false
+        if (e.key == "Shift") shift = false
+        if (
+            e.key == "Enter" && 
+            basket.possibleChange &&
+            basket.enoughNotes &&
+            (5 * Math.round((basket.payingSum - basket.finalPrice) / 5)) === basket.returnSum
+        ) sell()
 }}/>
 
 <svelte:head>
@@ -194,7 +203,7 @@
     <h1>Termékek</h1>
 
     <section class="products">
-        <RenderProds {products} {basket} {control}></RenderProds>
+        <RenderProds {products} {basket} {control} {shift}></RenderProds>
     </section>
 
     {#if basket.products.length > 0}

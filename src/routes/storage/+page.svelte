@@ -92,9 +92,9 @@
                             <td>{product.singleProductValueM} Ft</td>
                         </tr>
                         <tr>
-                            <th>Egységár</th>
-                            <td>{product.organiserProfitMargin} %</td>
-                            <td>{product.participantProfitMargin} %</td>
+                            <th>Haszonkulcs</th>
+                            <td>{product.organiserProfitMargin}%</td>
+                            <td>{product.participantProfitMargin}%</td>
                             <td>- %</td>
                         </tr>
                         <tr>

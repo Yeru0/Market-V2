@@ -1,7 +1,7 @@
 <script lang="ts">
     import { priceListStateSellingToOrg } from "$lib/shared.svelte";
 
-    let { products, basket, control} = $props()
+    let { products, basket, control, shift} = $props()
 
 </script>
 
@@ -24,12 +24,18 @@
                     <td>{product.name}</td>
                     {#if $priceListStateSellingToOrg}
                         <td><button
-                            onclick={() => { basket.addToBasket(product, "org", control) }}
+                            onclick={() => {
+                                if (shift) basket.removeFromBasket(product, "org", control)
+                                else basket.addToBasket(product, "org", control)
+                            }}
                             disabled={!product.canAddMore}
                             >{product.singleOrgPriceM} Ft</button></td>
                     {:else}
                         <td><button
-                            onclick={() => { basket.addToBasket(product, "part", control) }}
+                            onclick={() => {
+                                if (shift) basket.removeFromBasket(product, "part", control)
+                                else basket.addToBasket(product, "part", control)
+                            }}
                             disabled={!product.canAddMore}
                             >{product.singlePartPriceM} Ft</button></td>
                     {/if}

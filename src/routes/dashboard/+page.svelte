@@ -196,10 +196,10 @@
     <h2>Események</h2>
     {#if events.length !==0}
     
-        <button onclick={renderEvents}>Események újratöltéses</button>
+        <button onclick={renderEvents}>Események újratöltése</button>
         {#each events as basket}
         <ol>
-            <legend>Új kosár eladás <em>{basket.events[0].time}</em>-kor!
+            <legend>Új {basket.events[0].soldTo == "to" ? "kivett" : basket.events[0].soldTo == "org" ? "szervezőnek eladott" : "résztvevőnek eladtott" } kosár <em>{basket.events[0].time}</em>-kor!
                 <button onclick={() => { basket.overlay = !basket.overlay }}>Részletek</button>
             </legend>
                 {#each basket.events as event}

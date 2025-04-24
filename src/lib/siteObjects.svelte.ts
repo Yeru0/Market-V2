@@ -95,6 +95,7 @@ export class Product {
                 this.soldToPartN += 1;
                 break;
             case "to":
+
                 this.takenOutN += 1;
                 break;
         }
@@ -273,9 +274,10 @@ export class SellEvent {
     basketID: string = $state("");
     productID: string = $state("");
 
-    soldTo: "org" | "part" | "ta" = $state("");
+    soldTo: "org" | "part" | "to" = $state("");
     dateTime: string = $state("");
     time: string = $state("");
+    seconds: string = $state("");
 
 
     constructor(products: Product[], event: {}) {
@@ -347,6 +349,7 @@ export class SellEvent {
         let months = date.getMonth() > 9 ? date.getMonth() + 1 : `0${date.getMonth() + 1}`;
         let hours = date.getHours() > 9 ? date.getHours() : `0${date.getHours()}`;
         let minutes = date.getMinutes() > 9 ? date.getMinutes() : `0${date.getMinutes()}`;
+        this.seconds = date.getSeconds() > 9 ? date.getSeconds() : `0${date.getSeconds()}`;
 
         this.dateTime = `${date.getFullYear()}-${months}-${date.getDate()} ${hours}:${minutes}`;
 
@@ -358,7 +361,7 @@ export class SellEvent {
         } else if (this.productB.soldToPartN - this.productA.soldToPartN !== 0) {
             this.soldTo = "part";
         } else if (this.productB.takenOutN - this.productA.takenOutN !== 0) {
-            this.soldTo = "ta";
+            this.soldTo = "to";
         }
 
 

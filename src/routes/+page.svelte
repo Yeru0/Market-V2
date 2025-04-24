@@ -76,14 +76,19 @@
         
     })
         
-    const sell = async () => {
+    const sell = async () => {        
 
+        // If selling, then invalidate if not enough notes, can't give change or the change is more than it should be
         if (
-            takingOut ||
-            basket.possibleChange ||
-            basket.enoughNotes ||
-            (5 * Math.round((basket.payingSum - basket.finalPrice) / 5)) === basket.returnSum
-        ) return
+            !takingOut
+        ) {
+            if (
+                !basket.possibleChange ||
+                !basket.enoughNotes ||
+                (5 * Math.round((basket.payingSum - basket.finalPrice) / 5)) !== basket.returnSum
+            ) return
+        }
+
 
         // Register product sale
         type SellingProduct = {
@@ -112,7 +117,7 @@
                 takenOutN: product.prod.takenOutN
             })
 
-            for (product.amt; product.amt > 0; product.amt--) {
+            for (product.amt; product.amt > 0; product.amt--) {                
                 if (!takingOut) product.prod.sell(product.price)
                 else product.prod.sell("to")
             }

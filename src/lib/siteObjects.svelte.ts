@@ -77,6 +77,18 @@ export class Product {
             this.active = true;
             this.canAddMore = true;
         }
+
+        //Reset the infoObject
+        this.infoObject.id = this.id;
+        this.infoObject.name = this.name;
+        this.infoObject.organiserProfitMargin = this.organiserProfitMargin;
+        this.infoObject.participantProfitMargin = this.participantProfitMargin;
+        this.infoObject.soldToOrgN = this.soldToOrgN;
+        this.infoObject.soldToPartN = this.soldToPartN;
+        this.infoObject.purchasedN = this.purchasedN;
+        this.infoObject.purchasePriceM = this.purchasePriceM;
+        this.infoObject.code = this.code;
+        this.infoObject.takenOutN = this.takenOutN;
     }
 
     sell(to: "org" | "part" | "to") {
@@ -103,10 +115,6 @@ export class Product {
         //Recalculate all the properties based on the changes
         this.setProps();
 
-        // Update notes
-        // Update income or stats or whatever
-        // Register sell event
-        // Update db of notes, products, events and stats
     };
 
     buttonDisabling(basket: Basket) {
@@ -369,4 +377,5 @@ export class SellEvent {
     };
 
     //TODO Carousel
+    // TODO Amikor nincs update a noteoknal akkkor a notes elszarodik
 }

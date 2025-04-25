@@ -16,7 +16,7 @@ import { priceListStateSellingToOrg } from "$lib/shared.svelte";
 
         {#each products as product (product)}
 
-        <!-- TODO show when product is inactive -->
+            {#if product.active}
                 <tr>
                     <td>{product.name}</td>
                     {#if $priceListStateSellingToOrg}
@@ -25,6 +25,7 @@ import { priceListStateSellingToOrg } from "$lib/shared.svelte";
                         <td>{product.singlePartPriceM} Ft</td>
                     {/if}
                 </tr>
+            {/if}
 
         {/each}
 

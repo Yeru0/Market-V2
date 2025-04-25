@@ -1,16 +1,16 @@
 import { WebSocketServer } from 'ws';
 import crypto from "node:crypto";
 
-const wss = new WebSocketServer({ port: 8082 });
-const clients: {
+//Update the price list state across all devices using WS
+const wss8082 = new WebSocketServer({ port: 8082 });
+const clients8082: {
     id: string,
     ws: WebSocket;
 }[] = [];
 
-//Update the state across all devices using WS
-wss.on("connection", ws => {
+wss8082.on("connection", ws => {
     let id = crypto.randomUUID();
-    clients.push({ id, ws });
+    clients8082.push({ id, ws });
 
     ws.send(JSON.stringify({ id }));
 
@@ -18,7 +18,7 @@ wss.on("connection", ws => {
         let value = JSON.parse(data).value;
         let wsId = JSON.parse(data).id;
 
-        clients.forEach(async (client) => {
+        clients8082.forEach(async (client) => {
             if (client.id !== wsId) {
                 client.ws.send(JSON.stringify(`${value}`));
             }
@@ -26,9 +26,47 @@ wss.on("connection", ws => {
     });
 
     ws.on("close", () => {
-        for (const client of clients) {
+        for (const client of clients8082) {
             if (client.id === id) {
-                clients.splice(client, 1);
+                clients8082.splice(client, 1);
+            }
+        }
+    });
+});
+
+
+
+// Update the price list it self across all devices using WS
+const wss8083 = new WebSocketServer({ port: 8083 });
+const clients8083: {
+    id: string,
+    ws: WebSocket;
+}[] = [];
+
+wss8083.on("connection", ws => {
+    let id = crypto.randomUUID();
+    clients8083.push({ id, ws });
+
+    ws.send(JSON.stringify({ id }));
+
+    ws.on("message", async (data) => {
+
+
+
+        let value = JSON.parse(data).products;
+        let wsId = JSON.parse(data).id;
+
+        clients8083.forEach(async (client) => {
+            if (client.id !== wsId) {
+                client.ws.send(JSON.stringify(value));
+            }
+        });
+    });
+
+    ws.on("close", () => {
+        for (const client of clients8083) {
+            if (client.id === id) {
+                clients8083.splice(client, 1);
             }
         }
     });
@@ -55,6 +93,8 @@ export const load = async ({ fetch }) => {
     return {
         state
     };
+
+
 
 }
 

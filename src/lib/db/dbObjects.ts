@@ -103,6 +103,7 @@ export class Table {
 
             let oldRecord: Record;
             const newRecord = new Record(updateValue, this.header);
+
             this.getRecord(recordID).then((result) => {
                 oldRecord = result;
 

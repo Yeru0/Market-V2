@@ -5,7 +5,7 @@
 	import { changeNotes } from "$lib/siteMethods";
 	import RenderBasket from "./RenderBasket.svelte";
 	import CodeReaderModule from "./CodeReaderModule.svelte";
-	import { priceListStateSellingToOrg } from "$lib/shared.svelte";
+	import { priceListStateSellingToOrg, priceListWebSocket } from "$lib/shared.svelte";
 	import Toast from "./Toast.svelte";
 
 
@@ -171,13 +171,17 @@
                     productA: soldProducts
                 })
             });
-            // Send the changed notes to the database
-            await fetch("/api/notes/sell", {
-                method: "PUT",
-                body: JSON.stringify({
-                    notes
-                })
-            });
+            if (!takingOut) {
+
+                // Send the changed notes to the database
+                await fetch("/api/notes/sell", {
+                    method: "PUT",
+                    body: JSON.stringify({
+                        notes
+                    })
+                });
+                
+            }
             // Send the product sale event to the database
             await fetch("/api/product/sell", {
                 method: "PUT",
@@ -185,6 +189,8 @@
                     soldProducts
                 })
             });
+            
+            $priceListWebSocket.ws.send(JSON.stringify({products: {...products}, id: $priceListWebSocket.id})) // Update the price list
 
             toast = {
                 time: 3000,

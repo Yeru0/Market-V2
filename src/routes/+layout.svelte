@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { priceListStateSellingToOrg } from "$lib/shared.svelte";
+	import { priceListStateSellingToOrg, priceListWebSocket } from "$lib/shared.svelte";
     import { onMount } from "svelte";
     import Toast from "./Toast.svelte";
 
 
     const { children, data } = $props()
-    let websocket: WebSocket
+    let priceListStateWebSocket: WebSocket
 
     let shift: boolean = false
 
@@ -22,7 +22,9 @@
 
     
     onMount(async () => {
-        websocket = new WebSocket("ws://192.168.50.81:8082/prices")
+        priceListStateWebSocket = new WebSocket("ws://192.168.50.81:8082/prices")
+        $priceListWebSocket.ws = new WebSocket("ws://192.168.50.81:8083/prices")
+        
 
         switch (data.state) {
             case "true":
@@ -33,7 +35,7 @@
                 break
         }
 
-        websocket.onmessage = (async (event) => {
+        priceListStateWebSocket.onmessage = (async (event) => {
             let data = JSON.parse(event.data)            
             switch(data) {
                 case "true":
@@ -47,12 +49,17 @@
                     break
                 }                
         })
+
+        $priceListWebSocket.ws.onmessage = (async (event) => {
+            let data = JSON.parse(event.data)
+            $priceListWebSocket.id = data.id           
+        })
     })
 
     let updatePriceStateValueBackend = async () => {
         
-        if(websocket && websocket.readyState === websocket.OPEN) {            
-            websocket.send(JSON.stringify({value: !$priceListStateSellingToOrg, id}))
+        if(priceListStateWebSocket && priceListStateWebSocket.readyState === priceListStateWebSocket.OPEN) {            
+            priceListStateWebSocket.send(JSON.stringify({value: !$priceListStateSellingToOrg, id}))
         }
 
         try {

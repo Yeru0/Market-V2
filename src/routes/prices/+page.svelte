@@ -1,5 +1,7 @@
 <script lang="ts">
+	import { priceListWebSocket } from "$lib/shared.svelte";
     import { Product } from "$lib/siteObjects.svelte";
+	import { onMount } from "svelte";
 	import RenderProds from "./RenderProds.svelte";
 
     let { data } = $props()
@@ -21,6 +23,19 @@
         } else {           
             return 0;
         }
+    })
+
+    onMount(() => {
+
+        $priceListWebSocket.ws.onmessage = ((value) => {
+            let data = JSON.parse(value.data)
+            products = []
+
+            for (const object in data) {
+                products.push(new Product(data[object].infoObject))
+            }
+        })
+
     })
 
 

@@ -96,9 +96,9 @@ export const orderStorage = (products: Product[]): Product[] => {
 
     inactiveProducts = [...inactiveProducts].sort((a: Product, b: Product) => {
         if (a.name.toUpperCase() < b.name.toUpperCase()) {
-            return -1;
-        } else if (a.name.toUpperCase() > b.name.toUpperCase()) {
             return 1;
+        } else if (a.name.toUpperCase() > b.name.toUpperCase()) {
+            return -1;
         } else {
             return 0;
         }

@@ -1,7 +1,5 @@
 <script lang="ts">
-	import { enhance } from "$app/forms";
-    import { page } from "$app/state"
-	import { onDestroy } from "svelte";
+    import { priceListWebSocket } from "$lib/shared.svelte";
 
     let {
             product,
@@ -19,6 +17,7 @@
             })
         }).then(() => {
             products.splice(products.indexOf(product), 1)
+            $priceListWebSocket.ws.send(JSON.stringify({products: {...products}, id: $priceListWebSocket.id})) // Update the price list
             toast = {
                 time: 3000,
                 text: "A termék törölve!",
@@ -32,7 +31,6 @@
             }
             return
         });
-
 
         
     }

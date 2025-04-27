@@ -1,6 +1,7 @@
 <script lang="ts">
 
     import { Product } from "$lib/siteObjects.svelte"
+	import { priceListWebSocket } from "$lib/shared.svelte";
 
     let {
         product,
@@ -12,7 +13,7 @@
 
 
         try {
-                    // Send the changed product to the database
+            // Send the changed product to the database
             await fetch("/api/product/update", {
                 method: "POST",
                 body: JSON.stringify({
@@ -34,6 +35,9 @@
                     prod.purchasedN = data.purchasedN,
                     prod.code = data.code
                 }
+
+                prod.setProps()
+
             }                 
 
 
@@ -47,6 +51,8 @@
                     return 0;
                 }
             })
+            
+            $priceListWebSocket.ws.send(JSON.stringify({products: {...products}, id: $priceListWebSocket.id})) // Update the price list
 
             product.modOverlay = false 
 

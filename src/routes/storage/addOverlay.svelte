@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { enhance } from "$app/forms"
+	import { priceListWebSocket } from "$lib/shared.svelte";
 	import { Product } from "$lib/siteObjects.svelte";
     import { onMount } from "svelte";
 
@@ -98,6 +98,8 @@
                 }
             })
             
+            $priceListWebSocket.ws.send(JSON.stringify({products: {...products}, id: $priceListWebSocket.id})) // Update the price list
+
             toast = {
                 time: 3000,
                 text: "A termék létrehozva!",

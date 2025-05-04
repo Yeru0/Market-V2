@@ -7,6 +7,8 @@
     import "$lib/styles/global.css"
 
 
+    let scrollY: number = $state(0)
+
     const { children, data } = $props()
     let priceListStateWebSocket: WebSocket
 
@@ -119,31 +121,32 @@
     onkeyup={(e) => { 
         if (e.key == "Shift") shift = false
     }}
+
+    bind:scrollY
 />
 
-<svelte:head>
-    <script>
-        import "./global.css"
-    </script>
-</svelte:head>
 
 {#if toast.show}
     <Toast text={toast.text} bind:show={toast.show} time={toast.time}></Toast>
 {/if}
 
-<nav>
-
+<header class="{scrollY <= 0 ? "initial" : "progressed"}">
+    
     <div class="logo">
         <img src="/favicon.ico" alt="An icon showing a storefront">
-        <h1>Market V2</h1>
+        <h3>Market</h3>
     </div>
-
-    <ul>
-        <li><a class="{page.url.pathname == "/" ? "active" : ""}" href="/">Eladás</a></li>
-        <li><a class="{page.url.pathname == "/prices" ? "active" : ""}" href="/prices">Árlista</a></li>
-        <li><a class="{page.url.pathname == "/dashboard" ? "active" : ""}" href="/dashboard">Irányítópult</a></li>
-        <li><a class="{page.url.pathname == "/storage" ? "active" : ""}" href="/storage">Raktár</a></li>
-    </ul>
+    
+    <nav>
+    
+        <ul>
+            <li><a class="{page.url.pathname == "/" ? "active" : ""}" href="/">Eladás</a></li>
+            <li><a class="{page.url.pathname == "/prices" ? "active" : ""}" href="/prices">Árlista</a></li>
+            <li><a class="{page.url.pathname == "/dashboard" ? "active" : ""}" href="/dashboard">Irányítópult</a></li>
+            <li><a class="{page.url.pathname == "/storage" ? "active" : ""}" href="/storage">Raktár</a></li>
+        </ul>
+    
+    </nav>
 
     <div class="form-label">
         <label for="sell-to">
@@ -152,6 +155,7 @@
         <input type="checkbox" name="sell-to" bind:checked={$priceListStateSellingToOrg} onclick={updatePriceStateValueBackend}>
     </div>
 
-</nav>
+</header>
+
 
 {@render children()}

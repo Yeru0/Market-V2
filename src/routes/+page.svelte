@@ -221,7 +221,7 @@
 }}/>
 
 <svelte:head>
-    <title>Market-V2: Eladás</title>
+    <title>Market: Eladás</title>
 </svelte:head>
 
 <CodeReaderModule {basket} {products} ></CodeReaderModule>

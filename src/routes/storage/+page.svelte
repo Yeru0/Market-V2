@@ -28,7 +28,7 @@
 </script>
 
 <svelte:head>
-    <title>Market-V2: Raktár</title>
+    <title>Market: Raktár</title>
 </svelte:head>
 
 <main>

@@ -99,7 +99,7 @@
 </script>
 
 <svelte:head>
-    <title>Market-V2: Irányítópult</title>
+    <title>Market: Irányítópult</title>
 </svelte:head>
 
 <main>

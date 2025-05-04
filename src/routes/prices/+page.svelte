@@ -42,7 +42,7 @@
 </script>
 
 <svelte:head>
-    <title>Market-V2: Árlista</title>
+    <title>Market: Árlista</title>
 </svelte:head>
 
 <main>

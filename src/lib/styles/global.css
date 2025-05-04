@@ -51,6 +51,8 @@
 body {
     color: var(--c-g-scale-t9a);
     background-color: var(--c-g-scale-t10);
+    margin: 0;
+    /* margin-top: 60px; */
 }
 
 
@@ -99,7 +101,7 @@ h3 {
 /* button */
 button {
     border: 0;
-    color: var(--c-g-scale-t9a);
+    color: var(--c-default-t1);
     background-color: var(--c-default-t2);
     padding: var(--n-xs) var(--n-m);
     border-radius: var(--n-xxs);
@@ -125,8 +127,37 @@ input, textarea {
     color: var(--c-default-t1);
 }
 
-/* .form-label */
 
+/* Hide the default value of the checkbox */
+input[type="checkbox"] {
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: transparent;
+    margin: 0;
+    border: 1px solid var(--c-g-scale-t4a);
+    width: 24px;
+    height: 24px;
+    display: grid;
+    place-content: center;
+}
+
+/* Custom checkbox */
+input[type="checkbox"]::before {
+    content: "";
+    aspect-ratio: 1/1;
+    width: 12px;
+    height: 12px;
+    border-radius: var(--n-xs);
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+    background-color: var(--c-highlight);
+  }
+
+  input[type="checkbox"]:checked::before {
+    transform: scale(1);
+  }
+
+/* .form-label */
 
 .form-label {
     margin: var(--n-s);

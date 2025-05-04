@@ -45,12 +45,37 @@
 
 </script>
 
+<style>
+    table {
+        width: 100%;
+    }
+
+    table tbody tr td.decr {
+        display: grid;
+        place-content: center end;
+    }
+
+    button.active {
+        background-color: var(--c-highlight);
+        color: var(--c-default-t0);
+
+        &:disabled {
+            color: var(--c-g-scale-9a);
+            background-color: var(--c-g-scale-t2a);
+
+            &:active {
+                background-color: var(--c-g-scale-t40);
+            }
+        }
+    }
+</style>
+
 <table>
     <tbody>
         {#each notesKeys as note}
         <tr>
-            <td><button type="button" onclick={() => { increment(note) }}>{note}</button></td>
-            <td><button type="button" onclick={() => { decrement(note) }}>{notes[parseInt(note)]}</button></td>
+            <td class="incr"><button class="{notes[parseInt(note)] >= 1 ? "active" : ""}" type="button" onclick={() => { increment(note) }}>{note} Ft</button></td>
+            <td class="decr"><button class="{notes[parseInt(note)] >= 1 ? "active" : ""}" type="button" onclick={() => { decrement(note) }}>{notes[parseInt(note)]}</button></td>
         </tr>
         {/each}
     </tbody>

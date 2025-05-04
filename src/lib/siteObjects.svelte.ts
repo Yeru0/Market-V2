@@ -34,6 +34,7 @@ export class Product {
     canAddMore: boolean = $state(true);
     modOverlay: boolean = $state(false);
     delOverlay: boolean = $state(false);
+    inBasket: boolean = $state(false);
 
 
     constructor(productInfo) {
@@ -170,6 +171,7 @@ export class Basket {
                 }
             }
 
+            prod.inBasket = true;
             all ? this.products.push({ prod, price, amt: prod.allRemainingN }) : this.products.push({ prod, price, amt: 1 });
             prod.buttonDisabling(this);
             this.calcFinalPrice();
@@ -185,20 +187,26 @@ export class Basket {
         return new Promise((resolve, reject) => {
 
             for (const product of this.products) {
-                if (product.prod == prod && product.price == price && product.amt > 1 && !removeAll && !removeMost) {
+                if (product.prod.id == prod.id && product.price == price && product.amt > 1 && !removeAll && !removeMost) {
                     product.amt -= 1;
-                } else if (product.prod == prod && product.price == price && product.amt > 1 && !removeAll && removeMost) {
-                    product.amt = 1;
-                } else if (product.prod == prod && product.price == price && product.amt <= 1 || removeAll) {
-                    this.products.splice(this.products.indexOf(product), 1);
-                } else {
                     prod.buttonDisabling(this);
                     this.calcFinalPrice();
-                    reject("Something went wrong");
-                    return "Something went wrong";
+                    return;
+                } else if (product.prod.id == prod.id && product.price == price && product.amt > 1 && !removeAll && removeMost) {
+                    product.amt = 1;
+                    prod.buttonDisabling(this);
+                    this.calcFinalPrice();
+                    return;
+                } else if (
+                    product.prod.id == prod.id && product.price == price && product.amt <= 1 ||
+                    product.prod.id == prod.id && product.price == price && removeAll
+                ) {
+                    this.products.splice(this.products.indexOf(product), 1);
                 }
             }
 
+            prod.inBasket = false;
+            prod.inBasket = false;
             prod.buttonDisabling(this);
             this.calcFinalPrice();
             resolve("Product deleted");

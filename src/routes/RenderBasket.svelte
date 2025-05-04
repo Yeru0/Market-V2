@@ -3,15 +3,47 @@
 
     let {
         basket = $bindable(),
-        control } = $props()
+        control
+    } = $props()
+
+    priceListStateSellingToOrg.subscribe((value) => {
+        for (const prod of basket.products) {            
+            switch (value) {
+                case true:
+                    prod.price = "org"
+                    break
+                case false:
+                    prod.price = "part"
+                    break
+            }
+        }
+    })
 
 </script>
+
+
+<style>
+    
+    table tbody tr td.amt {
+        grid-template-columns: repeat(3, auto);
+        grid-template-rows: auto;
+        width: fit-content;
+        place-self: center;
+    }
+
+    table tbody tr td.amt button {
+        margin: 0 var(--n-m);
+    }
+
+
+
+</style>
 
 <table>
     <thead>
         <tr>
-            <th>Mennyiség</th>
             <th>Terméknév</th>
+            <th>Mennyiség</th>
             <th>Ár</th>
             <th>Akció</th>
         </tr>
@@ -20,7 +52,8 @@
 
         {#each basket.products as basketProduct (basketProduct)}
             <tr>
-                <td>
+                <td >{basketProduct.prod.name}</td>
+                <td class="button amt">
                     <button
                         onclick={() => { basket.removeFromBasket(basketProduct.prod, basketProduct.price, false, control) }}
                         type="button"
@@ -32,13 +65,12 @@
                         type="button"
                     >+</button>
                     </td>
-                    <td>{basketProduct.prod.name}</td>
                     {#if $priceListStateSellingToOrg}
-                        <td>{basketProduct.prod.singleOrgPriceM}</td>
+                        <td class="center">{basketProduct.prod.singleOrgPriceM} Ft</td>
                     {:else}
-                        <td>{basketProduct.prod.singlePartPriceM}</td>
+                        <td class="center">{basketProduct.prod.singlePartPriceM} Ft</td>
                     {/if}
-                    <td><button 
+                    <td class="button"><button 
                         type="button"
                         onclick={() => {basket.removeFromBasket(basketProduct.prod, basketProduct.price, true)}}>Törlés</button></td>
                 </tr> 

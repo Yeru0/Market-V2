@@ -7,6 +7,7 @@
 	import CodeReaderModule from "./CodeReaderModule.svelte";
 	import { priceListStateSellingToOrg, priceListWebSocket } from "$lib/shared.svelte";
 	import Toast from "./Toast.svelte";
+    import "$lib/styles/sell.css"
 
 
     let { data } = $props()
@@ -46,7 +47,6 @@
 
     // Basket
     let basket: Basket = $state(new Basket())
-    let takingOut: boolean = $state(false)
     let control: boolean = $state(false)
 
     priceListStateSellingToOrg.subscribe((value) => {
@@ -87,8 +87,15 @@
         }
         
     })
-        
-    const sell = async () => {        
+    
+    const emptyBasket = () => {      
+        basket = new Basket()
+        for (const product of products) {
+            product.inBasket = false
+        }
+    }
+    
+    const sell = async (takingOut: boolean) => {        
 
         try {
 
@@ -235,73 +242,71 @@
     <h1>Termékek</h1>
 
     <section class="products">
-        <RenderProds {products} {basket} {control} {shift}></RenderProds>
+        <RenderProds {products} bind:basket {control} {shift}></RenderProds>
     </section>
-
+    
     {#if basket.products.length > 0}
-        
+    
         <section class="basket">
             <div class="header">
-                <span class="material-symbols-outlined">
-                    shopping_cart
-                </span>
-                <h2>Kosár</h2>
-                <button onclick={() => {basket = new Basket()}}>Kosár ürítése</button>
+                <div class="icon">
+                    <span class="material-symbols-outlined">shopping_cart</span>
+                    <h2>Kosár</h2>
+                </div>
+                <button class="et" onclick={emptyBasket}>Kosár ürítése</button>
+                <button class="to" onclick={() => {sell(true)}}>{basket.products.length == 1 ? "Termék kivétele" : "Termékek kivétele"}</button>
             </div>
-            <form onsubmit={sell}>
-                <div>
-
+            <form onsubmit={() => {sell(false)}}>
+                <div class="render-products">
                     <RenderBasket bind:basket {control}></RenderBasket>
-
-                    <div class="form-label">
-                        <label for="taking-out">
-                            {basket.products.length == 1 ? "Termék kivétele" : "Termékek kivétele"}
-                        </label>
-                        <input type="checkbox" name="taking-out" id="taking-out" bind:checked={takingOut}>
+                </div>
+            
+                <div class="notes">
+                    <div class="paying">
+                        <h3>Fizetendő</h3>
+                        <p>{basket.finalPrice} Ft</p>
+                        <h4>Fizető címlet</h4>
+                        <div class="line">
+                            <NoteSelectionTable bind:sum={basket.payingSum} bind:notes={basket.payingNotes} {control}></NoteSelectionTable>
+                        </div>
+                        <p>{basket.payingSum} Ft</p>
                     </div>
-                    {#if takingOut}
-                        <button type="submit">{basket.products.length == 1 ? "Termék kivétele" : "Termékek kivétele"}</button>
-                    {/if}
-                </div>
-
-                <div>
-                    {#if !takingOut}
-                        <div>
-                            <h3>Fizetendő</h3>
-                            <p>{basket.finalPrice}</p>
-                            <div>
-                                <h4>Fizető címlet</h4>
-                                <NoteSelectionTable bind:sum={basket.payingSum} bind:notes={basket.payingNotes} {control}></NoteSelectionTable>
-                                <p>{basket.payingSum}</p>
+                    <div class="change">
+                        <h3>Visszajáró</h3>
+                        {#if basket.possibleChange && basket.enoughNotes}
+                            <p>{basket.payingSum - basket.finalPrice} Ft</p>
+                            <h4>Visszajáró címlet</h4>
+                            <div class="line">
+                                <NoteSelectionTable bind:sum={basket.returnSum} bind:notes={basket.returnNotes} {control}></NoteSelectionTable>
                             </div>
-                        </div>
-                        <div>
-                            <h3>Visszajáró</h3>
-                            {#if basket.possibleChange && basket.enoughNotes && !takingOut}
-                                <p>{basket.payingSum - basket.finalPrice}</p>
-                                <div>
-                                    <h4>Visszajáró címlet</h4>
-                                    <NoteSelectionTable bind:sum={basket.returnSum} bind:notes={basket.returnNotes} {control}></NoteSelectionTable>
-                                    <p>{basket.returnSum}</p>
-
-                                    <button
-                                        type="submit"
-                                        disabled={
-                                            (5 * Math.round((basket.payingSum - basket.finalPrice) / 5)) !== basket.returnSum &&
-                                            !takingOut
-                                            }
-                                    >Eladás</button>
-
-                                </div>
-                            {:else if !basket.enoughNotes}    
+                            <p>{basket.returnSum} Ft</p>
+                        {:else if !basket.enoughNotes}
+                            <div class="not-enough-money">
+                                <span class="material-symbols-outlined">credit_card_off</span>
                                 <h4>A fizetett összeg még nem elég!</h4>
-                            {:else if !basket.possibleChange}
+                            </div>
+                        {:else if !basket.possibleChange}
+                            <div class="no-change-possible">
+                                <span class="material-symbols-outlined">money_off</span>
                                 <h4>Nem lehet visszajárót adni!</h4>
-                            {/if}
-                        </div>
-                    {/if}
+                            </div>
+                        {/if}
+                    </div>
+                
+                    <div class="sell-btn">
+                    
+                        <button
+                        type="submit"
+                        disabled={
+                            (5 * Math.round((basket.payingSum - basket.finalPrice) / 5)) !== basket.returnSum
+                            }
+                        >Eladás</button>
+                        
+                        
+                    </div>
+                
                 </div>
-
+            
             </form>
         </section>
         

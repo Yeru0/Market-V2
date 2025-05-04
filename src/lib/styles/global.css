@@ -115,6 +115,14 @@ button {
         color: var(--c-default-t0);
     }
 
+    &:disabled {
+        color: var(--c-g-scale-9a);
+
+        &:active {
+            background-color: var(--c-g-scale-t40);
+        }
+    }
+
 }
 
 

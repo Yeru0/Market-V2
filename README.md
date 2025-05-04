@@ -1,6 +1,11 @@
 # Üdv!
 Ez itt [Horváth Péter Benedek](https://github.com/Yeru0) által készített és [Simon Ádám Gyula](https://github.com/simonadamgyula) által felügyelt büfés eladó alkalmazás.
 
+## Elhivatáok
+- 100% organikus, termelői, kézzel készült stílusok 🥀
+- 100% organikus, termelői, kézzel készült kód 🌸
+- Jót tesz a léleknek 😌
+
 ## Használat
 Erősen ajánlott, hogy tudod mit csinálsz! Továbbá ajánlott a svelte interpreter és a javascript nyelv illetve a git és github "mélyreható" ismerete. Az alkalmazást ezek nélkül is lehet kezelni, de nem ajánlott!
 
@@ -27,5 +32,8 @@ A MARKET V-3-ra tekintettel jótanácsok:
 - Mindent a saját komponensébe
 - A Type-okat célszerű külön fájlba tárolni
 - Kommentek
+- A termék árát a kosárban a kosár ára alapján számítsa, ne pedig egyesével minden egyes terméknek legyen megadva az ára.
+- Eladásnál ne csak az ár, hanem az egész sor legyen gomb
+- QuickCheckout címletezés nélkül
 ## Bugok
 - Az adatbázis van, hogy szar, ezért érdemes git-tel is figyelni főleg az adatbázistáblák változását

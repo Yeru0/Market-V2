@@ -4,27 +4,48 @@
 
     let {
         products,
-        basket,
+        basket = $bindable(),
         control,
         shift,
         toast = $bindable()
     } = $props()
 
-    const handleClick = (to: "org" | "part", product: Product) => {
+    const handleClick = (to: "org" | "part", product: Product) => {        
         if (shift) basket.removeFromBasket(product, to, control)
         else basket.addToBasket(product, to, control)
     }
 
 </script>
 
+<style>
+    button {
+        width: 100%;
+        text-align: left;
+    }
+
+    button.active {
+        background-color: var(--c-highlight);
+        color: var(--c-default-t0);
+
+        &:disabled {
+            color: var(--c-g-scale-9a);
+            background-color: var(--c-g-scale-t2a);
+
+            &:active {
+                background-color: var(--c-g-scale-t40);
+            }
+        }
+    }
+</style>
+
 <table>
     <thead>
         <tr>
-            <td>Terméknév</td>
-            <td>Ár</td>
-            <td>Raktár</td>
-            <td>Összesen eladott</td>
-            <td>Összesen kivett</td>
+            <th>Terméknév</th>
+            <th>Ár</th>
+            <th>Raktár</th>
+            <th>Eladott</th>
+            <th>Kivett</th>
         </tr>
     </thead>
     <tbody>
@@ -33,21 +54,24 @@
 
             {#if product.active}
                 <tr>
-                    <td>{product.name}</td>
                     {#if $priceListStateSellingToOrg}
-                        <td><button
-                            onclick={() => { handleClick("org", product) }}
-                            disabled={!product.canAddMore}
-                            >{product.singleOrgPriceM}</button></td>
+                    <td><button
+                        onclick={() => { handleClick("org", product) }}
+                        disabled={!product.canAddMore}
+                        class="{product.inBasket ? "active" : ""}"
+                        >{product.name}</button></td>
+                        <td class="center">{product.singleOrgPriceM} Ft</td>
                     {:else}
                         <td><button
                             onclick={() => { handleClick("part", product) }}
                             disabled={!product.canAddMore}
-                            >{product.singlePartPriceM}</button></td>
+                            class="{product.inBasket ? "active" : ""}"
+                            >{product.name}</button></td>
+                            <td class="center">{product.singlePartPriceM} Ft</td>
                     {/if}
-                    <td>{product.allRemainingN}/{product.purchasedN}</td>
-                    <td>{product.allSoldN}</td>
-                    <td>{product.takenOutN}</td>
+                    <td class="center">{product.allRemainingN}/{product.purchasedN}</td>
+                    <td class="center">{product.allSoldN} db</td>
+                    <td class="center">{product.takenOutN} db</td>
                 </tr>
             {/if}   
 

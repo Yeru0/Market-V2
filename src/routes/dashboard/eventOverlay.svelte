@@ -39,7 +39,7 @@
 
 
 <table>
-    <caption>Eladás elött</caption>
+    <caption>Eladás előtt</caption>
 
     <tbody>
         <tr>

@@ -253,10 +253,12 @@
 
                     <RenderBasket bind:basket {control}></RenderBasket>
 
-                    <label for="taking-out">
-                        {basket.products.length == 1 ? "Termék kivétele" : "Termékek kivétele"}
+                    <div class="form-label">
+                        <label for="taking-out">
+                            {basket.products.length == 1 ? "Termék kivétele" : "Termékek kivétele"}
+                        </label>
                         <input type="checkbox" name="taking-out" id="taking-out" bind:checked={takingOut}>
-                    </label>
+                    </div>
                     {#if takingOut}
                         <button type="submit">{basket.products.length == 1 ? "Termék kivétele" : "Termékek kivétele"}</button>
                     {/if}
@@ -266,21 +268,21 @@
                     {#if !takingOut}
                         <div>
                             <h3>Fizetendő</h3>
-                            <p>{basket.finalPrice} Ft</p>
+                            <p>{basket.finalPrice}</p>
                             <div>
                                 <h4>Fizető címlet</h4>
                                 <NoteSelectionTable bind:sum={basket.payingSum} bind:notes={basket.payingNotes} {control}></NoteSelectionTable>
-                                <p>{basket.payingSum} Ft</p>
+                                <p>{basket.payingSum}</p>
                             </div>
                         </div>
                         <div>
                             <h3>Visszajáró</h3>
                             {#if basket.possibleChange && basket.enoughNotes && !takingOut}
-                                <p>{basket.payingSum - basket.finalPrice} Ft</p>
+                                <p>{basket.payingSum - basket.finalPrice}</p>
                                 <div>
                                     <h4>Visszajáró címlet</h4>
                                     <NoteSelectionTable bind:sum={basket.returnSum} bind:notes={basket.returnNotes} {control}></NoteSelectionTable>
-                                    <p>{basket.returnSum} Ft</p>
+                                    <p>{basket.returnSum}</p>
 
                                     <button
                                         type="submit"

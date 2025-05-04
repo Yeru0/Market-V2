@@ -114,35 +114,35 @@
            <tbody>
                <tr>
                    <td>Szervezői bevétel:</td>
-                   <td>{stats.orgIncome} Ft</td>
+                   <td>{stats.orgIncome}</td>
                </tr>
                <tr>
                    <td>Résztvevői bevétel:</td>
-                   <td>{stats.partIncome} Ft</td>
+                   <td>{stats.partIncome}</td>
                 </tr>
                 <tr>
                     <td>Szervezői profit:</td>
-                    <td>{stats.orgProfit} Ft</td>
+                    <td>{stats.orgProfit}</td>
                 </tr>
                <tr>
                    <td>Résztvevői profit:</td>
-                   <td>{stats.partProfit} Ft</td>
+                   <td>{stats.partProfit}</td>
                </tr>
                <tr>
                    <td>Összes bevétel:</td>
-                   <td>{stats.allIncome} Ft</td>
+                   <td>{stats.allIncome}</td>
                </tr>
                <tr>
                    <td>Beszerzési ár:</td>
-                   <td>{stats.purchasePrice} Ft</td>
+                   <td>{stats.purchasePrice}</td>
                </tr>
                <tr>
                    <td>ELÁBÉ:</td>
-                   <td>{stats.valueOfSoldProducts} Ft</td>
+                   <td>{stats.valueOfSoldProducts}</td>
                </tr>
                <tr>
                    <td>Profit:</td>
-                   <td>{stats.profit} Ft</td>
+                   <td>{stats.profit}</td>
                </tr>
            </tbody>
         </table>
@@ -151,27 +151,27 @@
            <tbody>
                <tr>
                    <td>Összes termék:</td>
-                   <td>{stats.allProducts} db</td>
+                   <td>{stats.allProducts}</td>
                </tr>
                <tr>
                    <td>Raktárban:</td>
-                   <td>{stats.inStorage} db</td>
+                   <td>{stats.inStorage}</td>
                </tr>
                <tr>
                    <td>Szervezőnek eladott:</td>
-                   <td>{stats.soldToOrgs} db</td>
+                   <td>{stats.soldToOrgs}</td>
                </tr>
                <tr>
                    <td>Résztvevőnek eladott:</td>
-                   <td>{stats.soldToParts} db</td>
+                   <td>{stats.soldToParts}</td>
                </tr>
                <tr>
                    <td>Összes eladott termék:</td>
-                   <td>{stats.allSoldProducts} db</td>
+                   <td>{stats.allSoldProducts}</td>
                 </tr>
                 <tr>
                    <td>Kivett:</td>
-                   <td>{stats.takenOut} db</td>
+                   <td>{stats.takenOut}</td>
                </tr>
            </tbody>
         </table>
@@ -179,7 +179,7 @@
 
    <section>
     <h2>Beállítások</h2>
-        <p>Összesen: {noteSum} Ft</p>
+        <p>Összesen: {noteSum}</p>
         {#if input}
             <NoteChangeTable bind:notes={notes} bind:sum={noteSum}></NoteChangeTable>
             <button onclick={cancelNotes}>Mégsem</button>

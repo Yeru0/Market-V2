@@ -20,17 +20,17 @@
     <tbody>
         <tr>
             <th>Egység beszer. ár:</th>
-            <td>{productB.singleProductValueM} Ft</td>
+            <td>{productB.singleProductValueM}</td>
             <th>Szerveői egység ár eladáskor:</th>
-            <td>{productB.singleOrgPriceM} Ft</td>
+            <td>{productB.singleOrgPriceM}</td>
             <th>Szervezői haszonkulcs eladáskor:</th>
             <td>{productB.organiserProfitMargin}%</td>
         </tr>
         <tr>
             <th>Össz. beszer. ár:</th>
-            <td>{productB.purchasePriceM} Ft</td>
+            <td>{productB.purchasePriceM}</td>
             <th>Résztvevői egység ár eladáskor:</th>
-            <td>{productB.singlePartPriceM} Ft</td>
+            <td>{productB.singlePartPriceM}</td>
             <th>Résztvevői haszonkulcs eladáskor:</th>
             <td>{productB.participantProfitMargin}%</td>
         </tr>
@@ -44,39 +44,39 @@
     <tbody>
         <tr>
             <td>Raktárban:</td>
-            <td>{productB.allRemainingN} db</td>
+            <td>{productB.allRemainingN}</td>
         </tr>
         <tr>
             <td>Szervezőnek eladott:</td>
-            <td>{productB.soldToOrgN} db</td>
+            <td>{productB.soldToOrgN}</td>
         </tr>
         <tr>
             <td>Résztvevőnek eladott:</td>
-            <td>{productB.soldToPartN} db</td>
+            <td>{productB.soldToPartN}</td>
         </tr>
         <tr>
             <td>Kivett:</td>
-            <td>{productB.takenOutN} db</td>
+            <td>{productB.takenOutN}</td>
         </tr>
         <tr>
             <td>Összes eladott:</td>
-            <td>{productB.allSoldN} db</td>
+            <td>{productB.allSoldN}</td>
         </tr>
         <tr>
             <td>Szervezői össz. bevétel:</td>
-            <td>{productB.allOrgIncomeM} Ft</td>
+            <td>{productB.allOrgIncomeM}</td>
         </tr>
         <tr>
             <td>Résztvevői össz. bevétel:</td>
-            <td>{productB.allPartIncomeM} Ft</td>
+            <td>{productB.allPartIncomeM}</td>
         </tr>
         <tr>
             <td>Összes bevétel:</td>
-            <td>{productB.allIncomeM} Ft</td>
+            <td>{productB.allIncomeM}</td>
         </tr>
         <tr>
             <td>Profit:</td>
-            <td>{productB.allProfitM} Ft</td>
+            <td>{productB.allProfitM}</td>
         </tr>
     </tbody>
 </table>
@@ -87,39 +87,39 @@
     <tbody>
         <tr>
             <td>Raktárban:</td>
-            <td>{productA.allRemainingN} db</td>
+            <td>{productA.allRemainingN}</td>
         </tr>
         <tr>
             <td>Szervezőnek eladott:</td>
-            <td>{productA.soldToOrgN} db</td>
+            <td>{productA.soldToOrgN}</td>
         </tr>
         <tr>
             <td>Résztvevőnek eladott:</td>
-            <td>{productA.soldToPartN} db</td>
+            <td>{productA.soldToPartN}</td>
         </tr>
         <tr>
             <td>Kivett:</td>
-            <td>{productA.takenOutN} db</td>
+            <td>{productA.takenOutN}</td>
         </tr>
         <tr>
             <td>Összes eladott:</td>
-            <td>{productA.allSoldN} db</td>
+            <td>{productA.allSoldN}</td>
         </tr>
         <tr>
             <td>Szervezői össz. bevétel:</td>
-            <td>{productA.allOrgIncomeM} Ft</td>
+            <td>{productA.allOrgIncomeM}</td>
         </tr>
         <tr>
             <td>Résztvevői össz. bevétel:</td>
-            <td>{productA.allPartIncomeM} Ft</td>
+            <td>{productA.allPartIncomeM}</td>
         </tr>
         <tr>
             <td>Összes bevétel:</td>
-            <td>{productA.allIncomeM} Ft</td>
+            <td>{productA.allIncomeM}</td>
         </tr>
         <tr>
             <td>Profit:</td>
-            <td>{productA.allProfitM} Ft</td>
+            <td>{productA.allProfitM}</td>
         </tr>
     </tbody>
 </table>

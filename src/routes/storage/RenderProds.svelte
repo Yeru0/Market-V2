@@ -21,27 +21,27 @@
 <div class="top-stats">
     <div class="purchased stat-card">
         <h3>Beszerzett</h3>
-        <p>{product.purchasedN} db</p>
+        <p>{product.purchasedN}</p>
     </div>
     <div class="purchased-price stat-card">
         <h3>Beszerzési ár</h3>
-        <p>{product.purchasePriceM} Ft</p>
+        <p>{product.purchasePriceM}</p>
     </div>
     <div class="single-purchased-price stat-card">
         <h3>Beszerzési egységár</h3>
-        <p>{product.singleProductValueM} Ft</p>
+        <p>{product.singleProductValueM}</p>
     </div>
     <div class="stored stat-card">
         <h3>Raktározva</h3>
-        <p>{product.allRemainingN} db</p>
+        <p>{product.allRemainingN}</p>
     </div>
     <div class="stored stat-card">
         <h3>Kivett</h3>
-        <p>{product.takenOutN} db</p>
+        <p>{product.takenOutN}</p>
     </div>
     <div class="profit stat-card">
         <h3>Profit</h3>
-        <p>{product.allProfitM} Ft</p>
+        <p>{product.allProfitM}</p>
     </div>
 </div>
 
@@ -57,40 +57,40 @@
     <tbody>
             <tr>
                 <th>Eladott</th>
-                <td>{product.soldToOrgN} db</td>
-                <td>{product.soldToPartN} db</td>
-                <td>{product.allSoldN} db</td>
+                <td>{product.soldToOrgN}</td>
+                <td>{product.soldToPartN}</td>
+                <td>{product.allSoldN}</td>
             </tr>
             <tr>
                 <th>Egységár</th>
-                <td>{product.singleOrgPriceM} Ft</td>
-                <td>{product.singlePartPriceM} Ft</td>
-                <td>{product.singleProductValueM} Ft</td>
+                <td>{product.singleOrgPriceM}</td>
+                <td>{product.singlePartPriceM}</td>
+                <td>{product.singleProductValueM}</td>
             </tr>
             <tr>
                 <th>Haszonkulcs</th>
                 <td>{product.organiserProfitMargin}%</td>
                 <td>{product.participantProfitMargin}%</td>
-                <td>- %</td>
+                <td>-</td>
             </tr>
             <tr>
                 <th>Egységprofit</th>
-                <td>{product.singleOrgProfitM} Ft</td>
-                <td>{product.singlePartProfitM} Ft</td>
-                <td>- Ft</td>
+                <td>{product.singleOrgProfitM}</td>
+                <td>{product.singlePartProfitM}</td>
+                <td>-</td>
             </tr>
             <tr>
                 <!-- Eladott áruk beszerzési értéke, eladott * egység beszerár -->
                 <th>ELÁBÉ</th>
-                <td>{product.valueOfSoldProductsOrgM} Ft</td>
-                <td>{product.valueOfSoldProductsPartM} Ft</td>
-                <td>{product.valueOfSoldProductsM} Ft</td>
+                <td>{product.valueOfSoldProductsOrgM}</td>
+                <td>{product.valueOfSoldProductsPartM}</td>
+                <td>{product.valueOfSoldProductsM}</td>
             </tr>
             <tr>
                 <th>Bevétel</th>
-                <td>{product.allOrgIncomeM} Ft</td>
-                <td>{product.allPartIncomeM} Ft</td>
-                <td>{product.allIncomeM} Ft</td>
+                <td>{product.allOrgIncomeM}</td>
+                <td>{product.allPartIncomeM}</td>
+                <td>{product.allIncomeM}</td>
             </tr>
     </tbody>
 </table>    

@@ -38,12 +38,12 @@
                         <td><button
                             onclick={() => { handleClick("org", product) }}
                             disabled={!product.canAddMore}
-                            >{product.singleOrgPriceM} Ft</button></td>
+                            >{product.singleOrgPriceM}</button></td>
                     {:else}
                         <td><button
                             onclick={() => { handleClick("part", product) }}
                             disabled={!product.canAddMore}
-                            >{product.singlePartPriceM} Ft</button></td>
+                            >{product.singlePartPriceM}</button></td>
                     {/if}
                     <td>{product.allRemainingN}/{product.purchasedN}</td>
                     <td>{product.allSoldN}</td>

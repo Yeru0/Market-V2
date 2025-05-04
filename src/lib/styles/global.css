@@ -1,0 +1,149 @@
+:root {
+    --c-highlight: #ffea00;
+      
+    --c-default-t0: #000000;
+    --c-default-t1: #ffffff;
+
+    --c-g-scale-t10: #101010;
+    --c-g-scale-t1a: #1a1a1a;
+    --c-g-scale-t20: #202020;
+    --c-g-scale-t2a: #2a2a2a;
+    --c-g-scale-t30: #303030;
+    --c-g-scale-t3a: #3a3a3a;
+    --c-g-scale-t40: #404040;
+    --c-g-scale-t4a: #4a4a4a;
+    --c-g-scale-t50: #505050;
+    --c-g-scale-t5a: #5a5a5a;
+    --c-g-scale-t60: #606060;
+    --c-g-scale-t6a: #6a6a6a;
+    --c-g-scale-t70: #707070;
+    --c-g-scale-t7a: #7a7a7a;
+    --c-g-scale-t80: #808080;
+    --c-g-scale-t8a: #8a8a8a;
+    --c-g-scale-t90: #909090;
+    --c-g-scale-t9a: #9a9a9a;
+    
+
+    --n-xxxs: 3px;
+    --n-xxs: 4px;
+    --n-xs: 6px;
+    --n-s: 12px;
+    --n-m: 16px;
+    --n-l: 24px;
+    --n-xl: 32px;
+    --n-xxl: 48px;
+    --n-xxxl: 60px;
+
+    --t-default: all ease-in-out 300ms
+}
+
+* {
+    /* Default text */
+    font-family: "League Spartan", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: normal;
+    font-style: normal;
+
+    font-weight: 400;
+    font-size: 18px;
+}
+
+body {
+    color: var(--c-g-scale-t9a);
+    background-color: var(--c-g-scale-t10);
+}
+
+
+/* === Hide defaults === */
+
+/* For Chrome, Safari, Edge */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0; /* Important for some layouts */
+}
+
+/* === Set defaults === */
+
+/* a */
+a {
+    color: var(--c-g-scale-t9a);
+    text-decoration: none;
+}
+
+/* h */
+h1 {
+    font-weight: 700;
+    font-size: 32px;
+    color: var(--c-default-t1)
+}
+
+h2 {
+    font-weight: 700;
+    font-size: 28px;
+    color: var(--c-default-t1)
+}
+
+h3 {
+    font-weight: 700;
+    font-size: 24px;
+    color: var(--c-default-t1)
+}
+
+h3 {
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--c-default-t1)
+}
+
+/* button */
+button {
+    border: 0;
+    color: var(--c-g-scale-t9a);
+    background-color: var(--c-default-t2);
+    padding: var(--n-xs) var(--n-m);
+    border-radius: var(--n-xxs);
+
+    &:hover {
+        background-color: var(--c-g-scale-t2a);
+    }
+
+    &:active {
+        background-color: var(--c-highlight);
+        color: var(--c-default-t0);
+    }
+
+}
+
+
+/* input */
+input, textarea {
+    background-color: transparent;
+    border: 1px solid var(--c-g-scale-t9a);
+    border-radius: var(--n-xs);
+    padding: var(--n-xs);
+    color: var(--c-default-t1);
+}
+
+/* .form-label */
+
+
+.form-label {
+    margin: var(--n-s);
+    width: fit-content;
+    height: fit-content;
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: repeat(2, auto);
+    grid-template-areas:
+    "label"
+    "field";
+}
+.form-label label {
+    grid-area: label;
+    padding-bottom: var(--n-xxs);
+    font-size: var(--n-m);
+}
+.form-label input {
+    grid-area: field;
+}

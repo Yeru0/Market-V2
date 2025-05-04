@@ -20,9 +20,9 @@ import { priceListStateSellingToOrg } from "$lib/shared.svelte";
                 <tr>
                     <td>{product.name}</td>
                     {#if $priceListStateSellingToOrg}
-                        <td>{product.singleOrgPriceM} Ft</td>
+                        <td>{product.singleOrgPriceM}</td>
                     {:else}
-                        <td>{product.singlePartPriceM} Ft</td>
+                        <td>{product.singlePartPriceM}</td>
                     {/if}
                 </tr>
             {/if}

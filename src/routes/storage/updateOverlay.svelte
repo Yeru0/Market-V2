@@ -128,45 +128,61 @@
         <input type="hidden" name="product-sold-to-part" id="product-sold-to-part" value="{product.soldToPartN}">
         <input type="hidden" name="product-taken-out" id="product-taken-out" value="{product.takenOutN}">
 
-        <label for="product-name" class="product-name">
-            Terméknév
+        <div class="form-label">
+            <label for="product-name" class="product-name">
+                Terméknév
+            </label>
             <input type="text" name="product-name" bind:value={data.name} required>
-        </label>
+        </div>
         
-        <label for="purchased-amount" class="purchased-amount">
-            Beszerzett mennyiség
+        <div class="form-label">
+            <label for="purchased-amount" class="purchased-amount">
+                Beszerzett mennyiség
+            </label>
             <input type="number" name="purchased-amount" bind:value={data.purchasedN} required onchange={() => { calcPercent("b"); calcPrice("b") }}>
-        </label>
+        </div>
 
-        <label for="purchase-price" class="purchase-price">
-            Beszerzési ár
-            <input type="number" name="purchase-price" bind:value={data.purchasePriceM} required onchange={() => { calcPercent("b"); calcPrice("b") }}> Ft
-        </label>
+        <div class="form-label">
+            <label for="purchase-price" class="purchase-price">
+                Beszerzési ár
+            </label>
+            <input type="number" name="purchase-price" bind:value={data.purchasePriceM} required onchange={() => { calcPercent("b"); calcPrice("b") }}>
+        </div>
 
-        <label for="organiser-profit-margin" class="organiser-profit-margin">
-            Szervezői haszonkulcs
-            <input type="number" name="organiser-profit-margin" required bind:value={data.organiserProfitMargin} onchange={() => {calcPrice("org")}}> %
-        </label>
+        <div class="form-label">
+            <label for="organiser-profit-margin" class="organiser-profit-margin">
+                Szervezői haszonkulcs
+            </label>
+            <input type="number" name="organiser-profit-margin" required bind:value={data.organiserProfitMargin} onchange={() => {calcPrice("org")}}>
+        </div>
 
-        <label for="organiser-price" class="organiser-price">
-            Szervezői ár
-            <input type="number" name="organiser-price" required bind:value={data.singleOrgPriceM} onchange={() => {calcPercent("org")}}> Ft
-        </label>
+        <div class="form-label">
+            <label for="organiser-price" class="organiser-price">
+                Szervezői ár
+            </label>
+            <input type="number" name="organiser-price" required bind:value={data.singleOrgPriceM} onchange={() => {calcPercent("org")}}>
+        </div>
         
-        <label for="participant-profit-margin" class="participant-profit-margin">
-            Résztvevői haszonkulcs
-            <input type="number" name="participant-profit-margin" required bind:value={data.participantProfitMargin} onchange={() => {calcPrice("part")}}> %
-        </label>
+        <div class="form-label">
+            <label for="participant-profit-margin" class="participant-profit-margin">
+                Résztvevői haszonkulcs
+            </label>
+            <input type="number" name="participant-profit-margin" required bind:value={data.participantProfitMargin} onchange={() => {calcPrice("part")}}>
+        </div>
 
-        <label for="participant-price" class="participant-price">
-            Résztvevői ár
-            <input type="number" name="participant-price" required bind:value={data.singlePartPriceM} onchange={() => {calcPercent("part")}}> Ft
-        </label>
+        <div class="form-label">
+            <label for="participant-price" class="participant-price">
+                Résztvevői ár
+            </label>
+            <input type="number" name="participant-price" required bind:value={data.singlePartPriceM} onchange={() => {calcPercent("part")}}>
+        </div>
 
-        <label for="barcode" class="barcode">
-            Vonalkód
+        <div class="form-label">
+            <label for="barcode" class="barcode">
+                Vonalkód
+            </label>
             <input type="text" name="barcode" bind:value={data.code} required>
-        </label>
+        </div>
 
 
 

@@ -2,6 +2,9 @@
 	import { priceListStateSellingToOrg, priceListWebSocket } from "$lib/shared.svelte";
     import { onMount } from "svelte";
     import Toast from "./Toast.svelte";
+    import { page } from "$app/state"
+    import "$lib/styles/layout.css"
+    import "$lib/styles/global.css"
 
 
     const { children, data } = $props()
@@ -118,23 +121,36 @@
     }}
 />
 
+<svelte:head>
+    <script>
+        import "./global.css"
+    </script>
+</svelte:head>
+
 {#if toast.show}
     <Toast text={toast.text} bind:show={toast.show} time={toast.time}></Toast>
 {/if}
 
 <nav>
 
+    <div class="logo">
+        <img src="/favicon.ico" alt="An icon showing a storefront">
+        <h1>Market V2</h1>
+    </div>
+
     <ul>
-        <li><a href="/">Eladás</a></li>
-        <li><a href="/prices">Árlista</a></li>
-        <li><a href="/dashboard">Irányítópult</a></li>
-        <li><a href="/storage">Raktár</a></li>
+        <li><a class="{page.url.pathname == "/" ? "active" : ""}" href="/">Eladás</a></li>
+        <li><a class="{page.url.pathname == "/prices" ? "active" : ""}" href="/prices">Árlista</a></li>
+        <li><a class="{page.url.pathname == "/dashboard" ? "active" : ""}" href="/dashboard">Irányítópult</a></li>
+        <li><a class="{page.url.pathname == "/storage" ? "active" : ""}" href="/storage">Raktár</a></li>
     </ul>
 
-    <label for="sell-to">
-        Szervezői árlista:
+    <div class="form-label">
+        <label for="sell-to">
+            Szervezői árlista:
+        </label>
         <input type="checkbox" name="sell-to" bind:checked={$priceListStateSellingToOrg} onclick={updatePriceStateValueBackend}>
-    </label>
+    </div>
 
 </nav>
 

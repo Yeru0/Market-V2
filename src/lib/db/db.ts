@@ -1,6 +1,6 @@
 import { readLbL, writeLbL } from "./fileFunc";
 import { Table, Record } from "./dbObjects";
-//there are type errors in the db
+//there are type errors in the
 
 
 export const readTable: (tableName: string) => Promise<Table> = async (tableName: string) => {

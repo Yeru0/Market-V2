@@ -34,9 +34,9 @@
                     </td>
                     <td>{basketProduct.prod.name}</td>
                     {#if $priceListStateSellingToOrg}
-                        <td>{basketProduct.prod.singleOrgPriceM} Ft</td>
+                        <td>{basketProduct.prod.singleOrgPriceM}</td>
                     {:else}
-                        <td>{basketProduct.prod.singlePartPriceM} Ft</td>
+                        <td>{basketProduct.prod.singlePartPriceM}</td>
                     {/if}
                     <td><button 
                         type="button"

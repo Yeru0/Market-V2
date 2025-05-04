@@ -37,10 +37,12 @@
         {#each notesKeys as note}
         <tr>
             <td>
-                <label for="amount-{note}">
-                    {note}:
+                <div class="form-label">
+                    <label for="amount-{note}">
+                        {note}:
+                    </label>
                     <input type="number" name="amount-{note}" id="amount-{note}" bind:value={notes[note]}>
-                </label>
+                </div>
             </td>
         </tr>
         {/each}

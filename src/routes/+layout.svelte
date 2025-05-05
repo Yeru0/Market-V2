@@ -108,7 +108,7 @@
     // Hide navbar on price list
     let visibleNavbar: boolean = $state(true)
     let hideNavbarTimeout: any = setTimeout(() => {}, 0)
-    let bodyNavbarPadding = new Tween(60, {duration: 400});
+    let bodyNavbarPadding = new Tween(80, {duration: 400});
 
     const hideNavbar = () => {
         if (page.url.pathname == "/prices") {
@@ -143,7 +143,13 @@
     }}
     
     onmousemove={() => {
-        bodyNavbarPadding.target = 60
+        bodyNavbarPadding.target = 80
+        visibleNavbar = true
+        hideNavbar()
+    }}
+
+    ontouchmove={() => {
+        bodyNavbarPadding.target = 80
         visibleNavbar = true
         hideNavbar()
     }}

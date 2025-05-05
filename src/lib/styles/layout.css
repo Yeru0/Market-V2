@@ -3,9 +3,9 @@ header {
     margin: auto;
     transition: var(--t-default);
     background-color: var(--c-g-scale-t20);
-    height: 60px;
     position: fixed;
     left: 50%;
+    top: 50%;
     transform: translate(-50%, 0);
     margin: auto;
     display: grid;
@@ -14,6 +14,7 @@ header {
 
 @media (min-width: 516px) {
     header {
+        height: 60px;
         grid-template-columns: fit-content(200px) auto fit-content(200px);
         grid-template-rows: auto;
         grid-template-areas:
@@ -23,6 +24,7 @@ header {
 
 @media (max-width: 515px) {
     header {
+        height: 100px;
         grid-template-columns: repeat(2, auto);
         grid-template-rows: repeat(2, auto);
         grid-template-areas:
@@ -37,8 +39,6 @@ header.initial {
 header.progressed {
     background-color: rgba(33, 33, 33, .7);
     backdrop-filter: blur(3px);
-    top: 50%;
-    transform: translate(-50%, 0);
 }
 
 @media (min-width: 1020px) {

@@ -7,8 +7,6 @@
 	import CodeReaderModule from "./CodeReaderModule.svelte";
 	import { priceListStateSellingToOrg, priceListWebSocket } from "$lib/shared.svelte";
 	import Toast from "./Toast.svelte";
-    import "$lib/styles/sell.css"
-
 
     let { data } = $props()
 

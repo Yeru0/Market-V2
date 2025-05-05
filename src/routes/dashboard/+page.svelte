@@ -3,6 +3,7 @@
     import NoteChangeTable from "./NoteChangeTable.svelte";
     import NoteDisplayTable from "./NoteDisplayTable.svelte";
     import BasketOverlay from "./BasketOverlay.svelte"
+    import "$lib/styles/dashboard.css"
     
     let { data } = $props()
     let noteSum: number = $state(0)
@@ -33,6 +34,13 @@
         input = !input
 
         if (input) return
+
+        for (let [note, amt] of Object.entries(notes)) {
+            if (!amt || amt < 0) {
+                notes[note] = 0
+            }
+        }
+
         // Send the changed notes to the database
         await fetch("/api/notes/sell", {
             method: "PUT",
@@ -102,120 +110,135 @@
     <title>Market: Irányítópult</title>
 </svelte:head>
 
-<main>
+<main class="dashboard">
 
     <h1>Irányítópult</h1>
 
-    <section>
+    <section class="stats">
         <h2>Statisztika</h2>
 
-        <table>
+        <table class="money">
            <caption>Pénz</caption>
            <tbody>
                <tr>
-                   <td>Szervezői bevétel:</td>
-                   <td>{stats.orgIncome}</td>
+                   <td class="name">Szervezői bevétel:</td>
+                   <td class="value">{stats.orgIncome} Ft</td>
                </tr>
                <tr>
-                   <td>Résztvevői bevétel:</td>
-                   <td>{stats.partIncome}</td>
+                   <td class="name">Résztvevői bevétel:</td>
+                   <td class="value">{stats.partIncome} Ft</td>
                 </tr>
                 <tr>
-                    <td>Szervezői profit:</td>
-                    <td>{stats.orgProfit}</td>
+                    <td class="name">Szervezői profit:</td>
+                    <td class="value">{stats.orgProfit} Ft</td>
                 </tr>
                <tr>
-                   <td>Résztvevői profit:</td>
-                   <td>{stats.partProfit}</td>
+                   <td class="name">Résztvevői profit:</td>
+                   <td class="value">{stats.partProfit} Ft</td>
                </tr>
                <tr>
-                   <td>Összes bevétel:</td>
-                   <td>{stats.allIncome}</td>
+                   <td class="name">Összes bevétel:</td>
+                   <td class="value">{stats.allIncome} Ft</td>
                </tr>
                <tr>
-                   <td>Beszerzési ár:</td>
-                   <td>{stats.purchasePrice}</td>
+                   <td class="name">Beszerzési ár:</td>
+                   <td class="value">{stats.purchasePrice} Ft</td>
                </tr>
                <tr>
-                   <td>ELÁBÉ:</td>
-                   <td>{stats.valueOfSoldProducts}</td>
+                   <td class="name">ELÁBÉ:</td>
+                   <td class="value">{stats.valueOfSoldProducts} Ft</td>
                </tr>
                <tr>
-                   <td>Profit:</td>
-                   <td>{stats.profit}</td>
+                   <td class="name">Profit:</td>
+                   <td class="value">{stats.profit} Ft</td>
                </tr>
            </tbody>
         </table>
-        <table>
+        <table class="storage">
             <caption>Raktár</caption>
            <tbody>
                <tr>
-                   <td>Összes termék:</td>
-                   <td>{stats.allProducts}</td>
+                   <td class="name">Összes termék:</td>
+                   <td class="value">{stats.allProducts} db</td>
                </tr>
                <tr>
-                   <td>Raktárban:</td>
-                   <td>{stats.inStorage}</td>
+                   <td class="name">Raktárban:</td>
+                   <td class="value">{stats.inStorage} db</td>
                </tr>
                <tr>
-                   <td>Szervezőnek eladott:</td>
-                   <td>{stats.soldToOrgs}</td>
+                   <td class="name">Szervezőnek eladott:</td>
+                   <td class="value">{stats.soldToOrgs} db</td>
                </tr>
                <tr>
-                   <td>Résztvevőnek eladott:</td>
-                   <td>{stats.soldToParts}</td>
+                   <td class="name">Résztvevőnek eladott:</td>
+                   <td class="value">{stats.soldToParts} db</td>
                </tr>
                <tr>
-                   <td>Összes eladott termék:</td>
-                   <td>{stats.allSoldProducts}</td>
+                   <td class="name">Összes eladott termék:</td>
+                   <td class="value">{stats.allSoldProducts} db</td>
                 </tr>
                 <tr>
-                   <td>Kivett:</td>
-                   <td>{stats.takenOut}</td>
+                   <td class="name">Kivett:</td>
+                   <td class="value">{stats.takenOut} db</td>
                </tr>
            </tbody>
         </table>
    </section>
 
-   <section>
-    <h2>Beállítások</h2>
-        <p>Összesen: {noteSum}</p>
-        {#if input}
-            <NoteChangeTable bind:notes={notes} bind:sum={noteSum}></NoteChangeTable>
-            <button onclick={cancelNotes}>Mégsem</button>
-        {:else}
-            <NoteDisplayTable bind:notes={notes} bind:sum={noteSum}></NoteDisplayTable>
-        {/if}
-        <button onclick={modifyNotes}>
-            {input ? "Mentés" : "Módosítás"}
-        </button>
-
+   <section class="notes">
+        <h2>Címletek</h2>
+        <p class="sum">Összesen: {noteSum} Ft</p>
+        <div class="buttons">
+            <button class="modify" onclick={modifyNotes}>
+                {input ? "Mentés" : "Módosítás"}
+            </button>
+            {#if input}
+                <button onclick={cancelNotes}>Mégsem</button>
+            {/if}
+        </div>
+        <div class="table">
+            {#if input}
+                <NoteChangeTable bind:notes={notes} bind:sum={noteSum}></NoteChangeTable>
+            {:else}
+                <NoteDisplayTable bind:notes={notes} bind:sum={noteSum}></NoteDisplayTable>
+            {/if}
+        </div>
    </section>
 
-   <section>
-    <h2>Események</h2>
-    {#if events.length !==0}
-    
-        <button onclick={renderEvents}>Események újratöltése</button>
-        {#each events as basket}
-        <ol>
-            <legend>Új {basket.events[0].soldTo == "to" ? "kivett" : basket.events[0].soldTo == "org" ? "szervezőnek eladott" : "résztvevőnek eladtott" } kosár <em>{basket.events[0].time}</em>-kor!
-                <button onclick={() => { basket.overlay = !basket.overlay }}>Részletek</button>
-            </legend>
-                {#each basket.events as event}
-                        <li><strong>{event.productA.name}</strong></li>
-                {/each}
-            {#if basket.overlay}                
-                <BasketOverlay {basket}></BasketOverlay>
+   <section class="sells">
+        <h2>Eladások</h2>
+
+        <div class="body">
+            {#if events.length !==0}
+
+            <button class="reload" onclick={renderEvents}>Eladások újratöltése</button>
+                
+            <div class="sell-list">
+                    {#each events as basket}
+                    <div class="sell-event">
+                        <div class="head">
+                            <h3>Új {basket.events[0].soldTo == "to" ? "kivett" : basket.events[0].soldTo == "org" ? "szervezőnek eladott" : "résztvevőnek eladtott" } kosár <em>{basket.events[0].time}</em>-kor!</h3>
+                            <button onclick={() => { basket.overlay = !basket.overlay }}>Részletek</button>
+                        </div>
+                        <ol>
+                            {#each basket.events as event}
+                                    <li><strong>{event.productA.name}</strong></li>
+                            {/each}
+                            {#if basket.overlay}
+                                <BasketOverlay {basket}></BasketOverlay>
+                            {/if}
+                        </ol>
+                    </div>
+                    {/each}
+                </div>
+            
+            {:else}
+            
+                <button class="load" onclick={renderEvents}>Eladások betöltése</button>
+            
             {/if}
-            </ol>
-        {/each}
-        
-    {:else}
+        </div>
 
-        <button onclick={renderEvents}>Események betöltése</button>
-
-    {/if}
    </section>
 
 </main>

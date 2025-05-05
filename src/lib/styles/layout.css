@@ -38,7 +38,7 @@ header.initial {
 }
 header.progressed {
     background-color: rgba(33, 33, 33, .7);
-    backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px) grayscale(60%) brightness(60%);
 }
 
 @media (min-width: 1020px) {

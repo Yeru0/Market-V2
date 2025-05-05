@@ -11,7 +11,7 @@
 
 
 <h3>{productB.name}</h3>
-<p> {event.time}:{event.seconds} </p>
+<p> {event.dateTime}:{event.seconds} </p>
 <p>Összesen beszerzett: {productB.purchasedN}</p>
 <p>Eladva: {event.soldTo == "org" ? "Szervezőnek" : event.soldTo == "part" ? "Résztvevőnek" : "Kivett"}</p>
 <p>Eladott mennyiség: {productB.allRemainingN - productA.allRemainingN}</p>

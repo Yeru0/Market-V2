@@ -19,6 +19,10 @@ import { priceListStateSellingToOrg } from "$lib/shared.svelte";
     table.prices tbody tr td.price{
         text-align: right;
     }
+
+    .name {
+        color: var(--c-default-t1)
+    }
 </style>
 
 <table class="prices">

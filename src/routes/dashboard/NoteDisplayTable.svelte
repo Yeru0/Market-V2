@@ -32,25 +32,35 @@
 
 </script>
 
+<style>
+    table {
+        width: 240px;
+    }
+
+    td {
+        padding: var(--n-xs);
+    }
+</style>
+
 <table>
     <tbody>
         {#each notesKeys as note}
         {#if displayO}
             <tr>
-                <td>
-                    {note}:
+                <td class="name">
+                    {note} Ft:
                 </td>
-                <td>
-                    {notes[note]}
+                <td class="value">
+                    {notes[note]} db
                 </td>
             </tr>
         {:else if !displayO && notes[note] != 0}
             <tr>
-                <td>
-                    {note}:
+                <td class="name">
+                    {note} Ft:
                 </td>
-                <td>
-                    {notes[note]}
+                <td class="value">
+                    {notes[note]} db
                 </td>
             </tr>
         {/if}

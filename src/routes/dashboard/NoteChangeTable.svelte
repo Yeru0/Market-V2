@@ -6,7 +6,6 @@
     } = $props()
     
     let notesKeys: string[] = Object.keys(notes)
-    let input = $state(false)
 
     if (Object.keys(notes).length == 0) {
         notes = {
@@ -37,12 +36,10 @@
         {#each notesKeys as note}
         <tr>
             <td>
-                <div class="form-label">
-                    <label for="amount-{note}">
-                        {note}:
-                    </label>
-                    <input type="number" name="amount-{note}" id="amount-{note}" bind:value={notes[note]}>
-                </div>
+                {note} Ft:
+            </td>
+            <td>
+                <input type="number" name="amount-{note}" id="amount-{note}" bind:value={notes[note]} required min="0"> <!-- Ik this ain't in a form 😪 -->
             </td>
         </tr>
         {/each}

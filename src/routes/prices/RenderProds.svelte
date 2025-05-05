@@ -5,24 +5,34 @@ import { priceListStateSellingToOrg } from "$lib/shared.svelte";
 
 </script>
 
-<table>
-    <thead>
-        <tr>
-            <td>Terméknév</td>
-            <td>Ár</td>
-        </tr>
-    </thead>
+<style>
+    table.prices {
+        border-collapse: collapse;
+    }
+
+    table.prices tbody tr td{
+        padding: var(--n-xs);
+        padding-top: var(--n-l);
+        border-bottom: 2px solid var(--c-g-scale-t9a);
+    }
+
+    table.prices tbody tr td.price{
+        text-align: right;
+    }
+</style>
+
+<table class="prices">
     <tbody>
 
         {#each products as product (product)}
 
             {#if product.active}
                 <tr>
-                    <td>{product.name}</td>
+                    <td class="name">{product.name}</td>
                     {#if $priceListStateSellingToOrg}
-                        <td>{product.singleOrgPriceM}</td>
+                        <td class="price">{product.singleOrgPriceM} Ft</td>
                     {:else}
-                        <td>{product.singlePartPriceM}</td>
+                        <td class="price">{product.singlePartPriceM} Ft</td>
                     {/if}
                 </tr>
             {/if}

@@ -52,6 +52,7 @@ body {
     color: var(--c-g-scale-t9a);
     background-color: var(--c-g-scale-t10);
     margin: 0;
+    transition: var(--t-default);
     /* margin-top: 60px; */
 }
 
@@ -96,6 +97,12 @@ h3 {
     font-weight: 700;
     font-size: 20px;
     color: var(--c-default-t1)
+}
+
+main {
+    margin: auto;
+    padding: 24px;
+    max-width: 800px;
 }
 
 /* button */
@@ -185,4 +192,18 @@ input[type="checkbox"]::before {
 }
 .form-label input {
     grid-area: field;
+}
+
+/* table */
+table {
+    width: 100%;
+}
+
+table tbody tr td.button {
+    display: grid;
+    place-items: center;
+}
+
+table tbody tr td.center {
+    text-align: center;
 }

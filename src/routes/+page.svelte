@@ -233,6 +233,115 @@
 
 <CodeReaderModule {basket} {products} ></CodeReaderModule>
 
+<style>
+
+/* Basket header */
+main section.basket div.header {
+    width: fit-content;
+    margin: var(--n-xxxl) auto;
+    display: grid;
+    gap: var(--n-xxs);
+    place-items: center;
+    grid-template-columns: repeat(2, auto);
+    grid-template-rows: min-content auto;
+    grid-template-areas:
+    "icon icon"
+    "to-button et-button";
+}
+
+main section.basket div.header div.icon {
+    grid-area: icon;
+    width: fit-content;
+    display: flex;
+    flex-direction: row;
+}
+
+main section.basket div.header div.icon span {
+    color: var(--c-highlight);
+    margin-right: var(--n-xxs);
+    place-self: center end;
+    height: 100%;
+}
+
+main section.basket div.header div.icon h2 {
+    margin-left: var(--n-xxs);
+    place-self: center start;
+    grid-area: text;
+    margin: 0;
+}
+
+main section.basket div.header button.et {
+    grid-area:et-button;
+    width: fit-content;
+}
+main section.basket div.header button.to {
+    grid-area:to-button;
+    width: fit-content;
+}
+
+/* Basket notes */
+main section.basket form div.notes {
+    display: grid;
+    place-items: center;
+    grid-template-columns: repeat(2, 50%);
+    grid-template-rows: auto auto;
+    grid-template-areas:
+    "paying-notes change-notes"
+    "button button";
+}
+
+main section.basket form h3 {
+    place-self: start center;
+}
+
+main section.basket form div.notes div.change {
+    grid-area: change-notes;
+
+    & div.line {
+        width: 100%;
+        border-left: 1px solid var(--c-g-scale-t9a);
+    }
+}
+
+main section.basket form div.notes div.paying {
+    grid-area: paying-notes;
+
+    & div.line {
+        width: 100%;
+    }
+}
+
+main section.basket form div.notes div.change,
+main section.basket form div.notes div.paying
+{
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    grid-template-rows: min-content auto;
+}
+
+
+main section.basket form div.notes div.sell-btn {
+    grid-area: button;
+}
+
+
+
+div.not-enough-money, div.no-change-possible {
+    place-self: center;
+    display: flex;
+    flex-direction: row;
+}
+
+div.not-enough-money h4, div.no-change-possible h4 {
+    margin: auto 0;
+    padding-left: var(--n-xxs);
+}
+
+
+</style>
+
 <main>
 
     {#if toast.show}

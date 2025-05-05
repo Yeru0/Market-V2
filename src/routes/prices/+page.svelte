@@ -46,7 +46,7 @@
 </svelte:head>
 
 <main>
-    <h1>Termékek</h1>
+    <h1>Árlista</h1>
     <section>
         <RenderProds {products}></RenderProds>
     </section>

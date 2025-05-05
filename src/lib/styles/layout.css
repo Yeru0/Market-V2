@@ -3,7 +3,10 @@ header {
     margin: auto;
     transition: var(--t-default);
     background-color: var(--c-g-scale-t20);
-    position: sticky;
+    height: 60px;
+    position: fixed;
+    left: 50%;
+    transform: translate(-50%, 0);
     margin: auto;
     display: grid;
     place-items: center;
@@ -34,6 +37,8 @@ header.initial {
 header.progressed {
     background-color: rgba(33, 33, 33, .7);
     backdrop-filter: blur(3px);
+    top: 50%;
+    transform: translate(-50%, 0);
 }
 
 @media (min-width: 1020px) {

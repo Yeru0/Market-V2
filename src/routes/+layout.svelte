@@ -5,6 +5,8 @@
     import { page } from "$app/state"
     import "$lib/styles/layout.css"
     import "$lib/styles/global.css"
+	import { fly } from "svelte/transition";
+    import { Tween } from 'svelte/motion';
 
 
     let scrollY: number = $state(0)
@@ -103,6 +105,24 @@
         }
     }
 
+    // Hide navbar on price list
+    let visibleNavbar: boolean = $state(true)
+    let hideNavbarTimeout: any = setTimeout(() => {}, 0)
+    let bodyNavbarPadding = new Tween(60, {duration: 400});
+
+    const hideNavbar = () => {
+        if (page.url.pathname == "/prices") {
+            clearTimeout(hideNavbarTimeout)
+            hideNavbarTimeout = setTimeout(() => {
+                bodyNavbarPadding.target = 0
+                visibleNavbar = false
+                console.log(visibleNavbar)            
+            }, 3000)
+        } else {
+            clearTimeout(hideNavbarTimeout)
+        }
+    }
+    hideNavbar()
 
 </script>
 
@@ -121,6 +141,12 @@
     onkeyup={(e) => { 
         if (e.key == "Shift") shift = false
     }}
+    
+    onmousemove={() => {
+        bodyNavbarPadding.target = 60
+        visibleNavbar = true
+        hideNavbar()
+    }}
 
     bind:scrollY
 />
@@ -130,7 +156,11 @@
     <Toast text={toast.text} bind:show={toast.show} time={toast.time}></Toast>
 {/if}
 
-<header class="{scrollY <= 0 ? "initial" : "progressed"}">
+{#if visibleNavbar}
+    <header
+        class="{scrollY <= 0 ? "initial" : "progressed"}"
+        transition:fly={{duration: 800, y: -100}} 
+    >
     
     <div class="logo">
         <img src="/favicon.ico" alt="An icon showing a storefront">
@@ -148,14 +178,16 @@
     
     </nav>
 
-    <div class="form-label">
-        <label for="sell-to">
-            Szervezői árlista:
-        </label>
-        <input type="checkbox" name="sell-to" bind:checked={$priceListStateSellingToOrg} onclick={updatePriceStateValueBackend}>
-    </div>
+        <div class="form-label" style="opacity: {page.url.pathname == "/prices" ? "0%" : "100%"};">
+            <label for="sell-to">
+                Szervezői árlista:
+            </label>
+            <input type="checkbox" name="sell-to" bind:checked={$priceListStateSellingToOrg} onclick={updatePriceStateValueBackend}>
+        </div>
 
-</header>
+    </header>
+{/if}
 
-
-{@render children()}
+<div class="content" style="padding-top: {bodyNavbarPadding.current}px;">
+    {@render children()}
+</div>

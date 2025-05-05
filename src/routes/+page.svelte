@@ -267,7 +267,7 @@
                         <p>{basket.finalPrice} Ft</p>
                         <h4>Fizető címlet</h4>
                         <div class="line">
-                            <NoteSelectionTable bind:sum={basket.payingSum} bind:notes={basket.payingNotes} {control}></NoteSelectionTable>
+                            <NoteSelectionTable bind:sum={basket.payingSum} bind:notes={basket.payingNotes} {control} {shift}></NoteSelectionTable>
                         </div>
                         <p>{basket.payingSum} Ft</p>
                     </div>
@@ -277,7 +277,7 @@
                             <p>{basket.payingSum - basket.finalPrice} Ft</p>
                             <h4>Visszajáró címlet</h4>
                             <div class="line">
-                                <NoteSelectionTable bind:sum={basket.returnSum} bind:notes={basket.returnNotes} {control}></NoteSelectionTable>
+                                <NoteSelectionTable bind:sum={basket.returnSum} bind:notes={basket.returnNotes} {control} {shift}></NoteSelectionTable>
                             </div>
                             <p>{basket.returnSum} Ft</p>
                         {:else if !basket.enoughNotes}

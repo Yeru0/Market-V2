@@ -3,7 +3,8 @@
     let {
         sum = $bindable(),
         notes = $bindable({}),
-        control
+        control,
+        shift
     } = $props()
     
     if (Object.keys(notes).length == 0) {
@@ -30,6 +31,11 @@
     let notesKeys: string[] = Object.keys(notes)
 
     const increment = (note: string): void => {
+        if (shift) {
+            decrement(note)
+            return
+        }
+
         notes[parseInt(note)] += 1
         sum = Object.entries(notes).reduce((a, [note,amount]) => a + parseInt(note)*amount, 0)
     }

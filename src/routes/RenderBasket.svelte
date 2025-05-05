@@ -23,7 +23,7 @@
 
 
 <style>
-    
+
     table tbody tr td.amt {
         grid-template-columns: repeat(3, auto);
         grid-template-rows: auto;
@@ -31,9 +31,13 @@
         place-self: center;
     }
 
-    table tbody tr td.amt button {
-        margin: 0 var(--n-m);
+    .add {
+        margin-left: var(--n-s);
     }
+    .remove {
+        margin-right: var(--n-s);
+    }
+
 
 
 
@@ -55,11 +59,13 @@
                 <td >{basketProduct.prod.name}</td>
                 <td class="button amt">
                     <button
+                        class="remove"
                         onclick={() => { basket.removeFromBasket(basketProduct.prod, basketProduct.price, false, control) }}
                         type="button"
                     >-</button>
                     <input type="number" bind:value={basketProduct.amt} min="1" max={basketProduct.prod.allRemainingN} required onchange={() => { basket.calcFinalPrice() }}/>
                     <button
+                        class="add"
                         onclick={() => { basket.addToBasket(basketProduct.prod, basketProduct.price, control) }}
                         disabled={!basketProduct.prod.canAddMore}
                         type="button"
@@ -70,9 +76,11 @@
                     {:else}
                         <td class="center">{basketProduct.prod.singlePartPriceM} Ft</td>
                     {/if}
-                    <td class="button"><button 
+                    <td class="button action">
+                    <button 
                         type="button"
-                        onclick={() => {basket.removeFromBasket(basketProduct.prod, basketProduct.price, true)}}>Törlés</button></td>
+                        onclick={() => {basket.removeFromBasket(basketProduct.prod, basketProduct.price, true)}}
+                    >Törlés</button></td>
                 </tr> 
         {/each}
 

@@ -115,8 +115,7 @@
             clearTimeout(hideNavbarTimeout)
             hideNavbarTimeout = setTimeout(() => {
                 bodyNavbarPadding.target = 0
-                visibleNavbar = false
-                console.log(visibleNavbar)            
+                visibleNavbar = false          
             }, 3000)
         } else {
             clearTimeout(hideNavbarTimeout)

@@ -3,6 +3,7 @@
     let {
         notes = $bindable({}),
         sum = $bindable(0),
+        notAllO = $bindable(false),
         displayO = true
     } = $props()
     
@@ -28,13 +29,19 @@
     
     $effect(() => {
         sum = Object.entries(notes).reduce((a, [note,amount]) => a + parseInt(note)*amount, 0)
+        
+        if (sum === 0) {
+            notAllO = false
+        } else { 
+            notAllO = true
+        }
     })
 
 </script>
 
 <style>
     table {
-        width: 240px;
+        width: 100%;
     }
 
     td {

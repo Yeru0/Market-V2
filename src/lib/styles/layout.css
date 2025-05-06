@@ -10,6 +10,7 @@ header {
     margin: auto;
     display: grid;
     place-items: center;
+    z-index: 10000;
 }
 
 @media (min-width: 516px) {

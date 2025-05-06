@@ -15,9 +15,18 @@
 	<link rel="stylesheet"
 		href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 	%sveltekit.head%
+
+	<style>
+		.noscroll {
+			overflow: hidden;
+		}
+	</style>
+
 </head>
 
 <body data-sveltekit-preload-data="hover">
+	<!-- <script src="node_modules/eruda/eruda.js"></script>
+	<script>eruda.init();</script> -->
 	<div style="display: contents">%sveltekit.body%</div>
 </body>
 

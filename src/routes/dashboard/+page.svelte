@@ -224,10 +224,21 @@
                             {#each basket.events as event}
                                     <li><strong>{event.productA.name}</strong></li>
                             {/each}
-                            {#if basket.overlay}
-                                <BasketOverlay {basket}></BasketOverlay>
-                            {/if}
                         </ol>
+                        {#if basket.overlay}
+
+                            <div class="basket-overlay">
+                                <button onclick={() => {basket.overlay = false}} class="close-overlay" aria-label="close overlay"
+                                    style="
+                                        width: 100vw;
+                                        height: 100vh;
+                                        position:fixed;
+                                        z-index: 0;
+                                    "    
+                                ></button>
+                                <BasketOverlay {basket}></BasketOverlay>
+                            </div>
+                        {/if}
                     </div>
                     {/each}
                 </div>

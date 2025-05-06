@@ -1,15 +1,5 @@
 main.dashboard {
 
-    /* & table {
-        border-collapse: collapse;
-    }
-
-    & td {
-        border: 1px solid gray
-    } */
-
-
-
     /* === Default === */
     & td.value {
         text-align: right;
@@ -96,7 +86,8 @@ main.dashboard {
         & div.table {
             grid-area: table;
             display: grid;
-            place-content: center;
+            width: 240px;
+            place-self: center;
         }
 
     }
@@ -160,6 +151,36 @@ main.dashboard {
             margin: 0;
         }
 
+    }
+
+    & .basket-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(6, 6, 6, .7);
+        z-index: 10000000;
+        backdrop-filter: blur(4px) brightness(80%);
+        overflow:visible;
+    }
+
+    @media (min-height: 803px) {
+        & .basket-overlay {
+            overflow-y: hidden;
+            display: grid;
+            place-content: center;
+        }
+    }
+    
+    @media (max-height: 802px) {
+        & .basket-overlay {
+            overflow-y: scroll;
+        }
+    }
+ 
+    & .close-overlay {
+        opacity: 0%;
     }
 
 }

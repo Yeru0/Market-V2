@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { Product } from "$lib/siteObjects.svelte";
-	import NoteDisplayTable from "./NoteDisplayTable.svelte";
 
     let { event } = $props()
     
@@ -9,123 +8,182 @@
 
 </script>
 
+<style>
+    div.stat-diff {
+        display: grid;
+        column-gap: var(--n-m);
+
+        & h4 {
+            grid-area: title;
+        }
+
+        & div.at-sale {
+            grid-area: at;
+        }
+        & div.at-sale {
+            grid-area: before;
+        }
+        & div.at-sale {
+            grid-area: after;
+        }
+
+        & caption {
+            color: var(--c-default-t1)
+        }
+    }
+
+    @media (min-width: 516px) {
+        div.stat-diff {
+            grid-template-columns: repeat(3, auto);
+            grid-template-rows: repeat(2, auto);
+            grid-template-areas:
+            "title title title"
+            "at before after";
+        }
+    }
+    
+    @media (max-width: 515px) {
+        div.stat-diff {
+            grid-template-columns: auto;
+            grid-template-rows: repeat(4, auto);
+            grid-template-areas:
+            "title"
+            "at"
+            "before"
+            "after";
+        }
+    }
+</style>
 
 <h3>{productB.name}</h3>
-<p> {event.dateTime}:{event.seconds} </p>
-<p>Összesen beszerzett: {productB.purchasedN}</p>
-<p>Eladva: {event.soldTo == "org" ? "Szervezőnek" : event.soldTo == "part" ? "Résztvevőnek" : "Kivett"}</p>
-<p>Eladott mennyiség: {productB.allRemainingN - productA.allRemainingN}</p>
 
-<table>
-    <tbody>
-        <tr>
-            <th>Egység beszer. ár:</th>
-            <td>{productB.singleProductValueM}</td>
-            <th>Szerveői egység ár eladáskor:</th>
-            <td>{productB.singleOrgPriceM}</td>
-            <th>Szervezői haszonkulcs eladáskor:</th>
-            <td>{productB.organiserProfitMargin}%</td>
-        </tr>
-        <tr>
-            <th>Össz. beszer. ár:</th>
-            <td>{productB.purchasePriceM}</td>
-            <th>Résztvevői egység ár eladáskor:</th>
-            <td>{productB.singlePartPriceM}</td>
-            <th>Résztvevői haszonkulcs eladáskor:</th>
-            <td>{productB.participantProfitMargin}%</td>
-        </tr>
-    </tbody>
-</table>
+<ul>
+    <li>Eladás profitja: {event.profitOfSale} Ft</li>
+    <li>Összesen beszerzett: {productB.purchasedN} db</li>
+    <li>Eladott mennyiség: {productB.allRemainingN - productA.allRemainingN} db</li>
+    <li>Raktárban: {productA.allRemainingN} db</li>
+</ul>
 
+<div class="stat-diff">
+    <h4>Változás</h4>
 
-<table>
-    <caption>Eladás előtt</caption>
+    <table class="at-sale">
+        <caption>Eladásokor</caption>
 
-    <tbody>
-        <tr>
-            <td>Raktárban:</td>
-            <td>{productB.allRemainingN}</td>
-        </tr>
-        <tr>
-            <td>Szervezőnek eladott:</td>
-            <td>{productB.soldToOrgN}</td>
-        </tr>
-        <tr>
-            <td>Résztvevőnek eladott:</td>
-            <td>{productB.soldToPartN}</td>
-        </tr>
-        <tr>
-            <td>Kivett:</td>
-            <td>{productB.takenOutN}</td>
-        </tr>
-        <tr>
-            <td>Összes eladott:</td>
-            <td>{productB.allSoldN}</td>
-        </tr>
-        <tr>
-            <td>Szervezői össz. bevétel:</td>
-            <td>{productB.allOrgIncomeM}</td>
-        </tr>
-        <tr>
-            <td>Résztvevői össz. bevétel:</td>
-            <td>{productB.allPartIncomeM}</td>
-        </tr>
-        <tr>
-            <td>Összes bevétel:</td>
-            <td>{productB.allIncomeM}</td>
-        </tr>
-        <tr>
-            <td>Profit:</td>
-            <td>{productB.allProfitM}</td>
-        </tr>
-    </tbody>
-</table>
+        <tbody>
+            <tr>
+                <td class="name">Egység beszer. ár:</td>
+                <td class="value">{productB.singleProductValueM} Ft</td>
+            </tr>
+            <tr>
+                <td class="name">Össz. beszer. ár:</td>
+                <td class="value">{productB.purchasePriceM} Ft</td>
+            </tr>
+            <tr>
+                <td class="name">Szervezői e. ár:</td>
+                <td class="value">{productB.singlePartPriceM} Ft</td>
+            </tr>
+            <tr>
+                <td class="name">Résztvevői e. ár:</td>
+                <td class="value">{productB.singleOrgPriceM} Ft</td>
+            </tr>
+            <tr>
+                <td class="name">Szervezői hk.:</td>
+                <td class="value">{productB.organiserProfitMargin}%</td>
+            </tr>
+            <tr>
+                <td class="name">Résztvevői hk.:</td>
+                <td class="value">{productB.participantProfitMargin}%</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    
+    <table class="before-sale">
+        <caption>Eladás előtt</caption>
+    
+        <tbody>
+            <tr>
+                <td class="name">Raktárban:</td>
+                <td class="value">{productB.allRemainingN} db</td>
+            </tr>
+            <tr>
+                <td class="name">Szervezőnek eladott:</td>
+                <td class="value">{productB.soldToOrgN} db</td>
+            </tr>
+            <tr>
+                <td class="name">Résztvevőnek eladott:</td>
+                <td class="value">{productB.soldToPartN} db</td>
+            </tr>
+            <tr>
+                <td class="name">Összes eladott:</td>
+                <td class="value">{productB.allSoldN} db</td>
+            </tr>
+            <tr>
+                <td class="name">Kivett:</td>
+                <td class="value">{productB.takenOutN} db</td>
+            </tr>
+            <tr>
+                <td class="name">Szervezői össz. bevétel:</td>
+                <td class="value">{productB.allOrgIncomeM} Ft</td>
+            </tr>
+            <tr>
+                <td class="name">Résztvevői össz. bevétel:</td>
+                <td class="value">{productB.allPartIncomeM} Ft</td>
+            </tr>
+            <tr>
+                <td class="name">Összes bevétel:</td>
+                <td class="value">{productB.allIncomeM} Ft</td>
+            </tr>
+            <tr>
+                <td class="name">Profit:</td>
+                <td class="value">{productB.allProfitM} Ft</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <table class="after-sale">
+        <caption>Eladás után</caption>
+    
+        <tbody>
+            <tr>
+                <td class="name">Raktárban:</td>
+                <td class="value">{productA.allRemainingN} db</td>
+            </tr>
+            <tr>
+                <td class="name">Szervezőnek eladott:</td>
+                <td class="value">{productA.soldToOrgN} db</td>
+            </tr>
+            <tr>
+                <td class="name">Résztvevőnek eladott:</td>
+                <td class="value">{productA.soldToPartN} db</td>
+            </tr>
+            <tr>
+                <td class="name">Összes eladott:</td>
+                <td class="value">{productA.allSoldN} db</td>
+            </tr>
+            <tr>
+                <td class="name">Kivett:</td>
+                <td class="value">{productA.takenOutN} db</td>
+            </tr>
+            <tr>
+                <td class="name">Szervezői össz. bevétel:</td>
+                <td class="value">{productA.allOrgIncomeM} Ft</td>
+            </tr>
+            <tr>
+                <td class="name">Résztvevői össz. bevétel:</td>
+                <td class="value">{productA.allPartIncomeM} Ft</td>
+            </tr>
+            <tr>
+                <td class="name">Összes bevétel:</td>
+                <td class="value">{productA.allIncomeM} Ft</td>
+            </tr>
+            <tr>
+                <td class="name">Profit:</td>
+                <td class="value">{productA.allProfitM} Ft</td>
+            </tr>
+        </tbody>
+    </table>
+    
+</div>
 
-<table>
-    <caption>Eladás után</caption>
-
-    <tbody>
-        <tr>
-            <td>Raktárban:</td>
-            <td>{productA.allRemainingN}</td>
-        </tr>
-        <tr>
-            <td>Szervezőnek eladott:</td>
-            <td>{productA.soldToOrgN}</td>
-        </tr>
-        <tr>
-            <td>Résztvevőnek eladott:</td>
-            <td>{productA.soldToPartN}</td>
-        </tr>
-        <tr>
-            <td>Kivett:</td>
-            <td>{productA.takenOutN}</td>
-        </tr>
-        <tr>
-            <td>Összes eladott:</td>
-            <td>{productA.allSoldN}</td>
-        </tr>
-        <tr>
-            <td>Szervezői össz. bevétel:</td>
-            <td>{productA.allOrgIncomeM}</td>
-        </tr>
-        <tr>
-            <td>Résztvevői össz. bevétel:</td>
-            <td>{productA.allPartIncomeM}</td>
-        </tr>
-        <tr>
-            <td>Összes bevétel:</td>
-            <td>{productA.allIncomeM}</td>
-        </tr>
-        <tr>
-            <td>Profit:</td>
-            <td>{productA.allProfitM}</td>
-        </tr>
-    </tbody>
-</table>
-
-<h4>Fizető címletek</h4>
-<NoteDisplayTable notes={event.notesP} displayO={false}></NoteDisplayTable>
-
-<h4>Visszajáró címletek</h4>
-<NoteDisplayTable notes={event.notesC} displayO={false}></NoteDisplayTable>

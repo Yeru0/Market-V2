@@ -67,7 +67,7 @@ export class Product {
         this.singlePartProfitM = Math.round(this.singlePartPriceM - this.singleProductValueM);
         this.allOrgProfitM = Math.round(this.singleOrgProfitM * this.soldToOrgN);
         this.allPartProfitM = Math.round(this.singlePartProfitM * this.soldToPartN);
-        this.allProfitM = Math.round(this.allIncomeM - this.purchasePriceM);
+        this.allProfitM = Math.round(this.allPartProfitM + this.allOrgProfitM - this.purchasePriceM);
         this.valueOfSoldProductsM = this.allSoldN * this.singleProductValueM; //ELÁBÉ
         this.valueOfSoldProductsOrgM = this.soldToOrgN * this.singleProductValueM; //ELÁBÉ
         this.valueOfSoldProductsPartM = this.soldToPartN * this.singleProductValueM; //ELÁBÉ
@@ -295,6 +295,8 @@ export class SellEvent {
     dateTime: string = $state("");
     time: string = $state("");
     seconds: string = $state("");
+    profitOfSale: number = $state(0);
+    incomeOfSale: number = $state(0);
 
 
     constructor(products: Product[], event: {}) {
@@ -358,7 +360,11 @@ export class SellEvent {
 
         this.productA = new Product(product.infoObject);
 
+        //Profit
+        this.profitOfSale = this.productA.allProfitM - this.productB.allProfitM;
+        this.incomeOfSale = this.productA.allIncomeM - this.productB.allIncomeM;
 
+        //Income
 
         //Timestamp
         let date = new Date();
@@ -383,7 +389,4 @@ export class SellEvent {
 
 
     };
-
-    //TODO Carousel
-    // TODO Amikor nincs update a noteoknal akkkor a notes elszarodik
 }

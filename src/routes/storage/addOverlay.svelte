@@ -5,7 +5,8 @@
 
     let {
         products = $bindable(),
-        toast = $bindable()
+        toast = $bindable(),
+        showOverlay = $bindable()
     } = $props()
 
     let id: string = $state("")
@@ -99,6 +100,8 @@
             })
             
             $priceListWebSocket.ws.send(JSON.stringify({products: {...products}, id: $priceListWebSocket.id})) // Update the price list
+
+            showOverlay = false
 
             toast = {
                 time: 3000,
@@ -214,7 +217,7 @@
 
         <div class="submit-buttons">
             <button type="submit" class="submit">Termék hozzáadása</button>
-            <button type="reset" class="cancel">Mégsem</button>
+            <button type="reset" class="cancel" onclick={() => {showOverlay = false}}>Mégsem</button>
         </div>
 
     </form>

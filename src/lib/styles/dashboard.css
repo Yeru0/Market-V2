@@ -153,34 +153,5 @@ main.dashboard {
 
     }
 
-    & .basket-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background-color: rgba(6, 6, 6, .7);
-        z-index: 10000000;
-        backdrop-filter: blur(4px) brightness(80%);
-        overflow:visible;
-    }
-
-    @media (min-height: 803px) {
-        & .basket-overlay {
-            overflow-y: hidden;
-            display: grid;
-            place-content: center;
-        }
-    }
-    
-    @media (max-height: 802px) {
-        & .basket-overlay {
-            overflow-y: scroll;
-        }
-    }
- 
-    & .close-overlay {
-        opacity: 0%;
-    }
 
 }

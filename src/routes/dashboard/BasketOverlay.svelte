@@ -160,20 +160,21 @@
     .inner-overlay {
         background-color: var(--c-g-scale-t1a);
         display: grid;
-        max-width: 900px;
-        padding: var(--n-l);
         z-index: 10;
     }
-
+    
     @media (min-height: 803px) {
         .inner-overlay {
             border-radius: var(--n-m);
+            padding: var(--n-l);
         }
     }
     
     @media (max-height: 802px) {
         .inner-overlay {
+            padding-top: var(--n-m);
             border-radius: 0;
+            width: 100%;
         }
     }
 
@@ -225,6 +226,12 @@
     .close-button {
         place-self: end;
         width: min-content;
+    }
+    
+    @media (max-height: 802px) {
+        .close-button {
+            margin-right: var(--n-m)
+        }
     }
 
 </style>

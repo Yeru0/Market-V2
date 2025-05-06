@@ -10,6 +10,7 @@
     //Render products
     let parsedProds: Product[] = [] // This is needed so I can add the inactive products to the end
     let products: Product[] = $state([])
+    let add: boolean = $state(false)
     let toast = $state({
         show: false,
         time: 1000,
@@ -39,7 +40,12 @@
 
     <h1>Áruk</h1>
 
-    <AddOverlay bind:products bind:toast></AddOverlay>
+    <div class="add">
+        <button onclick={() => { add = true }}>Áru hozzáadása</button>
+        {#if add}
+            <AddOverlay bind:products bind:toast bind:showOverlay={add}></AddOverlay>
+        {/if}
+    </div>
 
     {#each products as product}
 

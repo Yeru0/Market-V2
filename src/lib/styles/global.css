@@ -209,3 +209,38 @@ table tbody tr td.button {
 table tbody tr td.center {
     text-align: center;
 }
+
+/* === Overlay backgrounds === */
+.overlay-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(6, 6, 6, .7);
+    z-index: 10000000;
+    backdrop-filter: blur(4px) brightness(80%);
+    overflow:hidden;
+}
+
+@media (min-height: 803px) {
+    & .overlay-background {
+        overflow-y: hidden;
+        display: grid;
+        place-content: center;
+    }
+}
+
+@media (max-height: 802px) {
+    & .overlay-background {
+        overflow-y: scroll;
+    }
+}
+
+.overlay-background-close {
+    opacity: 0%;
+    z-index: -9;
+    width: 100vw;
+    height: 100vh;
+    position:fixed;
+}

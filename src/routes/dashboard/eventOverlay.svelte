@@ -17,16 +17,6 @@
             grid-area: title;
         }
 
-        & div.at-sale {
-            grid-area: at;
-        }
-        & div.at-sale {
-            grid-area: before;
-        }
-        & div.at-sale {
-            grid-area: after;
-        }
-
         & caption {
             color: var(--c-default-t1)
         }

@@ -227,15 +227,8 @@
                         </ol>
                         {#if basket.overlay}
 
-                            <div class="basket-overlay">
-                                <button onclick={() => {basket.overlay = false}} class="close-overlay" aria-label="close overlay"
-                                    style="
-                                        width: 100vw;
-                                        height: 100vh;
-                                        position:fixed;
-                                        z-index: 0;
-                                    "    
-                                ></button>
+                            <div class="overlay-background">
+                                <button onclick={() => {basket.overlay = false }} class="overlay-background-close" aria-label="close overlay"></button>
                                 <BasketOverlay {basket}></BasketOverlay>
                             </div>
                         {/if}

@@ -163,6 +163,8 @@ export class Basket {
             for (const product of this.products) {
                 if (product.prod == prod && product.price == price) {
 
+                    if (product.amt >= prod.allRemainingN) return "no";
+
                     all ? product.amt = product.prod.allRemainingN : product.amt += 1;
                     prod.buttonDisabling(this);
                     this.calcFinalPrice();

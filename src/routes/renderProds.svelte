@@ -27,7 +27,7 @@
         background-color: var(--c-highlight);
         color: var(--c-default-t0);
 
-        &:disabled {
+        &:disabled, &.fake-disabled {
             color: var(--c-g-scale-9a);
             background-color: var(--c-g-scale-t2a);
 
@@ -57,16 +57,18 @@
                     {#if $priceListStateSellingToOrg}
                     <td><button
                         onclick={() => { handleClick("org", product) }}
-                        disabled={!product.canAddMore}
+                        class:fake-disabled={!product.canAddMore}
                         class="{product.inBasket ? "active" : ""}"
                         >{product.name}</button></td>
+
                         <td class="center">{product.singleOrgPriceM} Ft</td>
                     {:else}
                         <td><button
                             onclick={() => { handleClick("part", product) }}
-                            disabled={!product.canAddMore}
+                            class:fake-disabled={!product.canAddMore}
                             class="{product.inBasket ? "active" : ""}"
                             >{product.name}</button></td>
+
                             <td class="center">{product.singlePartPriceM} Ft</td>
                     {/if}
                     <td class="center">{product.allRemainingN}/{product.purchasedN}</td>

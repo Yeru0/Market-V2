@@ -169,7 +169,7 @@
             }
 
             // Send an events to the database
-            //WARNING: DO NOT CHANGE THE ORDER OF THE FETCH REQUESTS!           
+            //WARNING: DO NOT CHANGE THE ORDER OF THE FETCH REQUESTS!
             await fetch("/api/events/sell", {
                 method: "POST",
                 body: JSON.stringify({

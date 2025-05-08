@@ -293,7 +293,7 @@
     <div class="scroller">
         {#if basket.events.length > 1}
             <button onclick={previous} class="previous" disabled={activeIndex == 0}>
-                <span class="material-symbols-outlined"> arrow_back_ios </span>
+                <span class="material-symbols-outlined"> arrow_back_ios_new </span>
             </button>
         {/if}
         <div class="cards" ontouchstart={handleSwipeStart} ontouchmove={handleSwipeMove} ontouchend={handleSwipeEnd} bind:clientWidth={cardsWidth} style="height: {cardHeight}px;">

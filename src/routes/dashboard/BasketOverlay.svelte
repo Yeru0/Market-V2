@@ -15,7 +15,7 @@
     let activeIndex: number = $state(0)
     let cardHeight: number = $state(0)
 
-    const next = () => {
+	const next = () => {
         
         if (activeIndex > basket.events.length - 2) return
         active.target = Math.round(active.current) + 1
@@ -23,7 +23,7 @@
 
     }
 
-    const previous = () => {
+	const previous = () => {
         
         if (activeIndex < 1) return
         active.target = Math.round(active.current) - 1
@@ -31,7 +31,7 @@
         
     }
 
-    //Handle swipe
+	//Handle swipe
     let touchStartX: number = $state(0)
     let touchEndX: number = $state(0)
     let cardsWidth: number = $state(0)
@@ -39,12 +39,12 @@
     let swipeFraction = $state(0)
 
 
-    const handleSwipeStart = (e: TouchEvent) => {
+	const handleSwipeStart = (e: TouchEvent) => {
         touchStartX = e.touches[0].clientX
 
     }
 
-    const handleSwipeMove = (e: TouchEvent) => {
+	const handleSwipeMove = (e: TouchEvent) => {
         if (!touchStartX || basket.events.length === 1) return
 
         touchEndX = e.touches[0].clientX
@@ -53,19 +53,19 @@
 
         swipeFraction = (diffX / cardsWidth)
 
-        // If on either end of the list tone down the effect of swipeFraction
-        if (activeIndex == 0 && swipeFraction < 0) {
+		// If on either end of the list tone down the effect of swipeFraction
+		if (activeIndex == 0 && swipeFraction < 0) {
             active.target = activeIndex + (swipeFraction / 4)
-        } else if (activeIndex == basket.events.length - 1 && swipeFraction > 0) {
+		} else if (activeIndex == basket.events.length - 1 && swipeFraction > 0) {
             active.target = activeIndex + (swipeFraction / 4)
-        } else {
+		} else {
             active.target = activeIndex + swipeFraction
-        }
+		}
         
         
     }
-    
-    const handleSwipeEnd = () => {
+
+	const handleSwipeEnd = () => {
         if ((swipeFraction * 100) > 30) next()
         else if ((swipeFraction * 100) < -30) previous()
         active.set(activeIndex)
@@ -73,166 +73,170 @@
 
 
 
-    // All profit
+	// All profit
     let allProfit: number = $state(0)
     let allIncome: number = $state(0)
-    for (let event of basket.events) {
+	for (let event of basket.events) {
         allProfit += event.profitOfSale
         allIncome += event.incomeOfSale
-    }
+	}
 
 
-    // Notes
+	// Notes
     let displayNotes: boolean = $state(true)
     let displayExchange: boolean = $state(true)
 
-    // Hide body scrollbar
-    //Ez egy meglepően unorthodox megoldás, de tetszik
-    onMount(() => {
-        document.body.classList.add('noscroll');
+	// Hide body scrollbar
+	//Ez egy meglepően unorthodox megoldás, de tetszik
+	onMount(() => {
+		document.body.classList.add('noscroll');
     })
-    onDestroy(() => {
-        document.body.classList.remove('noscroll');
+	onDestroy(() => {
+		document.body.classList.remove('noscroll');
     })
 
 </script>
 
 <style>
-    .cards {
-        overflow: hidden;
-    }
+	.cards {
+		overflow: hidden;
+	}
 
-    .notes {
-        display: grid;
-        place-items: center;
-        grid-template-columns: repeat(2, 50%);
-        grid-template-rows: auto;
+	.notes {
+		display: grid;
+		place-items: center;
+		grid-template-columns: repeat(2, 50%);
+		grid-template-rows: auto;
         grid-template-areas:
         "notes exchange";   
-        
-        & .notes {
-            grid-area: notes;
-            display: grid;
-            height: 100%;
-            width: 100%;
-            grid-template-columns: auto;
-            grid-template-rows: min-content auto;
-            grid-template-areas:
+
+		& .notes {
+			grid-area: notes;
+			display: grid;
+			height: 100%;
+			width: 100%;
+			grid-template-columns: auto;
+			grid-template-rows: min-content auto;
+			grid-template-areas:
             "title"
             "content";
 
-            & h4 {
-                grid-area: title;
-                place-self: center;
-            }
+			& h4 {
+				grid-area: title;
+				place-self: center;
+			}
 
-            & .body {
-                grid-area: content;
-                place-self: start center;
-            }
-        }
+			& .body {
+				grid-area: content;
+				place-self: start center;
+			}
+		}
 
-        & .exchange {
-            grid-area: exchange;
-            display: grid;
-            height: 100%;
-            width: 100%;
-            grid-template-columns: auto;
-            grid-template-rows: min-content auto;
-            grid-template-areas:
+		& .exchange {
+			grid-area: exchange;
+			display: grid;
+			height: 100%;
+			width: 100%;
+			grid-template-columns: auto;
+			grid-template-rows: min-content auto;
+			grid-template-areas:
             "title"
             "content";
 
-            & h4 {
-                grid-area: title;
-                place-self: center;
-            }
+			& h4 {
+				grid-area: title;
+				place-self: center;
+			}
 
-            & .body {
-                grid-area: content;
-                place-self: start center;
-            }
+			& .body {
+				grid-area: content;
+				place-self: start center;
+			}
 
-        }
+		}
 
-    }
+	}
 
-    .inner-overlay {
-        background-color: var(--c-g-scale-t1a);
-        display: grid;
-        z-index: 10;
-    }
-    
-    @media (min-height: 803px) {
-        .inner-overlay {
-            border-radius: var(--n-m);
-            padding: var(--n-l);
-        }
-    }
-    
-    @media (max-height: 802px) {
-        .inner-overlay {
-            padding-top: var(--n-m);
-            border-radius: 0;
-            width: 100%;
-        }
-    }
+	.inner-overlay {
+		background-color: var(--c-g-scale-t1a);
+		display: grid;
+		z-index: 10;
+	}
 
-    .scroller {
-        display: grid;
-        grid-template-columns: min-content auto min-content;
-        grid-template-rows: auto;
+	@media (min-height: 803px) {
+		.inner-overlay {
+			border-radius: var(--n-m);
+			padding: var(--n-l);
+		}
+	}
+
+	@media (max-height: 802px) {
+		.inner-overlay {
+			padding-top: var(--n-m);
+			border-radius: 0;
+			width: 100%;
+		}
+	}
+
+	.scroller {
+		display: grid;
+		grid-template-columns: min-content auto min-content;
+		grid-template-rows: auto;
         grid-template-areas:
         "previous cards next";
 
-        & button {
-            height: min-content;
-            place-self: center;
-        }
+		& button {
+			height: min-content;
+			place-self: center;
+			display: grid;
+			place-items: center;
+		}
 
-        & .previous {
-            grid-area: previous;
-        }
-        & .cards {
-            grid-area: cards;
-        }
-        & .next {
-            grid-area: next;
-        }
-    }
+		& .previous {
+			grid-area: previous;
+		}
+		& .cards {
+			grid-area: cards;
+		}
+		& .next {
+			grid-area: next;
+		}
+	}
 
-    .overlay-head {
-        margin-top: var(--n-s);
-        place-self: center;
-        display: grid;
-        place-items: center;
-        grid-template-columns: auto;
-        grid-template-rows: repeat(2, auto);
-        grid-template-areas:
+	.overlay-head {
+		margin-top: var(--n-s);
+		place-self: center;
+		display: grid;
+		place-items: center;
+		grid-template-columns: auto;
+		grid-template-rows: repeat(2, auto);
+		grid-template-areas:
         "title"
         "time";
 
-        & .title {
-            grid-area: title;
-            margin: 0px;
-        }
-        
-        & .time {
-            grid-area: time;
-            margin: 0px;
-        }
-    }
+		& .title {
+			grid-area: title;
+			margin: 0px;
+		}
 
-    .close-button {
-        place-self: end;
-        width: min-content;
-    }
-    
-    @media (max-height: 802px) {
-        .close-button {
+		& .time {
+			grid-area: time;
+			margin: 0px;
+		}
+	}
+
+	.close-button {
+		place-self: end;
+		width: min-content;
+		display: grid;
+		place-items: center;
+	}
+
+	@media (max-height: 802px) {
+		.close-button {
             margin-right: var(--n-m)
-        }
-    }
+		}
+	}
 
 </style>
 
@@ -288,8 +292,8 @@
     
     <div class="scroller">
         {#if basket.events.length > 1}
-            <button onclick={previous} class="previous">
-                <span class="material-symbols-outlined"> arrow_back_ios </span>
+            <button onclick={previous} class="previous" disabled={activeIndex == 0}>
+                <span class="material-symbols-outlined"> arrow_back_ios_new </span>
             </button>
         {/if}
         <div class="cards" ontouchstart={handleSwipeStart} ontouchmove={handleSwipeMove} ontouchend={handleSwipeEnd} bind:clientWidth={cardsWidth} style="height: {cardHeight}px;">
@@ -301,7 +305,7 @@
             {/each}
         </div>
         {#if basket.events.length > 1}
-            <button onclick={next} class="next">
+            <button onclick={next} class="next" disabled={activeIndex == basket.events.length - 1}>
                 <span class="material-symbols-outlined"> arrow_forward_ios </span>
             </button>
         {/if}

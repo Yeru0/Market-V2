@@ -1,6 +1,6 @@
 :root {
     --c-highlight: #ffea00;
-      
+
     --c-default-t0: #000000;
     --c-default-t1: #ffffff;
 
@@ -22,7 +22,7 @@
     --c-g-scale-t8a: #8a8a8a;
     --c-g-scale-t90: #909090;
     --c-g-scale-t9a: #9a9a9a;
-    
+
 
     --n-xxxs: 3px;
     --n-xxs: 4px;
@@ -62,7 +62,7 @@ body {
 /* For Chrome, Safari, Edge */
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
-  -webkit-appearance: none;
+    -webkit-appearance: none;
   margin: 0; /* Important for some layouts */
 }
 
@@ -130,6 +130,9 @@ button {
         }
     }
 
+    &:not(:disabled) {
+        cursor: pointer;
+    }
 }
 
 
@@ -154,6 +157,7 @@ input[type="checkbox"] {
     height: 24px;
     display: grid;
     place-content: center;
+    cursor: pointer;
 }
 
 /* Custom checkbox */
@@ -166,11 +170,11 @@ input[type="checkbox"]::before {
     transform: scale(0);
     transition: 120ms transform ease-in-out;
     background-color: var(--c-highlight);
-  }
+}
 
-  input[type="checkbox"]:checked::before {
+input[type="checkbox"]:checked::before {
     transform: scale(1);
-  }
+}
 
 /* .form-label */
 
@@ -182,8 +186,8 @@ input[type="checkbox"]::before {
     grid-template-columns: auto;
     grid-template-rows: repeat(2, auto);
     grid-template-areas:
-    "label"
-    "field";
+        "label"
+        "field";
 }
 .form-label label {
     grid-area: label;

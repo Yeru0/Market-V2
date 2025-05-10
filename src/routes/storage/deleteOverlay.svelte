@@ -1,5 +1,6 @@
 <script lang="ts">
     import { priceListWebSocket } from "$lib/shared.svelte";
+	import { onDestroy, onMount } from "svelte";
 
     let {
             product,
@@ -35,10 +36,52 @@
         
     }
 
+    // Hide body scrollbar
+	onMount(() => {
+		document.body.classList.add('noscroll');
+    })
+	onDestroy(() => {
+		document.body.classList.remove('noscroll');
+    })
+
 </script>
 
 
-<div>
+
+<style>
+    .inner-overlay {
+        border-radius: var(--n-m);
+		padding: var(--n-l);
+        width: fit-content;
+        margin: auto;
+    }
+
+    h2 {
+        margin: 0;
+    }
+
+    .submit-buttons {
+        display: grid;
+        width: 100%;
+        grid-template-columns: repeat(2, auto);
+        grid-template-rows: auto;
+        grid-template-areas: 
+        "cancel delete";
+
+        & .cancel {
+            grid-area: cancel;
+        }
+
+        & .submit {
+            grid-area: delete;
+        }
+    }
+</style>
+
+
+
+
+<div class="inner-overlay">
 
     <h2>Termék törlése</h2>
 
@@ -48,8 +91,8 @@
         <input type="hidden" name="product-id" value={product.id}>
 
         <div class="submit-buttons">
-            <button type="submit" class="submit">Termék törlése</button>
             <button type="reset" class="cancel" onclick={() => { product.delOverlay = false }}>Mégsem</button>
+            <button type="submit" class="submit">Termék törlése</button>
         </div>
     </form>
 

@@ -141,14 +141,14 @@
     const calcPercent = (to: "org" | "part" | "b") => {
         switch (to) {
             case "org":
-                data.organiserProfitMargin = (data.organiserPrice / ((data.purchasedM / data.purchasedN) / 100)) - 100
+                data.organiserProfitMargin = Math.round((data.organiserPrice / ((data.purchasedM / data.purchasedN) / 100)) - 100)
                 break
             case "part":
-                data.participantProfitMargin = (data.participantPrice / ((data.purchasedM / data.purchasedN) / 100)) - 100
+                data.participantProfitMargin = Math.round((data.participantPrice / ((data.purchasedM / data.purchasedN) / 100)) - 100)
                 break
             case "b":
-                data.participantProfitMargin = (data.participantPrice / ((data.purchasedM / data.purchasedN) / 100)) - 100
-                data.organiserProfitMargin = (data.organiserPrice / ((data.purchasedM / data.purchasedN) / 100)) - 100
+                data.participantProfitMargin = Math.round((data.participantPrice / ((data.purchasedM / data.purchasedN) / 100)) - 100)
+                data.organiserProfitMargin = Math.round((data.organiserPrice / ((data.purchasedM / data.purchasedN) / 100)) - 100)
                 break
         }
     }

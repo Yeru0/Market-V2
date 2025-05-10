@@ -37,6 +37,27 @@
         display: grid;
         place-content: center;
     }
+
+    .head {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, auto);
+        grid-template-rows: auto;
+        grid-template-areas:
+        "title button";
+
+        & h1 {
+            grid-area: title;
+        }
+
+        & button {
+            grid-area: button;
+            width: fit-content;
+            height: fit-content;
+            justify-self: end;
+            align-self: center;
+        }
+    }
 </style>
 
 <main>
@@ -45,10 +66,11 @@
         <Toast text={toast.text} bind:show={toast.show} time={toast.time}></Toast>
     {/if}
 
-    <h1>Áruk</h1>
-
-    <div class="add">
+    
+    <div class="head">
+        <h1>Áruk</h1>
         <button onclick={() => { add = true }}>Áru hozzáadása</button>
+
         {#if add}
             <div class="overlay-background">
                 <button onclick={() => {add = false}} class="overlay-background-close" aria-label="close overlay"></button>

@@ -11,95 +11,221 @@
     
 </script>
 
+<style>
 
-<h3>{product.name}</h3>
-<div class="top-overlays">
-    <button onclick={() => { product.modOverlay = !product.modOverlay }}>Termék módosítása</button>
-    <button onclick={() => { product.delOverlay = !product.delOverlay }}>Termék törlése</button>
+    .head {
+        width: 100%;
+        display: grid;
+        padding-bottom: var(--n-l);
+        align-items: center;
+        grid-template-columns: repeat(2, auto);
+        grid-template-rows: auto;
+        grid-template-areas:
+        "title buttons";
+
+        & h3 {
+            grid-area: title;
+            margin: 0;
+        }
+
+        & .top-overlays {
+            grid-area: buttons;
+            justify-self: end;
+        }
+    }
+
+    .body {
+        border: 2px solid var(--c-default-t1);
+        border-radius: var(--n-m);
+        padding: var(--n-l);
+        margin-bottom: var(--n-xxl);
+    }
+    .top-stats {
+        display: grid;
+        place-content: space-evenly;
+        gap: var(--n-s);
+
+        & .profit {
+            grid-area: profit;
+        }
+        & .purchased {
+            grid-area: purchased;
+        }
+        & .purchased-price {
+            grid-area: purchased-price;
+        }
+        & .single-purchased-price {
+            grid-area: single-purchased-price;
+        }
+        & .stored {
+            grid-area: stored;
+        }
+        & .to {
+            grid-area: to;
+        }
+    }
+
+    @media (min-width: 760px) {
+        .top-stats {
+            grid-template-columns: repeat(3, auto);
+            grid-template-rows: repeat(2, auto);
+            grid-template-areas:
+            "profit purchased purchased-price"
+            "single-purchased-price stored to";
+        }
+    }
+    @media (min-width: 516px) and (max-width: 759px) {
+        .top-stats {
+            grid-template-columns: repeat(2, auto);
+            grid-template-rows: repeat(3, auto);
+            grid-template-areas:
+            "profit purchased"
+            "purchased-price single-purchased-price"
+            "stored to";
+        }
+    }
+
+    @media (max-width: 515px) {
+        .top-stats {
+            grid-template-columns: auto;
+            grid-template-rows: repeat(6, auto);
+            grid-template-areas:
+            "profit"
+            "purchased"
+            "purchased-price"
+            "single-purchased-price"
+            "stored"
+            "to";
+        }
+    }
+
+    .stat-card  {
+        border: 2px dashed var(--c-default-t1);
+        border-radius: var(--n-m);
+        padding: var(--n-s);
+        width: 180px;
+
+        & h4 {
+            margin: var(--n-xs) 0;
+        }
+
+        & p {
+            text-align: center;
+            color: var(--c-default-t1);
+        }
+    }
+
+    table {
+        width: auto;
+        min-width: 50%;
+        margin: auto;
+        margin-top: var(--n-l);
+    }
+
+    td, th {
+        width: fit-content;
+        padding: var(--n-xxs);
+    }
+    .side-head {
+        text-align: left;
+    }
+
+
+
+</style>
+
+<div class="body">
+    <div class="head">
+        <h3>{product.name}</h3>
+        <div class="top-overlays">
+            <button onclick={() => { product.modOverlay = !product.modOverlay }}>Termék módosítása</button>
+            <button onclick={() => { product.delOverlay = !product.delOverlay }}>Termék törlése</button>
+        </div>
+    </div>
+    
+    <div class="top-stats">
+        <div class="profit stat-card">
+            <h4>Profit</h4>
+            <p>{product.allProfitM} Ft</p>
+        </div>
+        <div class="purchased stat-card">
+            <h4>Beszerzett</h4>
+            <p>{product.purchasedN} db</p>
+        </div>
+        <div class="purchased-price stat-card">
+            <h4>Beszerzési ár</h4>
+            <p>{product.purchasePriceM} Ft</p>
+        </div>
+        <div class="single-purchased-price stat-card">
+            <h4>Beszerzési egységár</h4>
+            <p>{product.singleProductValueM} Ft</p>
+        </div>
+        <div class="stored stat-card">
+            <h4>Raktározva</h4>
+            <p>{product.allRemainingN} db</p>
+        </div>
+        <div class="to stat-card">
+            <h4>Kivett</h4>
+            <p>{product.takenOutN} db</p>
+        </div>
+    </div>
+    
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Szervező</th>
+                <th>Résztvevő</th>
+                <th>Összes</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr>
+                    <th class="side-head">Eladott</th>
+                    <td>{product.soldToOrgN} db</td>
+                    <td>{product.soldToPartN} db</td>
+                    <td>{product.allSoldN} db</td>
+                </tr>
+                <tr>
+                    <th class="side-head">Egy. ár</th>
+                    <td>{product.singleOrgPriceM} Ft</td>
+                    <td>{product.singlePartPriceM} Ft</td>
+                    <td>{product.singleProductValueM} Ft</td>
+                </tr>
+                <tr>
+                    <th class="side-head">Egy. Prof.</th>
+                    <td>{product.singleOrgProfitM} Ft</td>
+                    <td>{product.singlePartProfitM} Ft</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <th class="side-head">H. K.</th>
+                    <td>{product.organiserProfitMargin}%</td>
+                    <td>{product.participantProfitMargin}%</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <!-- Eladott áruk beszerzési értéke, eladott * egység beszerár -->
+                    <th class="side-head">ELÁBÉ</th>
+                    <td>{product.valueOfSoldProductsOrgM} Ft</td>
+                    <td>{product.valueOfSoldProductsPartM} Ft</td>
+                    <td>{product.valueOfSoldProductsM} Ft</td>
+                </tr>
+                <tr>
+                    <th class="side-head">Bevétel</th>
+                    <td>{product.allOrgIncomeM} Ft</td>
+                    <td>{product.allPartIncomeM} Ft</td>
+                    <td>{product.allIncomeM} Ft</td>
+                </tr>
+        </tbody>
+    </table>
+    
+    
+    {#if product.modOverlay}
+        <UpdateOverlay {product} bind:toast bind:products></UpdateOverlay>
+    {/if}
+    
+    {#if product.delOverlay}
+        <DeleteOverlay {product} bind:toast bind:products></DeleteOverlay>
+    {/if}
 </div>
-
-<div class="top-stats">
-    <div class="purchased stat-card">
-        <h4>Beszerzett</h4>
-        <p>{product.purchasedN}</p>
-    </div>
-    <div class="purchased-price stat-card">
-        <h4>Beszerzési ár</h4>
-        <p>{product.purchasePriceM}</p>
-    </div>
-    <div class="single-purchased-price stat-card">
-        <h4>Beszerzési egységár</h4>
-        <p>{product.singleProductValueM}</p>
-    </div>
-    <div class="stored stat-card">
-        <h4>Raktározva</h4>
-        <p>{product.allRemainingN}</p>
-    </div>
-    <div class="stored stat-card">
-        <h4>Kivett</h4>
-        <p>{product.takenOutN}</p>
-    </div>
-    <div class="profit stat-card">
-        <h4>Profit</h4>
-        <p>{product.allProfitM}</p>
-    </div>
-</div>
-
-<table>
-    <thead>
-        <tr>
-            <th></th>
-            <th>Szervező</th>
-            <th>Résztvevő</th>
-            <th>Összes</th>
-        </tr>
-    </thead>
-    <tbody>
-            <tr>
-                <th>Eladott</th>
-                <td>{product.soldToOrgN}</td>
-                <td>{product.soldToPartN}</td>
-                <td>{product.allSoldN}</td>
-            </tr>
-            <tr>
-                <th>Egységár</th>
-                <td>{product.singleOrgPriceM}</td>
-                <td>{product.singlePartPriceM}</td>
-                <td>{product.singleProductValueM}</td>
-            </tr>
-            <tr>
-                <th>Haszonkulcs</th>
-                <td>{product.organiserProfitMargin}%</td>
-                <td>{product.participantProfitMargin}%</td>
-                <td>-</td>
-            </tr>
-            <tr>
-                <th>Egységprofit</th>
-                <td>{product.singleOrgProfitM}</td>
-                <td>{product.singlePartProfitM}</td>
-                <td>-</td>
-            </tr>
-            <tr>
-                <!-- Eladott áruk beszerzési értéke, eladott * egység beszerár -->
-                <th>ELÁBÉ</th>
-                <td>{product.valueOfSoldProductsOrgM}</td>
-                <td>{product.valueOfSoldProductsPartM}</td>
-                <td>{product.valueOfSoldProductsM}</td>
-            </tr>
-            <tr>
-                <th>Bevétel</th>
-                <td>{product.allOrgIncomeM}</td>
-                <td>{product.allPartIncomeM}</td>
-                <td>{product.allIncomeM}</td>
-            </tr>
-    </tbody>
-</table>    
-
-
-{#if product.modOverlay}
-    <UpdateOverlay {product} bind:toast bind:products></UpdateOverlay>
-{/if}
-
-{#if product.delOverlay}
-    <DeleteOverlay {product} bind:toast bind:products></DeleteOverlay>
-{/if}

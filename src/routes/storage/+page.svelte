@@ -10,7 +10,7 @@
     //Render products
     let parsedProds: Product[] = [] // This is needed so I can add the inactive products to the end
     let products: Product[] = $state([])
-    let add: boolean = $state(false)
+    let add: boolean = $state(false) // Show add overlay
     let toast = $state({
         show: false,
         time: 1000,
@@ -32,6 +32,13 @@
     <title>Market: Raktár</title>
 </svelte:head>
 
+<style>
+    .overlay-background {
+        display: grid;
+        place-content: center;
+    }
+</style>
+
 <main>
 
     {#if toast.show}
@@ -43,7 +50,10 @@
     <div class="add">
         <button onclick={() => { add = true }}>Áru hozzáadása</button>
         {#if add}
-            <AddOverlay bind:products bind:toast bind:showOverlay={add}></AddOverlay>
+            <div class="overlay-background">
+                <button onclick={() => {add = false}} class="overlay-background-close" aria-label="close overlay"></button>
+                <AddOverlay bind:products bind:toast bind:showOverlay={add}></AddOverlay>
+            </div>
         {/if}
     </div>
 

@@ -33,7 +33,9 @@ A MARKET V-3-ra tekintettel jótanácsok:
 - A Type-okat célszerű külön fájlba tárolni
 - Kommentek
 - A termék árát a kosárban a kosár ára alapján számítsa, ne pedig egyesével minden egyes terméknek legyen megadva az ára.
-- Eladásnál ne csak az ár, hanem az egész sor legyen gomb
 - QuickCheckout címletezés nélkül
+- Személyreszabható árlista (Kategóriák)
+- Qr kódos Árlista?
+- Kiszállításos rendeléses dolog?
 ## Bugok
 - Az adatbázis van, hogy szar, ezért érdemes git-tel is figyelni főleg az adatbázistáblák változását

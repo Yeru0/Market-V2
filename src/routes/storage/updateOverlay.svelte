@@ -13,6 +13,8 @@
 
 
         try {
+
+
             // Send the changed product to the database
             await fetch("/api/product/update", {
                 method: "POST",

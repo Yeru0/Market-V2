@@ -12,7 +12,7 @@
 </script>
 
 
-<h2>{product.name}</h2>
+<h3>{product.name}</h3>
 <div class="top-overlays">
     <button onclick={() => { product.modOverlay = !product.modOverlay }}>Termék módosítása</button>
     <button onclick={() => { product.delOverlay = !product.delOverlay }}>Termék törlése</button>
@@ -20,27 +20,27 @@
 
 <div class="top-stats">
     <div class="purchased stat-card">
-        <h3>Beszerzett</h3>
+        <h4>Beszerzett</h4>
         <p>{product.purchasedN}</p>
     </div>
     <div class="purchased-price stat-card">
-        <h3>Beszerzési ár</h3>
+        <h4>Beszerzési ár</h4>
         <p>{product.purchasePriceM}</p>
     </div>
     <div class="single-purchased-price stat-card">
-        <h3>Beszerzési egységár</h3>
+        <h4>Beszerzési egységár</h4>
         <p>{product.singleProductValueM}</p>
     </div>
     <div class="stored stat-card">
-        <h3>Raktározva</h3>
+        <h4>Raktározva</h4>
         <p>{product.allRemainingN}</p>
     </div>
     <div class="stored stat-card">
-        <h3>Kivett</h3>
+        <h4>Kivett</h4>
         <p>{product.takenOutN}</p>
     </div>
     <div class="profit stat-card">
-        <h3>Profit</h3>
+        <h4>Profit</h4>
         <p>{product.allProfitM}</p>
     </div>
 </div>

@@ -143,11 +143,12 @@ input, textarea {
     border-radius: var(--n-xs);
     padding: var(--n-xs);
     color: var(--c-default-t1);
+    line-height: var(--n-l);
 }
 
 
-/* Hide the default value of the checkbox */
-input[type="checkbox"] {
+/* Hide the default value of the checkbox and radio */
+input[type="checkbox"], input[type="radio"] {
     -webkit-appearance: none;
     appearance: none;
     background-color: transparent;
@@ -160,19 +161,20 @@ input[type="checkbox"] {
     cursor: pointer;
 }
 
-/* Custom checkbox */
-input[type="checkbox"]::before {
+/* Custom checkbox and radio */
+input[type="checkbox"]::before, input[type="radio"]::before {
     content: "";
     aspect-ratio: 1/1;
     width: 12px;
     height: 12px;
+    display: block;
     border-radius: var(--n-xs);
     transform: scale(0);
     transition: 120ms transform ease-in-out;
     background-color: var(--c-highlight);
 }
 
-input[type="checkbox"]:checked::before {
+input[type="checkbox"]:checked::before, input[type="radio"]:checked::before {
     transform: scale(1);
 }
 
@@ -237,7 +239,7 @@ table tbody tr td.center {
 
 @media (max-height: 802px) {
     & .overlay-background {
-        overflow-y: scroll;
+        overflow-y: auto;
     }
 }
 
@@ -248,3 +250,26 @@ table tbody tr td.center {
     height: 100vh;
     position:fixed;
 }
+
+.inner-overlay {
+	background-color: var(--c-g-scale-t1a);
+	display: grid;
+	z-index: 10;
+    margin: auto;
+}
+
+@media (min-height: 803px) {
+	.inner-overlay {
+		border-radius: var(--n-m);
+		padding: var(--n-l);
+	}
+}
+
+@media (max-height: 802px) {
+	.inner-overlay {
+		padding-top: var(--n-m);
+		border-radius: 0;
+		width: 100%;
+	}
+}
+

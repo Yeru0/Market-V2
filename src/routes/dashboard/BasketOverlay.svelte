@@ -156,28 +156,6 @@
 		}
 
 	}
-
-	.inner-overlay {
-		background-color: var(--c-g-scale-t1a);
-		display: grid;
-		z-index: 10;
-	}
-
-	@media (min-height: 803px) {
-		.inner-overlay {
-			border-radius: var(--n-m);
-			padding: var(--n-l);
-		}
-	}
-
-	@media (max-height: 802px) {
-		.inner-overlay {
-			padding-top: var(--n-m);
-			border-radius: 0;
-			width: 100%;
-		}
-	}
-
 	.scroller {
 		display: grid;
 		grid-template-columns: min-content auto min-content;

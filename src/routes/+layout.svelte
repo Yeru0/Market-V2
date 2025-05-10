@@ -7,6 +7,7 @@
     import "$lib/styles/global.css"
 	import { fly } from "svelte/transition";
     import { Tween } from 'svelte/motion';
+	import { PUBLIC_WEBSOCKET_ADDRESS } from "$env/static/public";
 
 
     let scrollY: number = $state(0)
@@ -29,8 +30,8 @@
 
     
     onMount(async () => {
-        priceListStateWebSocket = new WebSocket("ws://192.168.50.81:8082/prices")
-        $priceListWebSocket.ws = new WebSocket("ws://192.168.50.81:8083/prices")
+        priceListStateWebSocket = new WebSocket(`ws://${PUBLIC_WEBSOCKET_ADDRESS}:8082/prices`)
+        $priceListWebSocket.ws = new WebSocket(`ws://${PUBLIC_WEBSOCKET_ADDRESS}:8083/prices`)
         
 
         switch (data.state) {

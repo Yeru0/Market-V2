@@ -130,7 +130,10 @@
         text-align: left;
     }
 
-
+    .overlay-background {
+        display: grid;
+        place-content: center;
+    }
 
 </style>
 
@@ -222,10 +225,16 @@
     
     
     {#if product.modOverlay}
-        <UpdateOverlay {product} bind:toast bind:products></UpdateOverlay>
+        <div class="overlay-background">
+        <button onclick={() => {product.modOverlay = false}} class="overlay-background-close" aria-label="close overlay"></button>
+            <UpdateOverlay {product} bind:toast bind:products></UpdateOverlay>
+        </div>
     {/if}
     
     {#if product.delOverlay}
-        <DeleteOverlay {product} bind:toast bind:products></DeleteOverlay>
+        <div class="overlay-background">
+        <button onclick={() => {product.delOverlay = false}} class="overlay-background-close" aria-label="close overlay"></button>
+            <DeleteOverlay {product} bind:toast bind:products></DeleteOverlay>
+        </div>
     {/if}
 </div>

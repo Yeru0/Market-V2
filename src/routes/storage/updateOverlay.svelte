@@ -2,6 +2,7 @@
 
     import { Product } from "$lib/siteObjects.svelte"
 	import { priceListWebSocket } from "$lib/shared.svelte";
+	import { onDestroy, onMount } from "svelte";
 
     let {
         product,
@@ -82,7 +83,8 @@
         participantProfitMargin: product.participantProfitMargin,
         singleOrgPriceM: product.singleOrgPriceM,
         singlePartPriceM: product.singlePartPriceM,
-        code: product.code
+        code: product.code,
+        priceInputType: "percent"
     })
 
 
@@ -116,10 +118,78 @@
         }
     }
 
+    // Hide body scrollbar
+	onMount(() => {
+		document.body.classList.add('noscroll');
+    })
+	onDestroy(() => {
+		document.body.classList.remove('noscroll');
+    })
+
 </script>
 
 
-<div>
+<!-- No, I didn't just copy this from add, don't be silly -->
+<style>
+
+    h2 {
+        margin: var(--n-m) auto;
+    }
+
+	.inner-overlay {
+		border-radius: var(--n-m);
+		padding: var(--n-l);
+        width: fit-content;
+        margin: auto;
+	}
+
+    .radio {
+        margin: 0;
+
+        display: grid;
+        place-content: center;
+        grid-template-columns: auto;
+        grid-template-rows: repeat(2, auto);
+        grid-template-areas:
+        "p"
+        "buttons";
+
+        & p {
+            grid-area: p;
+        }
+        & .buttons {
+            grid-area: buttons;
+        }
+    }
+
+    .button {
+            display: grid;
+            padding-bottom: var(--n-xxs);
+            align-items: center;
+            grid-template-columns: repeat(2, auto);
+            grid-template-rows: auto;
+            grid-template-areas: 
+            "label input";
+
+            & label {
+                grid-area: label;
+                padding-right: var(--n-xs);
+                height: min-content;
+            }
+            & input {
+                grid-area: input;
+                justify-self: end;
+            }
+    }
+
+
+</style>
+
+
+
+
+
+<div class="inner-overlay">
 
     <h2>Termék módosítása</h2>
 
@@ -129,6 +199,19 @@
         <input type="hidden" name="product-sold-to-org" id="product-sold-to-org" value="{product.soldToOrgN}">
         <input type="hidden" name="product-sold-to-part" id="product-sold-to-part" value="{product.soldToPartN}">
         <input type="hidden" name="product-taken-out" id="product-taken-out" value="{product.takenOutN}">
+
+        <div class="form-label radio">
+            <div class="buttons">
+                {#each ["percent", "value"] as type}
+                    <div class="button">
+                        <label for="{type}">
+                            {type == "percent" ? "Százalékos ár: " : "Számos ár: "}
+                        </label>
+                        <input type="radio" name="{type}" class="{type}" value={type} bind:group={data.priceInputType}>
+                    </div>
+                {/each}
+            </div>
+        </div>
 
         <div class="form-label">
             <label for="product-name" class="product-name">
@@ -151,33 +234,40 @@
             <input type="number" name="purchase-price" bind:value={data.purchasePriceM} required onchange={() => { calcPercent("b"); calcPrice("b") }}>
         </div>
 
-        <div class="form-label">
-            <label for="organiser-profit-margin" class="organiser-profit-margin">
-                Szervezői haszonkulcs
-            </label>
-            <input type="number" name="organiser-profit-margin" required bind:value={data.organiserProfitMargin} onchange={() => {calcPrice("org")}}>
-        </div>
+        {#if data.priceInputType == "percent"}
+            
+            <div class="form-label">
+                <label for="organiser-profit-margin" class="organiser-profit-margin">
+                    Szervezői haszonkulcs
+                </label>
+                <input type="number" name="organiser-profit-margin" required bind:value={data.organiserProfitMargin} onchange={() => {calcPrice("org")}}>
+            </div>
 
-        <div class="form-label">
-            <label for="organiser-price" class="organiser-price">
-                Szervezői ár
-            </label>
-            <input type="number" name="organiser-price" required bind:value={data.singleOrgPriceM} onchange={() => {calcPercent("org")}}>
-        </div>
-        
-        <div class="form-label">
-            <label for="participant-profit-margin" class="participant-profit-margin">
-                Résztvevői haszonkulcs
-            </label>
-            <input type="number" name="participant-profit-margin" required bind:value={data.participantProfitMargin} onchange={() => {calcPrice("part")}}>
-        </div>
+            <div class="form-label">
+                <label for="participant-profit-margin" class="participant-profit-margin">
+                    Résztvevői haszonkulcs
+                </label>
+                <input type="number" name="participant-profit-margin" required bind:value={data.participantProfitMargin} onchange={() => {calcPrice("part")}}>
+            </div>
 
-        <div class="form-label">
-            <label for="participant-price" class="participant-price">
-                Résztvevői ár
-            </label>
-            <input type="number" name="participant-price" required bind:value={data.singlePartPriceM} onchange={() => {calcPercent("part")}}>
-        </div>
+            
+        {:else}
+
+            <div class="form-label">
+                <label for="organiser-price" class="organiser-price">
+                    Szervezői ár
+                </label>
+                <input type="number" name="organiser-price" required bind:value={data.singleOrgPriceM} onchange={() => {calcPercent("org")}}>
+            </div>
+            
+            <div class="form-label">
+                <label for="participant-price" class="participant-price">
+                    Résztvevői ár
+                </label>
+                <input type="number" name="participant-price" required bind:value={data.singlePartPriceM} onchange={() => {calcPercent("part")}}>
+            </div>
+
+        {/if}
 
         <div class="form-label">
             <label for="barcode" class="barcode">

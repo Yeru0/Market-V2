@@ -135,9 +135,21 @@
         place-content: center;
     }
 
+    .inactive-product {
+        border-color: var(--c-g-scale-t7a);
+
+        & h4, h3, p, button {
+            color: var(--c-g-scale-t7a)
+        }
+
+        & .stat-card {
+            border-color: var(--c-g-scale-t7a);
+        }
+    }
+
 </style>
 
-<div class="body">
+<div class="body" class:inactive-product={!product.active}>
     <div class="head">
         <h3>{product.name}</h3>
         <div class="top-overlays">

@@ -50,7 +50,7 @@ main.sell {
         place-items: center;
     }
     
-    @media (min-width: 516px) {
+    @media (min-width: 677px) {
         & section.basket form div.notes {
             grid-template-columns: repeat(2, 50%);
             grid-template-rows: repeat(2, auto);
@@ -60,7 +60,7 @@ main.sell {
         }
     }
     
-    @media (max-width: 515px) {
+    @media (max-width: 676px) {
         & section.basket form div.notes {
             grid-template-columns: auto;
             grid-template-rows: repeat(3, auto);

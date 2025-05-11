@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Product } from "$lib/siteObjects.svelte";
+	import { onMount } from "svelte";
 
     let { event } = $props()
     

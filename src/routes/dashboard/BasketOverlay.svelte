@@ -95,6 +95,12 @@
 		document.body.classList.remove('noscroll');
     })
 
+
+    // Log some ids to the console so that if I need to identify a basket I can
+    onMount(() => {      
+        console.log("Basket ID: " ,basket.events[0].basketID);
+    })
+
 </script>
 
 <style>

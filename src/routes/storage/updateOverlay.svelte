@@ -279,8 +279,8 @@
 
 
         <div class="submit-buttons">
-            <button type="submit" class="submit">Termék módosítása</button>
             <button type="reset" class="cancel" onclick={() => { product.modOverlay = false }}>Mégsem</button>
+            <button type="submit" class="submit">Termék módosítása</button>
         </div>
     </form>
 

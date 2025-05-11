@@ -312,8 +312,8 @@
         </div>
 
         <div class="submit-buttons">
-            <button type="submit" class="submit">Termék hozzáadása</button>
             <button type="reset" class="cancel" onclick={() => {showOverlay = false}}>Mégsem</button>
+            <button type="submit" class="submit">Termék hozzáadása</button>
         </div>
 
     </form>

@@ -49,10 +49,12 @@
         background-color: var(--c-g-scale-t1a);
         border-radius: var(--n-m);
         padding: var(--n-m);
+        cursor: pointer;
+        width: fit-content;
 
         display: grid;
         place-items: center;
-        grid-template-columns: auto fit-content;
+        grid-template-columns:  repeat(2, fit-content);
         grid-template-rows: repeat(2, auto);
         grid-template-areas:
         "text button"
@@ -60,6 +62,7 @@
     }
 
     .toast .text {
+        min-width: max-content;
         grid-area: text;
         color: var(--c-default-t1);
         margin: 0;
@@ -99,7 +102,21 @@
 
 </style>
 
-<section class="toast">
+
+
+<svelte:window
+    onkeyup={(e) => {
+        if (e.key == "Escape") {
+            show = false
+        }
+    }}
+/>
+
+
+
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<section class="toast" onclick={() => { show=false }} aria-roledescription="toast message, that when clicked closes">
 
     <h4 class="text">{text}</h4>
 

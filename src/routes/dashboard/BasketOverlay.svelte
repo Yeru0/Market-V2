@@ -219,14 +219,16 @@
 </style>
 
 <svelte:window
-    onkeydown={(e) => {
+    onkeyup={(e) => {
         if (e.key == "ArrowRight") {
             next()
         }
         if (e.key == "ArrowLeft") {
             previous()
         }
-        
+        if (e.key == "Escape") {
+            basket.overlay = false
+        }
     }}
 />
 

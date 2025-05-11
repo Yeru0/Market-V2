@@ -216,6 +216,16 @@
 
 
 
+<svelte:window
+    onkeyup={(e) => {
+        if (e.key == "Escape") {
+            showOverlay = false
+        }
+    }}
+/>
+
+
+
 <div class="inner-overlay">
 
     <h2>Termék hozzáadása</h2>

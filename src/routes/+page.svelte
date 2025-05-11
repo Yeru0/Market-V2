@@ -226,6 +226,7 @@
     onkeyup={(e) => { 
         if (e.key == "Control") control = false
         if (e.key == "Shift") shift = false
+        if (e.key == "Escape") emptyBasket()
 }}/>
 
 <svelte:head>

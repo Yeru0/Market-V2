@@ -50,7 +50,7 @@
             grid-area: title;
         }
 
-        & button {
+        & .add {
             grid-area: button;
             width: fit-content;
             height: fit-content;
@@ -69,7 +69,7 @@
     
     <div class="head">
         <h1>Áruk</h1>
-        <button onclick={() => { add = true }}>Áru hozzáadása</button>
+        <button onclick={() => { add = true }} class="add">Áru hozzáadása</button>
 
         {#if add}
             <div class="overlay-background">

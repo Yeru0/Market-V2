@@ -110,6 +110,19 @@
     <title>Market: Irányítópult</title>
 </svelte:head>
 
+
+
+<!-- If notes input is open and escape is pressed close it -->
+<svelte:window
+    onkeyup={(e) => {
+        if (e.key == "Escape") {
+            input = false
+        }
+    }}
+/>
+
+
+
 <main class="dashboard">
 
     <h1>Irányítópult</h1>

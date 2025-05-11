@@ -82,7 +82,7 @@
                 case true:
                     toast.show = false
                     toast = {
-                            time: 1000,
+                            time: 3000,
                             text: "Szervezői árlista!",
                             show: true
                         }
@@ -90,7 +90,7 @@
                 case false:
                     toast.show = false
                     toast = {
-                            time: 1000,
+                            time: 3000,
                             text: "Résztvevői árlista!",
                             show: true
                         }
@@ -143,6 +143,7 @@
     }}
     
     onmousemove={() => {
+        //Set the body's top padding when mouse moves
         bodyNavbarPadding.target = 80
         visibleNavbar = true
         hideNavbar()

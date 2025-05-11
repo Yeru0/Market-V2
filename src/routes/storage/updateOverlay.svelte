@@ -178,6 +178,15 @@
 
 
 
+<svelte:window
+    onkeyup={(e) => {
+        if (e.key == "Escape") {
+            product.modOverlay = false
+        }
+    }}
+/>
+
+
 
 
 <div class="inner-overlay">

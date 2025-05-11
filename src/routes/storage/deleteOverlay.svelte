@@ -80,6 +80,16 @@
 
 
 
+<svelte:window
+    onkeyup={(e) => {
+        if (e.key == "Escape") {
+            product.delOverlay = false
+        }
+    }}
+/>
+
+
+
 
 <div class="inner-overlay">
 

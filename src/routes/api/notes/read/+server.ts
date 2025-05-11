@@ -1,4 +1,4 @@
-import { writeTable, readTable } from "$lib/db/db";
+import { readTable } from "$lib/db/db";
 import { Table, Record } from "$lib/db/dbObjects";
 import { json } from "@sveltejs/kit";
 

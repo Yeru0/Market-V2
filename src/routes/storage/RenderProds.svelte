@@ -205,10 +205,10 @@
                     <th class="side-head">Egy. ár</th>
                     <td>{product.singleOrgPriceM} Ft</td>
                     <td>{product.singlePartPriceM} Ft</td>
-                    <td>{product.singleProductValueM} Ft</td>
+                    <td>-</td>
                 </tr>
                 <tr>
-                    <th class="side-head">Egy. Prof.</th>
+                    <th class="side-head">Egy. prof.</th>
                     <td>{product.singleOrgProfitM} Ft</td>
                     <td>{product.singlePartProfitM} Ft</td>
                     <td>-</td>

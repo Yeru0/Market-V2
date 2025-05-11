@@ -51,6 +51,7 @@
         padding: var(--n-m);
         cursor: pointer;
         width: fit-content;
+        z-index: 100;
 
         display: grid;
         place-items: center;

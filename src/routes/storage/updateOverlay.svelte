@@ -4,6 +4,7 @@
 	import { priceListWebSocket } from "$lib/shared.svelte";
 	import { onDestroy, onMount } from "svelte";
 	import { orderStorage } from "$lib/siteMethods";
+	import Toast from "../Toast.svelte";
 
     let {
         product,
@@ -11,11 +12,43 @@
         toast = $bindable()
     } = $props()
 
+    // Toast
+    let innerToast = $state({
+        show: false,
+        time: 3000,
+        text: ""
+    })
+
     const handleSubmit = async (formData: any) => {        
 
 
         try {
 
+            if (
+                data.name === "" ||
+                data.purchasePriceM <= 0 ||
+                data.purchasedN <= 0 ||
+                data.code === ""
+            ) {
+                innerToast.text = "Az összes mezőt töltsd ki!"
+                innerToast.show = true
+                return
+            }
+            
+            if (
+                data.organiserProfitMargin <= 0
+            ) {                
+                innerToast.text = "A szervezői árnak többnek kell lennie!"
+                innerToast.show = true
+                return
+            }
+            else if (
+                data.participantProfitMargin <= 0
+            ) {                
+                innerToast.text = "A résztvevői árnak többnek kell lennie!"
+                innerToast.show = true
+                return
+            }
 
             // Send the changed product to the database
             await fetch("/api/product/update", {
@@ -52,7 +85,7 @@
 
             toast = {
                     time: 3000,
-                    text: "A termék módosítva!",
+                    text: "Termék módosítva!",
                     show: true
                 }
 
@@ -186,6 +219,10 @@
     }}
 />
 
+
+{#if innerToast.show}
+    <Toast text={innerToast.text} bind:show={innerToast.show} time={innerToast.time}></Toast>
+{/if}
 
 
 

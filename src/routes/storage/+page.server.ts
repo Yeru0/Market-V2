@@ -1,5 +1,5 @@
 import { error } from "@sveltejs/kit";
-import { readTable, writeTable } from "$lib/db/db";
+import { readTable } from "$lib/db/db";
 import { redirect, error } from "@sveltejs/kit";
 
 export const load = async ({ fetch }) => {

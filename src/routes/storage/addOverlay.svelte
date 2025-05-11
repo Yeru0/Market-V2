@@ -3,12 +3,21 @@
 	import { orderStorage } from "$lib/siteMethods";
 	import { Product } from "$lib/siteObjects.svelte";
     import { onDestroy, onMount } from "svelte";
+	import Toast from "../Toast.svelte";
 
     let {
         products = $bindable(),
         toast = $bindable(),
         showOverlay = $bindable()
     } = $props()
+
+
+    // Toast
+    let innerToast = $state({
+        show: false,
+        time: 3000,
+        text: ""
+    })
 
     let id: string = $state("")
 
@@ -57,7 +66,33 @@
 
         try {
 
-            data.barcode = data.barcode.substring(1) // Remove first character cause of code reading reasons
+            if (
+                data.name === "" ||
+                data.purchasedM <= 0 ||
+                data.purchasedN <= 0 ||
+                data.barcode === ""
+            ) {
+                innerToast.text = "Az összes mezőt töltsd ki!"
+                innerToast.show = true
+                return
+            }
+            
+            if (
+                data.organiserProfitMargin <= 0
+            ) {                
+                innerToast.text = "A szervezői árnak többnek kell lennie!"
+                innerToast.show = true
+                return
+            }
+            else if (
+                data.participantProfitMargin <= 0
+            ) {                
+                innerToast.text = "A résztvevői árnak többnek kell lennie!"
+                innerToast.show = true
+                return
+            }
+
+            data.barcode = data.barcode.substring(1) // Remove first character cause of code reading reasonss
 
             // Send the added product to the database
             await fetch("/api/product/add", {
@@ -70,16 +105,6 @@
             let form = e.target as HTMLFormElement
             if (form === null) return
             let formData = new FormData(form)
-            
-            if (
-                data.id === "" ||
-                data.name === "" ||
-                data.organiserProfitMargin <= 0 ||
-                data.participantProfitMargin <= 0 ||
-                data.purchasedM <= 0 ||
-                data.purchasedN <= 0 ||
-                data.barcode === ""
-            ) return 
             
             products.push(new Product({
                 id: id,
@@ -102,7 +127,7 @@
 
             toast = {
                 time: 3000,
-                text: "A termék létrehozva!",
+                text: "Termék létrehozva!",
                 show: true
             }
 
@@ -225,6 +250,10 @@
 />
 
 
+{#if innerToast.show}
+    <Toast text={innerToast.text} bind:show={innerToast.show} time={innerToast.time}></Toast>
+{/if}
+
 
 <div class="inner-overlay">
 
@@ -259,14 +288,14 @@
             <label for="purchased-amount" class="purchased-amount">
                 Beszerzett mennyiség
             </label>
-            <input type="number" name="purchased-amount" required bind:value={data.purchasedN} onchange={() => { calcPrice("b"); calcPercent("b") }}>
+            <input type="number" name="purchased-amount" required bind:value={data.purchasedN} onchange={() => { calcPrice("b"); calcPercent("b") }} min="1">
         </div>
 
         <div class="form-label">
             <label for="purchase-price" class="purchase-price">
                 Beszerzési ár
             </label>
-            <input type="number" name="purchase-price" required bind:value={data.purchasedM} onchange={() => { calcPercent("b"); calcPrice("b") }}>
+            <input type="number" name="purchase-price" required bind:value={data.purchasedM} onchange={() => { calcPercent("b"); calcPrice("b") }} min="1">
         </div>
 
         {#if data.priceInputType == "percent"}
@@ -275,14 +304,14 @@
                 <label for="organiser-profit-margin" class="organiser-profit-margin">
                     Szervezői haszonkulcs
                 </label>
-                <input type="number" name="organiser-profit-margin" required bind:value={data.organiserProfitMargin} onchange={() => {calcPrice("org")}}>
+                <input type="number" name="organiser-profit-margin" required bind:value={data.organiserProfitMargin} onchange={() => {calcPrice("org")}} min="1">
             </div>
 
             <div class="form-label">
                 <label for="participant-profit-margin" class="participant-profit-margin">
                     Résztvevői haszonkulcs
                 </label>
-                <input type="number" name="participant-profit-margin" required bind:value={data.participantProfitMargin} onchange={() => {calcPrice("part")}}>
+                <input type="number" name="participant-profit-margin" required bind:value={data.participantProfitMargin} onchange={() => {calcPrice("part")}} min="1">
             </div>
 
             
@@ -292,14 +321,14 @@
                 <label for="organiser-price" class="organiser-price">
                     Szervezői ár
                 </label>
-                <input type="number" name="organiser-price" required bind:value={data.organiserPrice} onchange={() => {calcPercent("org")}}>
+                <input type="number" name="organiser-price" required bind:value={data.organiserPrice} onchange={() => {calcPercent("org")}} min="1">
             </div>
             
             <div class="form-label">
                 <label for="participant-price" class="participant-price">
                     Résztvevői ár
                 </label>
-                <input type="number" name="participant-price" required bind:value={data.participantPrice} onchange={() => {calcPercent("part")}}>
+                <input type="number" name="participant-price" required bind:value={data.participantPrice} onchange={() => {calcPercent("part")}} min="1">
             </div>
 
         {/if}

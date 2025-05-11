@@ -48,6 +48,11 @@ export function writeLbL(fileName: string, linesToWrite: string[], overwrite: bo
             });
         }
 
+        if (linesToWrite.length == 0) {
+            resolve("Finished");
+            return;
+        }
+
         //I need to slow this down to avoid conflicts
         let writingToFile = setInterval(async () => {
             let line = linesToWrite[linesWritten];

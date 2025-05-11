@@ -1,5 +1,5 @@
 import { error, json } from "@sveltejs/kit";
-import { writeTable, readTable } from "$lib/db/db";
+import { readTable } from "$lib/db/db";
 import { Table } from "$lib/db/dbObjects";
 
 

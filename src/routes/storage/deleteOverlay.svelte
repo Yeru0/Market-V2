@@ -21,13 +21,13 @@
             $priceListWebSocket.ws.send(JSON.stringify({products: {...products}, id: $priceListWebSocket.id})) // Update the price list
             toast = {
                 time: 3000,
-                text: "A termék törölve!",
+                text: "Termék törölve!",
                 show: true
             }
         }).catch(() => {
             toast = {
                 time: 3000,
-                text: "A termék törlése sikertelen volt",
+                text: "A termék törlése sikertelen volt!",
                 show: true
             }
             return

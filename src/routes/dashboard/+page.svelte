@@ -4,6 +4,7 @@
     import NoteDisplayTable from "./NoteDisplayTable.svelte";
     import BasketOverlay from "./BasketOverlay.svelte"
     import "$lib/styles/dashboard.css"
+	import Toast from "../Toast.svelte";
     
     let { data } = $props()
     let noteSum: number = $state(0)
@@ -61,6 +62,14 @@
     }
 
 
+    // Toast
+    let toast = $state({
+        show: false,
+        time: 3000,
+        text: ""
+    })
+
+
     //Take care of events
 
     let events: {
@@ -74,8 +83,17 @@
             const eventsFetch = await fetch("/api/events/read");
             DBEvents = await eventsFetch.json()
         } catch (error) {
+            toast.text = "Nem sikerült az eseményeket betölteni!"
+            toast.show = true
             return
         }
+
+        if (DBEvents.length == 0) {
+            toast.text = "Még nem törnténtek eladások!"
+            toast.show = true
+            return
+        }
+
 
         interface SellEventList {
             [basketID: string]: {
@@ -123,11 +141,19 @@
 
 
 
+{#if toast.show}
+    <Toast text={toast.text} bind:show={toast.show} time={toast.time}></Toast>
+{/if}
+
+
+
 <main class="dashboard">
 
     <h1>Irányítópult</h1>
 
-    <section class="stats">
+    {#if products.length !== 0}
+
+        <section class="stats">
         <h2>Statisztika</h2>
 
         <table class="money">
@@ -196,9 +222,9 @@
                </tr>
            </tbody>
         </table>
-   </section>
+        </section>
 
-   <section class="notes">
+        <section class="notes">
         <h2>Címletek</h2>
         <p class="sum">Összesen: {noteSum} Ft</p>
         <div class="buttons">
@@ -216,46 +242,55 @@
                 <NoteDisplayTable bind:notes={notes} bind:sum={noteSum}></NoteDisplayTable>
             {/if}
         </div>
-   </section>
+        </section>
 
-   <section class="sells">
+        <section class="sells">
         <h2>Eladások</h2>
 
-        <div class="body">
-            {#if events.length !==0}
-
-            <button class="reload" onclick={renderEvents}>Eladások újratöltése</button>
+            <div class="body">
+                {#if events.length !==0}
                 
-            <div class="sell-list">
-                    {#each events as basket}
-                    <div class="sell-event">
-                        <div class="head">
-                            <h3>{basket.events[0].soldTo == "to" ? "Kivett" : basket.events[0].soldTo == "org" ? "Szervezőnek eladott" : "Résztvevőnek eladtott" } kosár <em>{basket.events[0].time}</em>-kor.</h3>
-                            <button onclick={() => { basket.overlay = !basket.overlay }}>Részletek</button>
-                        </div>
-                        <ol>
-                            {#each basket.events as event}
-                                    <li><strong>{event.productA.name}</strong></li>
-                            {/each}
-                        </ol>
-                        {#if basket.overlay}
-
-                            <div class="overlay-background">
-                                <button onclick={() => {basket.overlay = false }} class="overlay-background-close" aria-label="close overlay"></button>
-                                <BasketOverlay {basket}></BasketOverlay>
+                    <button class="reload" onclick={renderEvents}>Eladások újratöltése</button>
+                
+                    <div class="sell-list">
+                        {#each events as basket}
+                        <div class="sell-event">
+                            <div class="head">
+                                <h3>{basket.events[0].soldTo == "to" ? "Kivett" : basket.events[0].soldTo == "org" ? "Szervezőnek eladott" : "Résztvevőnek eladtott" } kosár <em>{basket.events[0].time}</em>-kor.</h3>
+                                <button onclick={() => { basket.overlay = !basket.overlay }}>Részletek</button>
                             </div>
-                        {/if}
+                            <ol>
+                                {#each basket.events as event}
+                                        <li><strong>{event.productA.name}</strong></li>
+                                {/each}
+                            </ol>
+                            {#if basket.overlay}
+                        
+                                <div class="overlay-background">
+                                    <button onclick={() => {basket.overlay = false }} class="overlay-background-close" aria-label="close overlay"></button>
+                                    <BasketOverlay {basket}></BasketOverlay>
+                                </div>
+                            {/if}
+                        </div>
+                        {/each}
                     </div>
-                    {/each}
-                </div>
-            
-            {:else}
-            
-                <button class="load" onclick={renderEvents}>Eladások betöltése</button>
-            
-            {/if}
+                
+                {:else}
+                
+                    <button class="load" onclick={renderEvents}>Eladások betöltése</button>
+                
+                {/if}
         </div>
 
-   </section>
+        </section>
+
+    {:else}
+        <section class="empty-product-list">
+            <span class="material-symbols-outlined">
+                shopping_cart_off
+            </span>
+            <h4>Nincsenek termékek raktáron</h4>
+        </section>
+    {/if}
 
 </main>

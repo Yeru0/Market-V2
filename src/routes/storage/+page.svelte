@@ -79,15 +79,20 @@
         {/if}
     </div>
 
-    {#each products as product}
-
-        <section>    
-
-            <RenderProds bind:products {product} bind:toast></RenderProds>
-        
+    {#if products.length !== 0}
+        {#each products as product}
+            <section>    
+                <RenderProds bind:products {product} bind:toast></RenderProds>
+            </section>
+        {/each}
+    {:else}
+        <section class="empty-product-list">
+            <span class="material-symbols-outlined">
+                shopping_cart_off
+            </span>
+            <h4>Nincsenek termékek raktáron</h4>
         </section>
-
-    {/each}
+    {/if}
 
 </main>
 

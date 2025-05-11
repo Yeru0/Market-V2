@@ -125,9 +125,7 @@
     hideNavbar()
 
     $effect(() => {
-        if (page.url.pathname !== "/prices") {
-            console.log("Klird");
-            
+        if (page.url.pathname !== "/prices") {           
             clearTimeout(hideNavbarTimeout)
         }
     })

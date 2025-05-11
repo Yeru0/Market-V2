@@ -273,3 +273,26 @@ table tbody tr td.center {
 	}
 }
 
+/* === Empty product list === */
+.empty-product-list {
+    margin: auto;
+    width: fit-content;
+    place-items: center;
+    gap: var(--n-s);
+
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: repeat(2, auto);
+    grid-template-areas:
+    "icon text";
+
+    & span {
+        grid-area: icon;
+    }
+
+    & h4 {
+        grid-area: text;
+        color: var(--c-g-scale-t9a);
+    }
+}
+

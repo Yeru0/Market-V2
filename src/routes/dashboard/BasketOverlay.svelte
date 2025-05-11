@@ -109,14 +109,18 @@
 	}
 
 	.notes {
-		display: grid;
+        padding-bottom: var(--n-m);
+		border-bottom: 1px solid var(--c-default-t1);
+        margin: 0 var(--n-m);
+        
+        display: grid;
 		place-items: center;
 		grid-template-columns: repeat(2, 50%);
 		grid-template-rows: auto;
         grid-template-areas:
         "notes exchange";   
 
-		& .notes {
+		& .paying-notes {
 			grid-area: notes;
 			display: grid;
 			height: 100%;
@@ -163,6 +167,7 @@
 
 	}
 	.scroller {
+        padding: var(--n-xl) 0;
 		display: grid;
 		grid-template-columns: min-content auto min-content;
 		grid-template-rows: auto;
@@ -222,6 +227,10 @@
 		}
 	}
 
+    .extra-padding {
+        padding: var(--n-xxl);
+    }
+
 </style>
 
 <svelte:window
@@ -238,7 +247,7 @@
     }}
 />
 
-<div class="inner-overlay">
+<div class="inner-overlay" class:extra-padding={basket.events.length == 1}>
     <button onclick={() => { basket.overlay = !basket.overlay }} class="close-button">
         <span class="material-symbols-outlined">
             close
@@ -258,7 +267,7 @@
     
     <div class="notes">
         {#if displayNotes}
-            <div class="notes">
+            <div class="paying-notes">
                 <h4>Fizető címletek</h4>
                 <div class="body">
                     <NoteDisplayTable notes={basket.events[0].notesP} displayO={false} bind:notAllO={displayNotes}></NoteDisplayTable>

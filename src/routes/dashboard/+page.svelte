@@ -230,7 +230,7 @@
                     {#each events as basket}
                     <div class="sell-event">
                         <div class="head">
-                            <h3>Új {basket.events[0].soldTo == "to" ? "kivett" : basket.events[0].soldTo == "org" ? "szervezőnek eladott" : "résztvevőnek eladtott" } kosár <em>{basket.events[0].time}</em>-kor!</h3>
+                            <h3>{basket.events[0].soldTo == "to" ? "Kivett" : basket.events[0].soldTo == "org" ? "Szervezőnek eladott" : "Résztvevőnek eladtott" } kosár <em>{basket.events[0].time}</em>-kor.</h3>
                             <button onclick={() => { basket.overlay = !basket.overlay }}>Részletek</button>
                         </div>
                         <ol>

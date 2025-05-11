@@ -124,6 +124,14 @@
     }
     hideNavbar()
 
+    $effect(() => {
+        if (page.url.pathname !== "/prices") {
+            console.log("Klird");
+            
+            clearTimeout(hideNavbarTimeout)
+        }
+    })
+
 </script>
 
 <svelte:window

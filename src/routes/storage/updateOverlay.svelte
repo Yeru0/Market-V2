@@ -3,6 +3,7 @@
     import { Product } from "$lib/siteObjects.svelte"
 	import { priceListWebSocket } from "$lib/shared.svelte";
 	import { onDestroy, onMount } from "svelte";
+	import { orderStorage } from "$lib/siteMethods";
 
     let {
         product,
@@ -43,17 +44,7 @@
 
             }                 
 
-
-
-            products = [...products].sort((a: Product, b: Product) => {
-                if (a.name.toUpperCase() < b.name.toUpperCase()) {                
-                    return -1;
-                } else if (a.name.toUpperCase() > b.name.toUpperCase()) {
-                    return 1;
-                } else {           
-                    return 0;
-                }
-            })
+            products = orderStorage(products)
             
             $priceListWebSocket.ws.send(JSON.stringify({products: {...products}, id: $priceListWebSocket.id})) // Update the price list
 

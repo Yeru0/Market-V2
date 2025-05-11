@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { priceListWebSocket } from "$lib/shared.svelte";
+	import { orderStorage } from "$lib/siteMethods";
 	import { Product } from "$lib/siteObjects.svelte";
     import { onDestroy, onMount } from "svelte";
 
@@ -92,17 +93,9 @@
                 purchasePriceM: formData.get("purchase-price"),
                 code: formData.get("barcode"),
             }))                    
-        
-            products = [...products].sort((a: Product, b: Product) => {
-                if (a.name.toUpperCase() < b.name.toUpperCase()) {                
-                    return -1;
-                } else if (a.name.toUpperCase() > b.name.toUpperCase()) {
-                    return 1;
-                } else {           
-                    return 0;
-                }
-            })
             
+            products = orderStorage(products)
+
             $priceListWebSocket.ws.send(JSON.stringify({products: {...products}, id: $priceListWebSocket.id})) // Update the price list
 
             showOverlay = false
@@ -120,7 +113,8 @@
                     show: true
                 }
         }
-        
+
+
     }
 
     const calcPrice = (to: "org" | "part" | "b") => {

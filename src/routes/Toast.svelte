@@ -44,8 +44,11 @@
         position: fixed;
         bottom: var(--n-m);
         left: 50%;
+        gap: var(--n-s);
         transform: translate(-50%, 0);
         background-color: var(--c-g-scale-t1a);
+        border-radius: var(--n-m);
+        padding: var(--n-m);
 
         display: grid;
         place-items: center;
@@ -54,22 +57,43 @@
         grid-template-areas:
         "text button"
         "progress progress";
+    }
 
-        & .text {
-            grid-area: text;
-            color: var(--c-default-t1);
-            font-weight: bolds;
-        }
+    .toast .text {
+        grid-area: text;
+        color: var(--c-default-t1);
+        margin: 0;
+    }
 
-        & button {
-            grid-area: button;
-            width: min-content;
-            height: min-content;
-        }
+    .toast button {
+        grid-area: button;
+        width: var(--n-l);
+        height: var(--n-l);
+        padding: 0;
+    }
 
-        & progress {
-            grid-area: progress;
-        }
+    .toast progress {
+        grid-area: progress;
+        background-color: var(--c-g-scale-t9a);
+        width: 100%;
+        height: var(--n-xs);
+        appearance: none;
+        border-radius: 9999999px;
+    }
+
+    progress::-webkit-progress-bar {
+      /* background-color: #ffea00; */
+      border-radius: 9999999px;
+    }
+  
+    progress::-webkit-progress-value {
+      background-color: #ffea00;
+      border-radius: 9999999px;
+    }
+  
+    progress::-moz-progress-bar {
+      background-color: #ffea00;
+      border-radius: 9999999px;
     }
 
 

@@ -2,6 +2,9 @@
 
     import { Product } from "$lib/siteObjects.svelte"
 	import { priceListWebSocket } from "$lib/shared.svelte";
+	import { onDestroy, onMount } from "svelte";
+	import { orderStorage } from "$lib/siteMethods";
+	import Toast from "../Toast.svelte";
 
     let {
         product,
@@ -9,10 +12,44 @@
         toast = $bindable()
     } = $props()
 
+    // Toast
+    let innerToast = $state({
+        show: false,
+        time: 3000,
+        text: ""
+    })
+
     const handleSubmit = async (formData: any) => {        
 
 
         try {
+
+            if (
+                data.name === "" ||
+                data.purchasePriceM <= 0 ||
+                data.purchasedN <= 0 ||
+                data.code === ""
+            ) {
+                innerToast.text = "Az összes mezőt töltsd ki!"
+                innerToast.show = true
+                return
+            }
+            
+            if (
+                data.organiserProfitMargin <= 0
+            ) {                
+                innerToast.text = "A szervezői árnak többnek kell lennie!"
+                innerToast.show = true
+                return
+            }
+            else if (
+                data.participantProfitMargin <= 0
+            ) {                
+                innerToast.text = "A résztvevői árnak többnek kell lennie!"
+                innerToast.show = true
+                return
+            }
+
             // Send the changed product to the database
             await fetch("/api/product/update", {
                 method: "POST",
@@ -40,17 +77,7 @@
 
             }                 
 
-
-
-            products = [...products].sort((a: Product, b: Product) => {
-                if (a.name.toUpperCase() < b.name.toUpperCase()) {                
-                    return -1;
-                } else if (a.name.toUpperCase() > b.name.toUpperCase()) {
-                    return 1;
-                } else {           
-                    return 0;
-                }
-            })
+            products = orderStorage(products)
             
             $priceListWebSocket.ws.send(JSON.stringify({products: {...products}, id: $priceListWebSocket.id})) // Update the price list
 
@@ -58,7 +85,7 @@
 
             toast = {
                     time: 3000,
-                    text: "A termék módosítva!",
+                    text: "Termék módosítva!",
                     show: true
                 }
 
@@ -80,7 +107,8 @@
         participantProfitMargin: product.participantProfitMargin,
         singleOrgPriceM: product.singleOrgPriceM,
         singlePartPriceM: product.singlePartPriceM,
-        code: product.code
+        code: product.code,
+        priceInputType: "percent"
     })
 
 
@@ -102,22 +130,103 @@
     const calcPercent = (to: "org" | "part" | "b") => {
         switch (to) {
             case "org":
-                data.organiserProfitMargin = (data.singleOrgPriceM / ((data.purchasePriceM / data.purchasedN) / 100)) - 100
+                data.organiserProfitMargin = Math.round((data.singleOrgPriceM / ((data.purchasePriceM / data.purchasedN) / 100)) - 100)
                 break
             case "part":
-                data.participantProfitMargin = (data.singlePartPriceM / ((data.purchasePriceM / data.purchasedN) / 100)) - 100
+                data.participantProfitMargin = Math.round((data.singlePartPriceM / ((data.purchasePriceM / data.purchasedN) / 100)) - 100)
                 break
             case "b":
-                data.participantProfitMargin = (data.singlePartPriceM / ((data.purchasePriceM / data.purchasedN) / 100)) - 100
-                data.organiserProfitMargin = (data.singleOrgPriceM / ((data.purchasePriceM / data.purchasedN) / 100)) - 100
+                data.participantProfitMargin = Math.round((data.singlePartPriceM / ((data.purchasePriceM / data.purchasedN) / 100)) - 100)
+                data.organiserProfitMargin = Math.round((data.singleOrgPriceM / ((data.purchasePriceM / data.purchasedN) / 100)) - 100)
                 break
         }
     }
 
+    // Hide body scrollbar
+	onMount(() => {
+		document.body.classList.add('noscroll');
+    })
+	onDestroy(() => {
+		document.body.classList.remove('noscroll');
+    })
+
 </script>
 
 
-<div>
+<!-- No, I didn't just copy this from add, don't be silly -->
+<style>
+
+    h2 {
+        margin: var(--n-m) auto;
+    }
+
+	.inner-overlay {
+		border-radius: var(--n-m);
+		padding: var(--n-l);
+        width: fit-content;
+        margin: auto;
+	}
+
+    .radio {
+        margin: 0;
+
+        display: grid;
+        place-content: center;
+        grid-template-columns: auto;
+        grid-template-rows: repeat(2, auto);
+        grid-template-areas:
+        "p"
+        "buttons";
+
+        & p {
+            grid-area: p;
+        }
+        & .buttons {
+            grid-area: buttons;
+        }
+    }
+
+    .button {
+            display: grid;
+            padding-bottom: var(--n-xxs);
+            align-items: center;
+            grid-template-columns: repeat(2, auto);
+            grid-template-rows: auto;
+            grid-template-areas: 
+            "label input";
+
+            & label {
+                grid-area: label;
+                padding-right: var(--n-xs);
+                height: min-content;
+            }
+            & input {
+                grid-area: input;
+                justify-self: end;
+            }
+    }
+
+
+</style>
+
+
+
+<svelte:window
+    onkeyup={(e) => {
+        if (e.key == "Escape") {
+            product.modOverlay = false
+        }
+    }}
+/>
+
+
+{#if innerToast.show}
+    <Toast text={innerToast.text} bind:show={innerToast.show} time={innerToast.time}></Toast>
+{/if}
+
+
+
+<div class="inner-overlay">
 
     <h2>Termék módosítása</h2>
 
@@ -127,6 +236,19 @@
         <input type="hidden" name="product-sold-to-org" id="product-sold-to-org" value="{product.soldToOrgN}">
         <input type="hidden" name="product-sold-to-part" id="product-sold-to-part" value="{product.soldToPartN}">
         <input type="hidden" name="product-taken-out" id="product-taken-out" value="{product.takenOutN}">
+
+        <div class="form-label radio">
+            <div class="buttons">
+                {#each ["percent", "value"] as type}
+                    <div class="button">
+                        <label for="{type}">
+                            {type == "percent" ? "Százalékos ár: " : "Számos ár: "}
+                        </label>
+                        <input type="radio" name="{type}" class="{type}" value={type} bind:group={data.priceInputType}>
+                    </div>
+                {/each}
+            </div>
+        </div>
 
         <div class="form-label">
             <label for="product-name" class="product-name">
@@ -149,33 +271,40 @@
             <input type="number" name="purchase-price" bind:value={data.purchasePriceM} required onchange={() => { calcPercent("b"); calcPrice("b") }}>
         </div>
 
-        <div class="form-label">
-            <label for="organiser-profit-margin" class="organiser-profit-margin">
-                Szervezői haszonkulcs
-            </label>
-            <input type="number" name="organiser-profit-margin" required bind:value={data.organiserProfitMargin} onchange={() => {calcPrice("org")}}>
-        </div>
+        {#if data.priceInputType == "percent"}
+            
+            <div class="form-label">
+                <label for="organiser-profit-margin" class="organiser-profit-margin">
+                    Szervezői haszonkulcs
+                </label>
+                <input type="number" name="organiser-profit-margin" required bind:value={data.organiserProfitMargin} onchange={() => {calcPrice("org")}}>
+            </div>
 
-        <div class="form-label">
-            <label for="organiser-price" class="organiser-price">
-                Szervezői ár
-            </label>
-            <input type="number" name="organiser-price" required bind:value={data.singleOrgPriceM} onchange={() => {calcPercent("org")}}>
-        </div>
-        
-        <div class="form-label">
-            <label for="participant-profit-margin" class="participant-profit-margin">
-                Résztvevői haszonkulcs
-            </label>
-            <input type="number" name="participant-profit-margin" required bind:value={data.participantProfitMargin} onchange={() => {calcPrice("part")}}>
-        </div>
+            <div class="form-label">
+                <label for="participant-profit-margin" class="participant-profit-margin">
+                    Résztvevői haszonkulcs
+                </label>
+                <input type="number" name="participant-profit-margin" required bind:value={data.participantProfitMargin} onchange={() => {calcPrice("part")}}>
+            </div>
 
-        <div class="form-label">
-            <label for="participant-price" class="participant-price">
-                Résztvevői ár
-            </label>
-            <input type="number" name="participant-price" required bind:value={data.singlePartPriceM} onchange={() => {calcPercent("part")}}>
-        </div>
+            
+        {:else}
+
+            <div class="form-label">
+                <label for="organiser-price" class="organiser-price">
+                    Szervezői ár
+                </label>
+                <input type="number" name="organiser-price" required bind:value={data.singleOrgPriceM} onchange={() => {calcPercent("org")}}>
+            </div>
+            
+            <div class="form-label">
+                <label for="participant-price" class="participant-price">
+                    Résztvevői ár
+                </label>
+                <input type="number" name="participant-price" required bind:value={data.singlePartPriceM} onchange={() => {calcPercent("part")}}>
+            </div>
+
+        {/if}
 
         <div class="form-label">
             <label for="barcode" class="barcode">
@@ -187,8 +316,8 @@
 
 
         <div class="submit-buttons">
-            <button type="submit" class="submit">Termék módosítása</button>
             <button type="reset" class="cancel" onclick={() => { product.modOverlay = false }}>Mégsem</button>
+            <button type="submit" class="submit">Termék módosítása</button>
         </div>
     </form>
 

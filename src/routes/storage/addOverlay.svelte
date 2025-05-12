@@ -1,13 +1,23 @@
 <script lang="ts">
 	import { priceListWebSocket } from "$lib/shared.svelte";
+	import { orderStorage } from "$lib/siteMethods";
 	import { Product } from "$lib/siteObjects.svelte";
-    import { onMount } from "svelte";
+    import { onDestroy, onMount } from "svelte";
+	import Toast from "../Toast.svelte";
 
     let {
         products = $bindable(),
         toast = $bindable(),
         showOverlay = $bindable()
     } = $props()
+
+
+    // Toast
+    let innerToast = $state({
+        show: false,
+        time: 3000,
+        text: ""
+    })
 
     let id: string = $state("")
 
@@ -21,7 +31,9 @@
         participantProfitMargin: 0,
         organiserPrice: 0,
         participantPrice: 0,
-        barcode: ""
+        barcode: "",
+        free: false,
+        priceInputType: "percent",
     })
 
     onMount(async () => {
@@ -54,6 +66,34 @@
 
         try {
 
+            if (
+                data.name === "" ||
+                data.purchasedM <= 0 ||
+                data.purchasedN <= 0 ||
+                data.barcode === ""
+            ) {
+                innerToast.text = "Az összes mezőt töltsd ki!"
+                innerToast.show = true
+                return
+            }
+            
+            if (
+                data.organiserProfitMargin <= 0
+            ) {                
+                innerToast.text = "A szervezői árnak többnek kell lennie!"
+                innerToast.show = true
+                return
+            }
+            else if (
+                data.participantProfitMargin <= 0
+            ) {                
+                innerToast.text = "A résztvevői árnak többnek kell lennie!"
+                innerToast.show = true
+                return
+            }
+
+            data.barcode = data.barcode.substring(1) // Remove first character cause of code reading reasonss
+
             // Send the added product to the database
             await fetch("/api/product/add", {
                 method: "POST",
@@ -65,16 +105,6 @@
             let form = e.target as HTMLFormElement
             if (form === null) return
             let formData = new FormData(form)
-            
-            if (
-                data.id === "" ||
-                data.name === "" ||
-                data.organiserProfitMargin <= 0 ||
-                data.participantProfitMargin <= 0 ||
-                data.purchasedM <= 0 ||
-                data.purchasedN <= 0 ||
-                data.barcode === ""
-            ) return 
             
             products.push(new Product({
                 id: id,
@@ -88,24 +118,16 @@
                 purchasePriceM: formData.get("purchase-price"),
                 code: formData.get("barcode"),
             }))                    
-        
-            products = [...products].sort((a: Product, b: Product) => {
-                if (a.name.toUpperCase() < b.name.toUpperCase()) {                
-                    return -1;
-                } else if (a.name.toUpperCase() > b.name.toUpperCase()) {
-                    return 1;
-                } else {           
-                    return 0;
-                }
-            })
             
+            products = orderStorage(products)
+
             $priceListWebSocket.ws.send(JSON.stringify({products: {...products}, id: $priceListWebSocket.id})) // Update the price list
 
             showOverlay = false
 
             toast = {
                 time: 3000,
-                text: "A termék létrehozva!",
+                text: "Termék létrehozva!",
                 show: true
             }
 
@@ -116,7 +138,8 @@
                     show: true
                 }
         }
-        
+
+
     }
 
     const calcPrice = (to: "org" | "part" | "b") => {
@@ -137,21 +160,102 @@
     const calcPercent = (to: "org" | "part" | "b") => {
         switch (to) {
             case "org":
-                data.organiserProfitMargin = (data.organiserPrice / ((data.purchasedM / data.purchasedN) / 100)) - 100
+                data.organiserProfitMargin = Math.round((data.organiserPrice / ((data.purchasedM / data.purchasedN) / 100)) - 100)
                 break
             case "part":
-                data.participantProfitMargin = (data.participantPrice / ((data.purchasedM / data.purchasedN) / 100)) - 100
+                data.participantProfitMargin = Math.round((data.participantPrice / ((data.purchasedM / data.purchasedN) / 100)) - 100)
                 break
             case "b":
-                data.participantProfitMargin = (data.participantPrice / ((data.purchasedM / data.purchasedN) / 100)) - 100
-                data.organiserProfitMargin = (data.organiserPrice / ((data.purchasedM / data.purchasedN) / 100)) - 100
+                data.participantProfitMargin = Math.round((data.participantPrice / ((data.purchasedM / data.purchasedN) / 100)) - 100)
+                data.organiserProfitMargin = Math.round((data.organiserPrice / ((data.purchasedM / data.purchasedN) / 100)) - 100)
                 break
         }
     }
 
+    // Hide body scrollbar
+	onMount(() => {
+		document.body.classList.add('noscroll');
+    })
+	onDestroy(() => {
+		document.body.classList.remove('noscroll');
+    })
+
 </script>
 
-<div>
+
+
+<style>
+
+    h2 {
+        margin: var(--n-m) auto;
+    }
+
+	.inner-overlay {
+		border-radius: var(--n-m);
+		padding: var(--n-l);
+        width: fit-content;
+        margin: auto;
+	}
+
+    .radio {
+        margin: 0;
+
+        display: grid;
+        place-content: center;
+        grid-template-columns: auto;
+        grid-template-rows: repeat(2, auto);
+        grid-template-areas:
+        "p"
+        "buttons";
+
+        & p {
+            grid-area: p;
+        }
+        & .buttons {
+            grid-area: buttons;
+        }
+    }
+
+    .button {
+            display: grid;
+            padding-bottom: var(--n-xxs);
+            align-items: center;
+            grid-template-columns: repeat(2, auto);
+            grid-template-rows: auto;
+            grid-template-areas: 
+            "label input";
+
+            & label {
+                grid-area: label;
+                padding-right: var(--n-xs);
+                height: min-content;
+            }
+            & input {
+                grid-area: input;
+                justify-self: end;
+            }
+    }
+
+
+</style>
+
+
+
+<svelte:window
+    onkeyup={(e) => {
+        if (e.key == "Escape") {
+            showOverlay = false
+        }
+    }}
+/>
+
+
+{#if innerToast.show}
+    <Toast text={innerToast.text} bind:show={innerToast.show} time={innerToast.time}></Toast>
+{/if}
+
+
+<div class="inner-overlay">
 
     <h2>Termék hozzáadása</h2>
 
@@ -159,6 +263,20 @@
 
         <input type="hidden" name="product-id" id="product-id" value="{id}">
 
+        <div class="form-label radio">
+            <div class="buttons">
+                {#each ["percent", "value"] as type}
+                    <div class="button">
+                        <label for="{type}">
+                            {type == "percent" ? "Százalékos ár: " : "Számos ár: "}
+                        </label>
+                        <input type="radio" name="{type}" class="{type}" value={type} bind:group={data.priceInputType}>
+                    </div>
+                {/each}
+            </div>
+        </div>
+            
+        
         <div class="form-label">
             <label for="product-name" class="product-name">
                 Terméknév
@@ -170,43 +288,50 @@
             <label for="purchased-amount" class="purchased-amount">
                 Beszerzett mennyiség
             </label>
-            <input type="number" name="purchased-amount" required bind:value={data.purchasedN} onchange={() => { calcPrice("b"); calcPercent("b") }}>
+            <input type="number" name="purchased-amount" required bind:value={data.purchasedN} onchange={() => { calcPrice("b"); calcPercent("b") }} min="1">
         </div>
 
         <div class="form-label">
             <label for="purchase-price" class="purchase-price">
                 Beszerzési ár
             </label>
-            <input type="number" name="purchase-price" required bind:value={data.purchasedM} onchange={() => { calcPercent("b"); calcPrice("b") }}>
+            <input type="number" name="purchase-price" required bind:value={data.purchasedM} onchange={() => { calcPercent("b"); calcPrice("b") }} min="1">
         </div>
 
-        <div class="form-label">
-            <label for="organiser-profit-margin" class="organiser-profit-margin">
-                Szervezői haszonkulcs
-            </label>
-            <input type="number" name="organiser-profit-margin" required bind:value={data.organiserProfitMargin} onchange={() => {calcPrice("org")}}>
-        </div>
+        {#if data.priceInputType == "percent"}
+            
+            <div class="form-label">
+                <label for="organiser-profit-margin" class="organiser-profit-margin">
+                    Szervezői haszonkulcs
+                </label>
+                <input type="number" name="organiser-profit-margin" required bind:value={data.organiserProfitMargin} onchange={() => {calcPrice("org")}} min="1">
+            </div>
 
-        <div class="form-label">
-            <label for="organiser-price" class="organiser-price">
-                Szervezői ár
-            </label>
-            <input type="number" name="organiser-price" required bind:value={data.organiserPrice} onchange={() => {calcPercent("org")}}>
-        </div>
-        
-        <div class="form-label">
-            <label for="participant-profit-margin" class="participant-profit-margin">
-                Résztvevői haszonkulcs
-            </label>
-            <input type="number" name="participant-profit-margin" required bind:value={data.participantProfitMargin} onchange={() => {calcPrice("part")}}>
-        </div>
+            <div class="form-label">
+                <label for="participant-profit-margin" class="participant-profit-margin">
+                    Résztvevői haszonkulcs
+                </label>
+                <input type="number" name="participant-profit-margin" required bind:value={data.participantProfitMargin} onchange={() => {calcPrice("part")}} min="1">
+            </div>
 
-        <div class="form-label">
-            <label for="participant-price" class="participant-price">
-                Résztvevői ár
-            </label>
-            <input type="number" name="participant-price" required bind:value={data.participantPrice} onchange={() => {calcPercent("part")}}>
-        </div>
+            
+        {:else}
+
+            <div class="form-label">
+                <label for="organiser-price" class="organiser-price">
+                    Szervezői ár
+                </label>
+                <input type="number" name="organiser-price" required bind:value={data.organiserPrice} onchange={() => {calcPercent("org")}} min="1">
+            </div>
+            
+            <div class="form-label">
+                <label for="participant-price" class="participant-price">
+                    Résztvevői ár
+                </label>
+                <input type="number" name="participant-price" required bind:value={data.participantPrice} onchange={() => {calcPercent("part")}} min="1">
+            </div>
+
+        {/if}
 
         <div class="form-label">
             <label for="barcode" class="barcode">
@@ -216,8 +341,8 @@
         </div>
 
         <div class="submit-buttons">
-            <button type="submit" class="submit">Termék hozzáadása</button>
             <button type="reset" class="cancel" onclick={() => {showOverlay = false}}>Mégsem</button>
+            <button type="submit" class="submit">Termék hozzáadása</button>
         </div>
 
     </form>

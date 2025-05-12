@@ -1,5 +1,6 @@
 <script lang="ts">
     import { priceListWebSocket } from "$lib/shared.svelte";
+	import { onDestroy, onMount } from "svelte";
 
     let {
             product,
@@ -20,13 +21,13 @@
             $priceListWebSocket.ws.send(JSON.stringify({products: {...products}, id: $priceListWebSocket.id})) // Update the price list
             toast = {
                 time: 3000,
-                text: "A termék törölve!",
+                text: "Termék törölve!",
                 show: true
             }
         }).catch(() => {
             toast = {
                 time: 3000,
-                text: "A termék törlése sikertelen volt",
+                text: "A termék törlése sikertelen volt!",
                 show: true
             }
             return
@@ -35,10 +36,62 @@
         
     }
 
+    // Hide body scrollbar
+	onMount(() => {
+		document.body.classList.add('noscroll');
+    })
+	onDestroy(() => {
+		document.body.classList.remove('noscroll');
+    })
+
 </script>
 
 
-<div>
+
+<style>
+    .inner-overlay {
+        border-radius: var(--n-m);
+		padding: var(--n-l);
+        width: fit-content;
+        margin: auto;
+    }
+
+    h2 {
+        margin: 0;
+    }
+
+    .submit-buttons {
+        display: grid;
+        width: 100%;
+        grid-template-columns: repeat(2, auto);
+        grid-template-rows: auto;
+        grid-template-areas: 
+        "cancel delete";
+
+        & .cancel {
+            grid-area: cancel;
+        }
+
+        & .submit {
+            grid-area: delete;
+        }
+    }
+</style>
+
+
+
+<svelte:window
+    onkeyup={(e) => {
+        if (e.key == "Escape") {
+            product.delOverlay = false
+        }
+    }}
+/>
+
+
+
+
+<div class="inner-overlay">
 
     <h2>Termék törlése</h2>
 
@@ -48,8 +101,8 @@
         <input type="hidden" name="product-id" value={product.id}>
 
         <div class="submit-buttons">
-            <button type="submit" class="submit">Termék törlése</button>
             <button type="reset" class="cancel" onclick={() => { product.delOverlay = false }}>Mégsem</button>
+            <button type="submit" class="submit">Termék törlése</button>
         </div>
     </form>
 

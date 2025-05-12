@@ -47,7 +47,17 @@
 
 <main>
     <h1>Árlista</h1>
-    <section>
-        <RenderProds {products}></RenderProds>
-    </section>
+
+    {#if products.length !== 0}
+        <section>
+            <RenderProds {products}></RenderProds>
+        </section>
+    {:else}
+        <section class="empty-product-list">
+            <span class="material-symbols-outlined">
+                shopping_cart_off
+            </span>
+            <h4>Nincsenek termékek raktáron</h4>
+        </section>
+    {/if}
 </main>

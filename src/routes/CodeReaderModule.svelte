@@ -58,7 +58,7 @@
 
 <!-- Code-reader listening -->
 <svelte:window
-    onkeydown={(e) => {     
+    onkeyup={(e) => {     
             constructCode(e).then((result) => {
                 let code = new Code(result)
                 codeS = ""

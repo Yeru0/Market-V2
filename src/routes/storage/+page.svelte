@@ -10,7 +10,7 @@
     //Render products
     let parsedProds: Product[] = [] // This is needed so I can add the inactive products to the end
     let products: Product[] = $state([])
-    let add: boolean = $state(false)
+    let add: boolean = $state(false) // Show add overlay
     let toast = $state({
         show: false,
         time: 1000,
@@ -32,30 +32,67 @@
     <title>Market: Raktár</title>
 </svelte:head>
 
+<style>
+    .overlay-background {
+        display: grid;
+        place-content: center;
+    }
+
+    .head {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, auto);
+        grid-template-rows: auto;
+        grid-template-areas:
+        "title button";
+
+        & h1 {
+            grid-area: title;
+        }
+
+        & .add {
+            grid-area: button;
+            width: fit-content;
+            height: fit-content;
+            justify-self: end;
+            align-self: center;
+        }
+    }
+</style>
+
 <main>
 
     {#if toast.show}
         <Toast text={toast.text} bind:show={toast.show} time={toast.time}></Toast>
     {/if}
 
-    <h1>Áruk</h1>
+    
+    <div class="head">
+        <h1>Áruk</h1>
+        <button onclick={() => { add = true }} class="add">Áru hozzáadása</button>
 
-    <div class="add">
-        <button onclick={() => { add = true }}>Áru hozzáadása</button>
         {#if add}
-            <AddOverlay bind:products bind:toast bind:showOverlay={add}></AddOverlay>
+            <div class="overlay-background">
+                <button onclick={() => {add = false}} class="overlay-background-close" aria-label="close overlay"></button>
+                <AddOverlay bind:products bind:toast bind:showOverlay={add}></AddOverlay>
+            </div>
         {/if}
     </div>
 
-    {#each products as product}
-
-        <section>    
-
-            <RenderProds bind:products {product} bind:toast></RenderProds>
-        
+    {#if products.length !== 0}
+        {#each products as product}
+            <section>    
+                <RenderProds bind:products {product} bind:toast></RenderProds>
+            </section>
+        {/each}
+    {:else}
+        <section class="empty-product-list">
+            <span class="material-symbols-outlined">
+                shopping_cart_off
+            </span>
+            <h4>Nincsenek termékek raktáron</h4>
         </section>
-
-    {/each}
+    {/if}
 
 </main>
 

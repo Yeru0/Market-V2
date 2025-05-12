@@ -95,6 +95,12 @@
 		document.body.classList.remove('noscroll');
     })
 
+
+    // Log some ids to the console so that if I need to identify a basket I can
+    onMount(() => {      
+        console.log("Basket ID: " ,basket.events[0].basketID);
+    })
+
 </script>
 
 <style>
@@ -103,14 +109,18 @@
 	}
 
 	.notes {
-		display: grid;
+        padding-bottom: var(--n-m);
+		border-bottom: 1px solid var(--c-default-t1);
+        margin: 0 var(--n-m);
+        
+        display: grid;
 		place-items: center;
 		grid-template-columns: repeat(2, 50%);
 		grid-template-rows: auto;
         grid-template-areas:
         "notes exchange";   
 
-		& .notes {
+		& .paying-notes {
 			grid-area: notes;
 			display: grid;
 			height: 100%;
@@ -156,29 +166,8 @@
 		}
 
 	}
-
-	.inner-overlay {
-		background-color: var(--c-g-scale-t1a);
-		display: grid;
-		z-index: 10;
-	}
-
-	@media (min-height: 803px) {
-		.inner-overlay {
-			border-radius: var(--n-m);
-			padding: var(--n-l);
-		}
-	}
-
-	@media (max-height: 802px) {
-		.inner-overlay {
-			padding-top: var(--n-m);
-			border-radius: 0;
-			width: 100%;
-		}
-	}
-
 	.scroller {
+        padding: var(--n-xl) 0;
 		display: grid;
 		grid-template-columns: min-content auto min-content;
 		grid-template-rows: auto;
@@ -238,21 +227,27 @@
 		}
 	}
 
+    .extra-padding {
+        padding: var(--n-xxl);
+    }
+
 </style>
 
 <svelte:window
-    onkeydown={(e) => {
+    onkeyup={(e) => {
         if (e.key == "ArrowRight") {
             next()
         }
         if (e.key == "ArrowLeft") {
             previous()
         }
-        
+        if (e.key == "Escape") {
+            basket.overlay = false
+        }
     }}
 />
 
-<div class="inner-overlay">
+<div class="inner-overlay" class:extra-padding={basket.events.length == 1}>
     <button onclick={() => { basket.overlay = !basket.overlay }} class="close-button">
         <span class="material-symbols-outlined">
             close
@@ -272,7 +267,7 @@
     
     <div class="notes">
         {#if displayNotes}
-            <div class="notes">
+            <div class="paying-notes">
                 <h4>Fizető címletek</h4>
                 <div class="body">
                     <NoteDisplayTable notes={basket.events[0].notesP} displayO={false} bind:notAllO={displayNotes}></NoteDisplayTable>

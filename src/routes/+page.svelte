@@ -27,9 +27,11 @@
     let products: Product[] = $state([])
     let shift: boolean = $state(false)
 
-    for (const product of data.products) {
-        // svelte-ignore state_referenced_locally
-        products.push(new Product(product))
+    if (data.products !== "Internal Error") {
+        for (const product of data.products) {
+            // svelte-ignore state_referenced_locally
+            products.push(new Product(product))
+        }
     }
     // svelte-ignore state_referenced_locally
     products = [...products].sort((a: Product, b: Product) => {
@@ -226,6 +228,7 @@
     onkeyup={(e) => { 
         if (e.key == "Control") control = false
         if (e.key == "Shift") shift = false
+        if (e.key == "Escape") emptyBasket()
 }}/>
 
 <svelte:head>
@@ -242,9 +245,18 @@
 
     <h1>Termékek</h1>
 
-    <section class="products">
-        <RenderProds {products} bind:basket {control} {shift}></RenderProds>
-    </section>
+    {#if products.length !== 0}
+        <section class="products">
+            <RenderProds {products} bind:basket {control} {shift}></RenderProds>
+        </section>
+    {:else}
+        <section class="empty-product-list">
+            <span class="material-symbols-outlined">
+                shopping_cart_off
+            </span>
+            <h4>Nincsenek termékek raktáron</h4>
+        </section>
+    {/if}
     
     {#if basket.products.length > 0}
     

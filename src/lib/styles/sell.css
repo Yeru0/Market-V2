@@ -44,14 +44,31 @@ main.sell {
     }
 
     /* Basket notes */
+
     & section.basket form div.notes {
         display: grid;
         place-items: center;
-        grid-template-columns: repeat(2, 50%);
-        grid-template-rows: auto auto;
-        grid-template-areas:
-        "paying-notes change-notes"
-        "button button";
+    }
+    
+    @media (min-width: 677px) {
+        & section.basket form div.notes {
+            grid-template-columns: repeat(2, 50%);
+            grid-template-rows: repeat(2, auto);
+            grid-template-areas:
+            "paying-notes change-notes"
+            "button button";
+        }
+    }
+    
+    @media (max-width: 676px) {
+        & section.basket form div.notes {
+            grid-template-columns: auto;
+            grid-template-rows: repeat(3, auto);
+            grid-template-areas:
+            "paying-notes"
+            "change-notes"
+            "button";
+        }
     }
 
     & section.basket form h3 {

@@ -9,7 +9,6 @@
     import { Tween } from 'svelte/motion';
 	import { PUBLIC_WEBSOCKET_ADDRESS } from "$env/static/public";
 
-
     let scrollY: number = $state(0)
 
     const { children, data } = $props()
@@ -30,6 +29,12 @@
 
     
     onMount(async () => {
+        
+        priceListWebSocket.set({
+            ws: new WebSocket(`ws://${PUBLIC_WEBSOCKET_ADDRESS}:8083/prices`),
+            id: ""
+        })
+
         priceListStateWebSocket = new WebSocket(`ws://${PUBLIC_WEBSOCKET_ADDRESS}:8082/prices`)
         $priceListWebSocket.ws = new WebSocket(`ws://${PUBLIC_WEBSOCKET_ADDRESS}:8083/prices`)
         
@@ -44,7 +49,7 @@
         }
 
         priceListStateWebSocket.onmessage = (async (event) => {
-            let data = JSON.parse(event.data)            
+            let data = JSON.parse(`${event.data}`)            
             switch(data) {
                 case "true":
                     $priceListStateSellingToOrg = true
@@ -58,8 +63,8 @@
                 }                
         })
 
-        $priceListWebSocket.ws.onmessage = (async (event) => {
-            let data = JSON.parse(event.data)
+        $priceListWebSocket.ws.onmessage = (async (event: any) => {
+            let data = JSON.parse(`${event.data}`)
             $priceListWebSocket.id = data.id           
         })
     })
@@ -82,7 +87,7 @@
                 case true:
                     toast.show = false
                     toast = {
-                            time: 1000,
+                            time: 3000,
                             text: "Szervezői árlista!",
                             show: true
                         }
@@ -90,7 +95,7 @@
                 case false:
                     toast.show = false
                     toast = {
-                            time: 1000,
+                            time: 3000,
                             text: "Résztvevői árlista!",
                             show: true
                         }
@@ -124,6 +129,12 @@
     }
     hideNavbar()
 
+    $effect(() => {
+        if (page.url.pathname !== "/prices") {           
+            clearTimeout(hideNavbarTimeout)
+        }
+    })
+
 </script>
 
 <svelte:window
@@ -143,6 +154,7 @@
     }}
     
     onmousemove={() => {
+        //Set the body's top padding when mouse moves
         bodyNavbarPadding.target = 80
         visibleNavbar = true
         hideNavbar()

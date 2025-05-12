@@ -80,7 +80,7 @@ Ha megjelent a visszajáró oszlop, akkor a visszajáró oszlop tetején megjele
 A kosár legalján van egy eladás gomb. Ez a gomb csak akkor aktív, ha a felhasználó eleget fizetett és te pontosan annyi forintot ütöttél be visszajárócímletként, ahány forint amúgy a visszajáró lenne. Ha a gomb aktív akkor rá tudsz kattintani, a kosár kiürül és megjelenik alul egy kis üzenet, ami tájékoztat minket róla, hogy sikeres volt az eladás. Ha egy adott termékből az összes el lett adva vagy ki lett véve, akkor az adott termék eltűnik az eladható termékek közül és inaktív lesz.
 ### Az irányítópult statisztikája
 Az irányítópulton a statisztika két részből áll. A bal oldalon láthatóak a pénzügyi statisztikák, a jobb oldalon pedig a raktár statisztikái
-**Pénzügyi statisztikák jelentése**
+#### Pénzügyi statisztikák jelentése
 - Szervezői bevétel: Az összes eddig szervezőnek eladott termék után kapott összes pénz.
 - Résztvevői bevétel: Az összes eddig résztvevőnek eladott termék után kapott összes pénz.
 - Összes bevétel: Az összes eddig eladott termék után kapott összes pénz.
@@ -89,7 +89,7 @@ Az irányítópulton a statisztika két részből áll. A bal oldalon láthatóa
 - Összes profit: Az eddigi összes bevétel és a beszerzési ár különbsége.
 - Beszerzési ár: Az összes termék összesített beszerzési ára.
 - ELÁBÉ: Eladott áruk beszerzési értéke. Az eddigi eladott összes termék beszerzési árának az összege. 
-**Raktárstatisztikák jelentése**
+#### Raktárstatisztikák jelentése
 - Összes termék: Az összes beszerzett termék.
 - Raktárban: A jelenleg raktárban lévő termékek.
 - Termékfajták: Hány különböző típusú termék van raktáron.
@@ -98,7 +98,7 @@ Az irányítópulton a statisztika két részből áll. A bal oldalon láthatóa
 - Kivett: Hány termék lett kivéve.
 ### Címletek kezelése az irányítópulton
 A "Címletek" című rész bal felső sarkában írja az összes jelenleg raktáron lévő címlet összegét. A jobb felső sarokban van egy "Módosítás" feliratú gomb. Az összeg illetve a gomb alatt van egy táblázat, aminek a bal oszlopa kilistázza az összes magyar forint címletet, a jobb oszlop pedig, hogy adott címletből mennyi van.
-**Módosítás**
+#### Módosítás
 A címleteket módosítani a jobb felső sarokban látható "Módosítás" feliratú gombra kattintva lehet. Ha rákattintasz, akkor a gomb átalakul két másik gombbá. A baloldalira az van írva, hogy "Mégsem", a jobboldalira az, hogy "Mentés". A "Módosítás" feliratú gomb megnyomása után továbbá megváltozik az alattuk lévő táblázat is. Most be lehet ütni a jobb oldali oszlopba, hogy melyik címletből mennyit tartson az alkalmazás nyilván. Ha mindegyikhez beütötted a megfelelő mennyiséget és el akarod menteni amit módosítottál, akkor nyomj a jobb felső sarokban található "Mentés" feliratú gombra. Ha mégsem szeretnéd megtartani a módosításokat, akkor válaszd a "Mégsem" feliratú gombot. Ha a "Mégsem" feliratú gombot nyomod meg, akkor az eredeti verzió fog visszaállni, és a változtatásaid elvesznek. Ha megnyomod az escape billentyűt, akkor azzal ugyan azt éred el, mintha a "Mégsem" feliratú gombot választod.
 ## Verziók 
 Ez jelenleg a büfés alkalmazás második iterációja.

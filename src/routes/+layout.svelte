@@ -8,8 +8,6 @@
 	import { fly } from "svelte/transition";
     import { Tween } from 'svelte/motion';
 	import { PUBLIC_WEBSOCKET_ADDRESS } from "$env/static/public";
-    import WebSocket from 'ws';
-
 
     let scrollY: number = $state(0)
 
@@ -31,6 +29,12 @@
 
     
     onMount(async () => {
+        
+        priceListWebSocket.set({
+            ws: new WebSocket(`ws://${PUBLIC_WEBSOCKET_ADDRESS}:8083/prices`),
+            id: ""
+        })
+
         priceListStateWebSocket = new WebSocket(`ws://${PUBLIC_WEBSOCKET_ADDRESS}:8082/prices`)
         $priceListWebSocket.ws = new WebSocket(`ws://${PUBLIC_WEBSOCKET_ADDRESS}:8083/prices`)
         
@@ -45,7 +49,7 @@
         }
 
         priceListStateWebSocket.onmessage = (async (event) => {
-            let data = JSON.parse(event.data)            
+            let data = JSON.parse(`${event.data}`)            
             switch(data) {
                 case "true":
                     $priceListStateSellingToOrg = true
@@ -59,8 +63,8 @@
                 }                
         })
 
-        $priceListWebSocket.ws.onmessage = (async (event) => {
-            let data = JSON.parse(event.data)
+        $priceListWebSocket.ws.onmessage = (async (event: any) => {
+            let data = JSON.parse(`${event.data}`)
             $priceListWebSocket.id = data.id           
         })
     })

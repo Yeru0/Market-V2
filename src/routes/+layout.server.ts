@@ -1,6 +1,5 @@
 import { WebSocketServer } from 'ws';
 import crypto from "node:crypto";
-import WebSocket from 'ws';
 
 //Update the price list state across all devices using WS
 const wss8082 = new WebSocketServer({ port: 8082 });

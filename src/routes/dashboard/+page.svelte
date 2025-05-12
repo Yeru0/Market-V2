@@ -42,6 +42,12 @@
             }
         }
 
+        for (const [note, amount] of Object.entries(data.notes[0] as {[key: string]: string})) {
+            if(note == "id") continue
+            // svelte-ignore state_referenced_locally
+            notes[note] = parseInt(amount);
+        }
+//TODO itt tartottál gyoker
         // Send the changed notes to the database
         await fetch("/api/notes/sell", {
             method: "PUT",
@@ -157,41 +163,41 @@
         <h2>Statisztika</h2>
 
         <table class="money">
-           <caption>Pénz</caption>
-           <tbody>
-               <tr>
-                   <td class="name">Szervezői bevétel:</td>
-                   <td class="value">{stats.orgIncome} Ft</td>
-               </tr>
-               <tr>
-                   <td class="name">Résztvevői bevétel:</td>
-                   <td class="value">{stats.partIncome} Ft</td>
+            <caption>Pénz</caption>
+            <tbody>
+                <tr>
+                    <td class="name">Szervezői bevétel:</td>
+                    <td class="value">{stats.orgIncome} Ft</td>
                 </tr>
                 <tr>
-                    <td class="name">Szervezői profit:</td>
-                    <td class="value">{stats.orgProfit} Ft</td>
+                    <td class="name">Résztvevői bevétel:</td>
+                    <td class="value">{stats.partIncome} Ft</td>
+                 </tr>
+                 <tr>
+                     <td class="name">Összes bevétel:</td>
+                     <td class="value">{stats.allIncome} Ft</td>
+                 </tr>
+                 <tr>
+                     <td class="name">Szervezői profit:</td>
+                     <td class="value">{stats.orgProfit} Ft</td>
+                 </tr>
+                <tr>
+                    <td class="name">Résztvevői profit:</td>
+                    <td class="value">{stats.partProfit} Ft</td>
                 </tr>
-               <tr>
-                   <td class="name">Résztvevői profit:</td>
-                   <td class="value">{stats.partProfit} Ft</td>
-               </tr>
-               <tr>
-                   <td class="name">Összes bevétel:</td>
-                   <td class="value">{stats.allIncome} Ft</td>
-               </tr>
-               <tr>
-                   <td class="name">Beszerzési ár:</td>
-                   <td class="value">{stats.purchasePrice} Ft</td>
-               </tr>
-               <tr>
-                   <td class="name">ELÁBÉ:</td>
-                   <td class="value">{stats.valueOfSoldProducts} Ft</td>
-               </tr>
-               <tr>
-                   <td class="name">Profit:</td>
-                   <td class="value">{stats.profit} Ft</td>
-               </tr>
-           </tbody>
+                <tr>
+                    <td class="name">Összes profit:</td>
+                    <td class="value">{stats.profit} Ft</td>
+                </tr>
+                <tr>
+                    <td class="name">Beszerzési ár:</td>
+                    <td class="value">{stats.purchasePrice} Ft</td>
+                </tr>
+                <tr>
+                    <td class="name">ELÁBÉ:</td>
+                    <td class="value">{stats.valueOfSoldProducts} Ft</td>
+                </tr>
+            </tbody>
         </table>
         <table class="storage">
             <caption>Raktár</caption>

@@ -262,7 +262,7 @@ export class Stats {
     takenOut: number = $state(0);
 
     constructor(products: Product[]) {
-        for (const product of products) {
+        for (const product of products) {           
             this.orgIncome += product.allOrgIncomeM;
             this.partIncome += product.allPartIncomeM;
             this.orgProfit += product.allOrgProfitM;
@@ -279,7 +279,6 @@ export class Stats {
             this.allSoldProducts += product.allSoldN;
             this.takenOut += product.takenOutN;
         }
-        this.profit = this.profit - this.purchasePrice;
     }
 }
 

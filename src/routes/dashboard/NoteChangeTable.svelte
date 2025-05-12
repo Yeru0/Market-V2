@@ -31,6 +31,12 @@
 
 </script>
 
+<style>
+    table, tr, td, tbody {
+        width: fit-content;
+    }
+</style>
+
 <table>
     <tbody>
         {#each notesKeys as note}

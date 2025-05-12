@@ -86,7 +86,6 @@ main.dashboard {
         & div.table {
             grid-area: table;
             display: grid;
-            width: 240px;
             place-self: center;
         }
 

@@ -8,6 +8,7 @@
 	import { fly } from "svelte/transition";
     import { Tween } from 'svelte/motion';
 	import { PUBLIC_WEBSOCKET_ADDRESS } from "$env/static/public";
+    import WebSocket from 'ws';
 
 
     let scrollY: number = $state(0)

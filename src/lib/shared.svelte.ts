@@ -1,5 +1,6 @@
 import { writable } from "svelte/store";
 import { PUBLIC_WEBSOCKET_ADDRESS } from "$env/static/public";
+import WebSocket from 'ws';
 
 export let priceListStateSellingToOrg = writable(false);
 

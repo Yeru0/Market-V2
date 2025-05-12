@@ -207,6 +207,10 @@
                    <td class="value">{stats.inStorage} db</td>
                </tr>
                <tr>
+                   <td class="name">Termékfajták:</td>
+                   <td class="value">{stats.productTypes} db</td>
+               </tr>
+               <tr>
                    <td class="name">Szervezőnek eladott:</td>
                    <td class="value">{stats.soldToOrgs} db</td>
                </tr>

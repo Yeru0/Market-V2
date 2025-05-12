@@ -260,6 +260,7 @@ export class Stats {
     soldToParts: number = $state(0);
     allSoldProducts: number = $state(0);
     takenOut: number = $state(0);
+    productTypes: number = $state(0)
 
     constructor(products: Product[]) {
         for (const product of products) {           
@@ -278,6 +279,8 @@ export class Stats {
             this.soldToParts += product.soldToPartN;
             this.allSoldProducts += product.allSoldN;
             this.takenOut += product.takenOutN;
+
+            this.productTypes++
         }
     }
 }

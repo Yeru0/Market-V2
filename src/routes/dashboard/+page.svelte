@@ -42,12 +42,8 @@
             }
         }
 
-        for (const [note, amount] of Object.entries(data.notes[0] as {[key: string]: string})) {
-            if(note == "id") continue
-            // svelte-ignore state_referenced_locally
-            notes[note] = parseInt(amount);
-        }
-//TODO itt tartottál gyoker
+        data.notes[0] = notes 
+
         // Send the changed notes to the database
         await fetch("/api/notes/sell", {
             method: "PUT",

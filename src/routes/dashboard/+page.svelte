@@ -234,12 +234,12 @@
         <h2>Címletek</h2>
         <p class="sum">Összesen: {noteSum} Ft</p>
         <div class="buttons">
-            <button class="modify" onclick={modifyNotes}>
-                {input ? "Mentés" : "Módosítás"}
-            </button>
             {#if input}
                 <button onclick={cancelNotes}>Mégsem</button>
             {/if}
+            <button class="modify" onclick={modifyNotes}>
+                {input ? "Mentés" : "Módosítás"}
+            </button>
         </div>
         <div class="table">
             {#if input}

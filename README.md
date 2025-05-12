@@ -91,9 +91,16 @@ Az irányítópulton a statisztika két részből áll. A bal oldalon láthatóa
 - ELÁBÉ: Eladott áruk beszerzési értéke. Az eddigi eladott összes termék beszerzési árának az összege. 
 **Raktárstatisztikák jelentése**
 - Összes termék: Az összes beszerzett termék.
-- A jelenleg raktárban lévő termékek
-- 
-## Verziók
+- Raktárban: A jelenleg raktárban lévő termékek.
+- Termékfajták: Hány különböző típusú termék van raktáron.
+- Szervezőnek eladott: Hány termék lett szervezőknek eladva.
+- Résztvevőnek eladott: Hány termék lett résztvevőnek eladva.
+- Kivett: Hány termék lett kivéve.
+#### Címletek kezelése az irányítópulton
+A "Címletek" című rész bal felső sarkában írja az összes jelenleg raktáron lévő címlet összegét. A jobb felső sarokban van egy "Módosítás" feliratú gomb. Az összeg illetve a gomb alatt van egy táblázat, aminek a bal oszlopa kilistázza az összes magyar forint címletet, a jobb oszlop pedig, hogy adott címletből mennyi van.
+**Módosítás**
+A címleteket módosítani a jobb felső sarokban látható "Módosítás" feliratú gombra kattintva lehet. Ha rákattintasz, akkor a gomb átalakul két másik gombbá. A baloldalira az van írva, hogy "Mégsem", a jobboldalira az, hogy "Mentés". A "Módosítás" feliratú gomb megnyomása után továbbá megváltozik az alattuk lévő táblázat is. Most be lehet ütni a jobb oldali oszlopba, hogy melyik címletből mennyit tartson az alkalmazás nyilván. Ha mindegyikhez beütötted a megfelelő mennyiséget és el akarod menteni amit módosítottál, akkor nyomj a jobb felső sarokban található "Mentés" feliratú gombra. Ha mégsem szeretnéd megtartani a módosításokat, akkor válaszd a "Mégsem" feliratú gombot. Ha a "Mégsem" feliratú gombot nyomod meg, akkor az eredeti verzió fog visszaállni, és a változtatásaid elvesznek. Ha megnyomod az escape billentyűt, akkor azzal ugyan azt éred el, mintha a "Mégsem" feliratú gombot választod.
+## Verziók 
 Ez jelenleg a büfés alkalmazás második iterációja.
 Ebben a verzióban nincs szükség internetre, mert mindent helyileg tárol az alkalmazás.
 Itt-ott lett optimalizálva egy-két dolog az előző iterációhoz képest,

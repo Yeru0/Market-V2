@@ -80,7 +80,7 @@ Ha megjelent a visszajáró oszlop, akkor a visszajáró oszlop tetején megjele
 A kosár legalján van egy eladás gomb. Ez a gomb csak akkor aktív, ha a felhasználó eleget fizetett és te pontosan annyi forintot ütöttél be visszajárócímletként, ahány forint amúgy a visszajáró lenne. Ha a gomb aktív akkor rá tudsz kattintani, a kosár kiürül és megjelenik alul egy kis üzenet, ami tájékoztat minket róla, hogy sikeres volt az eladás. Ha egy adott termékből az összes el lett adva vagy ki lett véve, akkor az adott termék eltűnik az eladható termékek közül és inaktív lesz.
 ### Az irányítópult statisztikája
 Az irányítópulton a statisztika két részből áll. A bal oldalon láthatóak a pénzügyi statisztikák, a jobb oldalon pedig a raktár statisztikái
-**Pénzügyi statisztikák jelentése**
+\n**Pénzügyi statisztikák jelentése**
 - Szervezői bevétel: Az összes eddig szervezőnek eladott termék után kapott összes pénz.
 - Résztvevői bevétel: Az összes eddig résztvevőnek eladott termék után kapott összes pénz.
 - Összes bevétel: Az összes eddig eladott termék után kapott összes pénz.

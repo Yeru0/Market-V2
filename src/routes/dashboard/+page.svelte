@@ -182,8 +182,15 @@
                     <td class="value">{stats.partProfit} Ft</td>
                 </tr>
                 <tr>
-                    <td class="name">Összes profit:</td>
-                    <td class="value">{stats.profit} Ft</td>
+                    <td class="name">Pozitív profit:</td>
+                    <td class="value">{stats.positiveProfit} Ft</td>
+                </tr>
+                <tr>
+                    <td class="name profit">Összes profit:</td>
+                    <td class="value"
+                        class:red={stats.profit < 0}
+                        class:green={stats.profit >= 0}
+                    >{stats.profit} Ft</td>
                 </tr>
                 <tr>
                     <td class="name">Beszerzési ár:</td>
@@ -254,7 +261,7 @@
         <h2>Eladások</h2>
 
             <div class="body">
-                {#if events.length !==0}
+                {#if events.length !== 0}
                 
                     <button class="reload" onclick={renderEvents}>Eladások újratöltése</button>
                 

@@ -30,6 +30,7 @@ export class Product {
     valueOfSoldProductsM: number = $state(0);
     valueOfSoldProductsOrgM: number = $state(0);
     valueOfSoldProductsPartM: number = $state(0);
+    positiveProfit: number = $state(0);
     active: boolean = $state(true);
     canAddMore: boolean = $state(true);
     modOverlay: boolean = $state(false);
@@ -71,6 +72,7 @@ export class Product {
         this.valueOfSoldProductsM = this.allSoldN * this.singleProductValueM; //ELÁBÉ
         this.valueOfSoldProductsOrgM = this.soldToOrgN * this.singleProductValueM; //ELÁBÉ
         this.valueOfSoldProductsPartM = this.soldToPartN * this.singleProductValueM; //ELÁBÉ
+        this.positiveProfit = this.allPartProfitM + this.allOrgProfitM;
         if (this.allRemainingN <= 0) {
             this.active = false;
             this.canAddMore = false;
@@ -260,10 +262,11 @@ export class Stats {
     soldToParts: number = $state(0);
     allSoldProducts: number = $state(0);
     takenOut: number = $state(0);
-    productTypes: number = $state(0)
+    productTypes: number = $state(0);
+    positiveProfit: number = $state(0);
 
     constructor(products: Product[]) {
-        for (const product of products) {           
+        for (const product of products) {
             this.orgIncome += product.allOrgIncomeM;
             this.partIncome += product.allPartIncomeM;
             this.orgProfit += product.allOrgProfitM;
@@ -279,8 +282,9 @@ export class Stats {
             this.soldToParts += product.soldToPartN;
             this.allSoldProducts += product.allSoldN;
             this.takenOut += product.takenOutN;
+            this.positiveProfit += product.positiveProfit;
 
-            this.productTypes++
+            this.productTypes++;
         }
     }
 }

@@ -86,6 +86,14 @@
                 <td class="name">Résztvevői hk.:</td>
                 <td class="value">{productB.participantProfitMargin}%</td>
             </tr>
+            <tr>
+                <td class="name">Szervezői profit.:</td>
+                <td class="value">{productB.singleOrgProfitM} Ft</td>
+            </tr>
+            <tr>
+                <td class="name">Résztvevői profit.:</td>
+                <td class="value">{productB.singlePartProfitM} Ft</td>
+            </tr>
         </tbody>
     </table>
     
@@ -127,8 +135,11 @@
                 <td class="value">{productB.allIncomeM} Ft</td>
             </tr>
             <tr>
-                <td class="name">Profit:</td>
-                <td class="value">{productB.allProfitM} Ft</td>
+                <td class="name profit">Profit:</td>
+                <td class="value"
+                    class:red={productB.allProfitM < 0}
+                    class:green={productB.allProfitM >= 0}
+                >{productB.allProfitM} Ft</td>
             </tr>
         </tbody>
     </table>
@@ -170,8 +181,11 @@
                 <td class="value">{productA.allIncomeM} Ft</td>
             </tr>
             <tr>
-                <td class="name">Profit:</td>
-                <td class="value">{productA.allProfitM} Ft</td>
+                <td class="name profit">Profit:</td>
+                <td class="value"
+                    class:red={productA.allProfitM < 0}
+                    class:green={productA.allProfitM >= 0}
+                >{productA.allProfitM} Ft</td>
             </tr>
         </tbody>
     </table>

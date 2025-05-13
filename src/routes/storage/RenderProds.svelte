@@ -161,7 +161,10 @@
     <div class="top-stats">
         <div class="profit stat-card">
             <h4>Profit</h4>
-            <p>{product.allProfitM} Ft</p>
+            <p
+                class:red={product.allProfitM < 0}
+                class:green={product.allProfitM >= 0}
+            >{product.allProfitM} Ft</p>
         </div>
         <div class="purchased stat-card">
             <h4>Beszerzett</h4>

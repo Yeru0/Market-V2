@@ -46,18 +46,20 @@ const clients8083: {
 wss8083.on("connection", ws => {
     let id = crypto.randomUUID();
     clients8083.push({ id, ws });
+    console.log("Client connected: ", id);
+    
 
     ws.send(JSON.stringify({ id }));
 
     ws.on("message", async (data) => {
+        
 
-
-
-        let value = JSON.parse(data).products;
-        let wsId = JSON.parse(data).id;
+        let value = JSON.parse(`${data}`).products;
+        let wsId = JSON.parse(`${data}`).id;
 
         clients8083.forEach(async (client) => {
             if (client.id !== wsId) {
+                console.log(value, ", sent to: ", client.id)
                 client.ws.send(JSON.stringify(value));
             }
         });
@@ -65,7 +67,7 @@ wss8083.on("connection", ws => {
 
     ws.on("close", () => {
         for (const client of clients8083) {
-            if (client.id === id) {
+            if (client.id === id) {                
                 clients8083.splice(client, 1);
             }
         }

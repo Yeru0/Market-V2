@@ -31,12 +31,11 @@
     onMount(async () => {
         
         priceListWebSocket.set({
-            ws: new WebSocket(`ws://${PUBLIC_WEBSOCKET_ADDRESS}:8083/prices`),
+            ws: new WebSocket(`ws://${PUBLIC_WEBSOCKET_ADDRESS}:8083`),
             id: ""
         })
 
-        priceListStateWebSocket = new WebSocket(`ws://${PUBLIC_WEBSOCKET_ADDRESS}:8082/prices`)
-        $priceListWebSocket.ws = new WebSocket(`ws://${PUBLIC_WEBSOCKET_ADDRESS}:8083/prices`)
+        priceListStateWebSocket = new WebSocket(`ws://${PUBLIC_WEBSOCKET_ADDRESS}:8082`)
         
 
         switch (data.state) {

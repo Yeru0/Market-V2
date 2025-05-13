@@ -3,6 +3,7 @@
     import { Product } from "$lib/siteObjects.svelte";
 	import { onMount } from "svelte";
 	import RenderProds from "./RenderProds.svelte";
+	import { PUBLIC_WEBSOCKET_ADDRESS } from "$env/static/public";
 
     let { data } = $props()
 
@@ -27,13 +28,23 @@
 
     onMount(() => {
 
+        priceListWebSocket.set({
+            ws: new WebSocket(`ws://${PUBLIC_WEBSOCKET_ADDRESS}:8083`),
+            id: ""
+        })
+
         $priceListWebSocket.ws.onmessage = ((value) => {
             let data = JSON.parse(value.data)
-            products = []
 
+            if (Object.entries(data).length !== 2) return
+            products = []
+            
+            
             for (const object in data) {
-                products.push(new Product(data[object].infoObject))
+                let prod: Product = new Product(data[object].infoObject)
+                products.push(prod)
             }
+            
         })
 
     })
@@ -50,7 +61,7 @@
 
     {#if products.length !== 0}
         <section>
-            <RenderProds {products}></RenderProds>
+            <RenderProds bind:products></RenderProds>
         </section>
     {:else}
         <section class="empty-product-list">

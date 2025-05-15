@@ -85,13 +85,13 @@
             const eventsFetch = await fetch("/api/events/read");
             DBEvents = await eventsFetch.json()
         } catch (error) {
-            toast.text = "Nem sikerült az eseményeket betölteni!"
+            toast.text = "Nem sikerült az eladásokat betölteni!"
             toast.show = true
             return
         }
 
         if (DBEvents.length == 0) {
-            toast.text = "Még nem törnténtek eladások!"
+            toast.text = "Még nem történtek eladások!"
             toast.show = true
             return
         }

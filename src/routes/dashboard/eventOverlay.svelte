@@ -49,7 +49,7 @@
 <h3>{productB.name}</h3>
 
 <ul>
-    <li>Eladás profitja: {event.profitOfSale} Ft</li>
+    <li class="profit">Eladás profitja: {event.profitOfSale} Ft</li>
     <li>Összesen beszerzett: {productB.purchasedN} db</li>
     <li>Eladott mennyiség: {productB.allRemainingN - productA.allRemainingN} db</li>
     <li>Raktárban: {productA.allRemainingN} db</li>

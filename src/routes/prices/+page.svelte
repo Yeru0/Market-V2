@@ -3,6 +3,7 @@
     import { Product } from "$lib/siteObjects.svelte";
 	import { onMount } from "svelte";
 	import RenderProds from "./RenderProds.svelte";
+	import { PUBLIC_WEBSOCKET_ADDRESS } from "$env/static/public";
 
     let { data } = $props()
 
@@ -27,17 +28,63 @@
 
     onMount(() => {
 
+        priceListWebSocket.set({
+            ws: new WebSocket(`ws://${PUBLIC_WEBSOCKET_ADDRESS}:8083`),
+            id: ""
+        })
+
         $priceListWebSocket.ws.onmessage = ((value) => {
             let data = JSON.parse(value.data)
-            products = []
 
+            if (Object.entries(data).length !== 2) return
+            let prods = []
+            
+            
             for (const object in data) {
-                products.push(new Product(data[object].infoObject))
+                let prod: Product = new Product(data[object].infoObject)
+                prods.push(prod)
             }
+
+            products = prods
+            
+            calculateCols()
         })
 
     })
 
+    // Break price list into cols
+    let col1: Product[] = $state([])
+    let col2: Product[] = $state([])
+    let col3: Product[] = $state([])
+    let col4: Product[] = $state([])
+
+    let fitInOneCol = 11 //The number of prods that can fit in a column
+
+    let colClass: string = $state("")
+
+    const calculateCols = () => {
+
+        col1 = []
+        col2 = []
+        col3 = []
+        col4 = []
+
+        for (const prod of products) {
+            if (products.indexOf(prod) <= fitInOneCol) col1.push(prod)
+            else if (products.indexOf(prod) > fitInOneCol && products.indexOf(prod) <= 2*fitInOneCol + 1) col2.push(prod)
+            else if (products.indexOf(prod) > 2*fitInOneCol && products.indexOf(prod) <= 3*fitInOneCol + 2) col3.push(prod)
+            else col4.push(prod)
+        }
+    
+        fitInOneCol = fitInOneCol + 1
+    
+        if (products.length <= fitInOneCol) colClass = "prices-col1"
+        else if (products.length <= 2 * fitInOneCol && products.length > fitInOneCol) colClass = "prices-col2"
+        else if (products.length <= 3 * fitInOneCol && products.length > 2 * fitInOneCol) colClass = "prices-col3"
+        else if (products.length > 3 * fitInOneCol) colClass = "prices-col4"
+    }
+
+    calculateCols()
 
 </script>
 
@@ -50,7 +97,7 @@
 
     {#if products.length !== 0}
         <section>
-            <RenderProds {products}></RenderProds>
+            <RenderProds {col1} {col2} {col3} {col4} {colClass}></RenderProds>
         </section>
     {:else}
         <section class="empty-product-list">

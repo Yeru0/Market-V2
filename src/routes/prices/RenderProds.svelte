@@ -1,31 +1,16 @@
 <script lang="ts">
-import { priceListStateSellingToOrg } from "$lib/shared.svelte";
+    import { priceListStateSellingToOrg } from "$lib/shared.svelte";
 	import type { Product } from "$lib/siteObjects.svelte";
 
-    let { products } = $props()
+    let { 
+        col1,
+        col2,
+        col3,
+        col4,
+        colClass
+     } = $props()
 
-    let col1: Product[] = []
-    let col2: Product[] = []
-    let col3: Product[] = []
-    let col4: Product[] = []
-
-    let fitInOneCol = 11 //The number of prods that can fit in a column
-
-    let colClass: string = $state("")
-
-    for (const prod of products) {
-        if (products.indexOf(prod) <= fitInOneCol) col1.push(prod)
-        else if (products.indexOf(prod) > fitInOneCol && products.indexOf(prod) <= 2*fitInOneCol + 1) col2.push(prod)
-        else if (products.indexOf(prod) > 2*fitInOneCol && products.indexOf(prod) <= 3*fitInOneCol + 2) col3.push(prod)
-        else col4.push(prod)
-    }
-
-    fitInOneCol = fitInOneCol + 1
-
-    if (products.length <= fitInOneCol) colClass = "prices-col1"
-    else if (products.length <= 2 * fitInOneCol && products.length > fitInOneCol) colClass = "prices-col2"
-    else if (products.length <= 3 * fitInOneCol && products.length > 2 * fitInOneCol) colClass = "prices-col3"
-    else if (products.length > 3 * fitInOneCol) colClass = "prices-col4"
+     $inspect(col1)
 
 </script>
 
@@ -111,7 +96,7 @@ import { priceListStateSellingToOrg } from "$lib/shared.svelte";
 </style>
 
 {#snippet col(column: Product[])}
-    {#each column as product (product)}
+    {#each column as product (product.id)}
 
         {#if product.active}
             <div class="row">

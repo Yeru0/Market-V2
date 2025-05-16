@@ -258,7 +258,7 @@
     </div>
     
     <ul class="data">
-        <li>Eladás összprofitja: {allProfit} Ft</li>
+        <li class="profit">Eladás összprofitja: {allProfit} Ft</li>
         <li>Eladás összbevétele: {allIncome} Ft</li>
         <li>Eladva: {basket.events[0].soldTo == "org" ? "Szervezőnek" : basket.events[0].soldTo == "part" ? "Résztvevőnek" : "Kivett"}</li>
     </ul>

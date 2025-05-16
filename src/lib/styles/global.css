@@ -296,3 +296,15 @@ table tbody tr td.center {
     }
 }
 
+/* ==== Profit ==== */
+.profit {
+    color: white !important;
+}
+
+.red {
+    color: #ff7a7a !important;
+}
+
+.green {
+    color: #7aff7a !important;
+}

@@ -42,6 +42,7 @@ Ha mindent megadtál akkor nyomj a "Termék módosítása" feliratú gombra. Ha 
 Terméket a "Raktár" oldalon (/storage) tudsz törölni. Az ABC sorrendbe rendezett listából ki kell keresned a törölni kívánt terméket. Keresni a ctrl és az f gomb egyidejű lenyomásával tudsz. Ha megvan a termék akkor a termék neve mellett jobb felül két gombot fogsz látni. Az egyik gombra "Termék törlése", a másikra a "Termék módosítása" van írva. Ha megnyomod a "Termék törlése" feliratú gombot, akkor fel ugrik egy ablak.
 Itt ki kell választanod, hogy biztosan törlöd-e a terméket. A "Termék törlése" feliratú gombra kattintva kitörlöd a terméket. Ha sikeres volt a termék törlése, akkor alul fogsz egy "Termék törölve!" feliratot látni. Ha valamiért nem sikerül létrehozni a terméket akkor egy "A termék törlése sikertelen volt!" felirat fog megjelenni.  A "Mégsem" feliratú gombra kattintva megszünteted a törlést, az ablak eltűnik és a termék nem kerül törlésre.
 ### Termékek statisztikája
+A termékek statisztikáját a "Raktár" oldalon (/storage) találod.
 A termékek statisztikája a következőket jelenti:
 - Profit: Az összes termék eladásából származó bevétel és a beszerzési ár különbsége.
 - Beszerzett: Az összes beszerzett termék.
@@ -65,7 +66,7 @@ A termékek statisztikája a következőket jelenti:
 - Összes ELÁBÉ: Eladott áruk beszerzési értéke. Az összes eddig eladott áru mennyibe kerültek, amikor megvetted.
 - Összes bevétel: Az összes eddig szervezői áron eladott termék után kapott pénz.
 ### Egyéb információ a raktár oldalról
-Ha egy termékből az összes elfogy, akkor a termék automatikusan az oldal legaljára kerülnek. Ilyenkor inaktív a termék. Az inaktív termékek elrendezése eltér a raktár oldal ABC elrendezésétől. Az inaktív termékek fordított ABC sorrendben vannak. Ez azért van így, hogy ne kelljen keresned az inaktív termékek listájának az elejét, hanem, ha letekersz az oldal aljára, akkor lentről felfele lesznek ABC sorrendben az inaktív termékek.
+A következő információk a "Raktár" oldalra (/storage) vonatkoznak. Ha egy termékből az összes elfogy, akkor a termék automatikusan az oldal legaljára kerülnek. Ilyenkor inaktív a termék. Az inaktív termékek elrendezése eltér a raktár oldal ABC elrendezésétől. Az inaktív termékek fordított ABC sorrendben vannak. Ez azért van így, hogy ne kelljen keresned az inaktív termékek listájának az elejét, hanem, ha letekersz az oldal aljára, akkor lentről felfele lesznek ABC sorrendben az inaktív termékek.
 ### Termékek kosárba helyezése
 Az "Eladás" oldalon (/) lehet termékeket eladni. Ha rákattintasz bármelyik termék nevére, az a termék belekerül a kosárba. Minden terméknet két ára van: egy szervezői és egy résztvevői. Két ár között úgy tudsz váltani, hogy a navigációs sáv jobb oldalán található "Szervezői árlista" feliratú dobozt bepipálod. Ilyenkor szervezői áron fogsz eladni, ha nincs bepipálva, akkor résztvevői áron fogsz eladni. A szervezői árlista bepipálását úgy is tudod változtatni, hogy lenyomod a shift-et és vele egyidejűleg le nyomod a space-t is, ilyenkor ha be volt pipálva akkor ki lesz pipálva, ha ki volt pipálva be lesz pipálva.  Ha a termék nevére többször kattintasz, akkor több kerül ebből a termékből a kosárba. Ha kattintás közben nyomod a shift-et akkor tudsz termékeket kivenni a kosárból. Ha kattintás közben nyomod a ctrl-t akkor az összes ilyen termék bekerül a kosárba. Ha kattintáskor nyomod a shift-et és a ctrl-t is akkor az összes eddig betett ilyen termék kikerül a kosárból. Termékeket tudsz a kosárban vonalkódolvasóval is regisztrálni. Csatlakoztasd az olvasót, szkenneld be a termék vonal vagy qr kódját és bekerül a termék a kosárba. Fontos, hogy olyan szkennert használj, amit a windows billentyűzetnek érzékel.
 ### A kosár
@@ -78,9 +79,9 @@ A "Visszajáró címlet" feliratú oszlop tartalma mind addig azt írja, hogy "A
 Ha megjelent a visszajáró oszlop, akkor a visszajáró oszlop tetején megjelenik, hogy hány forintot kell visszaadnod. Alatta megjelenik egy táblázat. A táblázat két oszlopból áll. Az egyik az összes magyar forint címletet mutatja a bal oldalon, a jobb oldalon pedig, hogy az adott címletből jelenleg hány van beütve. Itt be kell ütni, hogy a milyen címletekkel szereznél visszaadni. Ezt úgy teheted meg, hogy rákattintasz a fizettett címlet mennyiségével feliratozott gombra (Ha a vendég egy 500-assal fizetett, akkor rá kell nyomnod az "500" feliratú gombra). Ha a vendég egy fajta címletből többet használ, akkor azt úgy tudod beütni, hogy a címlet értékét jelző gombra többször rányomsz egymás után, addig, amíg a jobb oldalon látható számláló nem mutatja azt a mennyiséget, amennyi címletet adott a vendég. Ha véletlen túl sokat ütöttél be valamelyik címletből, akkor egy-egy címletet ki tudsz venni, ha a számot jelző gombra kattintasz. Ha az összeset ki szeretnéd venni egy adott címletből akkor nyomd le a ctrl-t miközben rákattintasz a mennyiséget jelző gombra. Ha a felhasználó fizetett eleget és vissza tudsz adni, akkor a program automatikusan be fogja ütni, hogy hány forintot adj vissza. Ebbe figyelembe fogja venni, hogy jelenleg neked jelenleg hány forintod van, amiből vissza tudsz adni. Ha valamiért nem tudsz visszaadni akkor az a felirat fog megjelenni a "Visszajáró címlet" feliratú oszlop tartalmaként, hogy "Nem lehet visszajárót adni!".
 #### Kosár eladása
 A kosár legalján van egy eladás gomb. Ez a gomb csak akkor aktív, ha a felhasználó eleget fizetett és te pontosan annyi forintot ütöttél be visszajárócímletként, ahány forint amúgy a visszajáró lenne. Ha a gomb aktív akkor rá tudsz kattintani, a kosár kiürül és megjelenik alul egy kis üzenet, ami tájékoztat minket róla, hogy sikeres volt az eladás. Ha egy adott termékből az összes el lett adva vagy ki lett véve, akkor az adott termék eltűnik az eladható termékek közül és inaktív lesz.
-#### Az irányítópult statisztikája
-Az irányítópulton a statisztika két részből áll. A bal oldalon láthatóak a pénzügyi statisztikák, a jobb oldalon pedig a raktár statisztikái.
-**Pénzügyi statisztikák jelentése**
+### Az irányítópult statisztikája
+Az irányítópult statisztikáját az "Irányítópult" oldalon (/dashboard) találod. Az irányítópulton a statisztika két részből áll. A bal oldalon láthatóak a pénzügyi statisztikák, a jobb oldalon pedig a raktár statisztikái
+#### Pénzügyi statisztikák jelentése
 - Szervezői bevétel: Az összes eddig szervezőnek eladott termék után kapott összes pénz.
 - Résztvevői bevétel: Az összes eddig résztvevőnek eladott termék után kapott összes pénz.
 - Összes bevétel: Az összes eddig eladott termék után kapott összes pénz.
@@ -89,11 +90,31 @@ Az irányítópulton a statisztika két részből áll. A bal oldalon láthatóa
 - Összes profit: Az eddigi összes bevétel és a beszerzési ár különbsége.
 - Beszerzési ár: Az összes termék összesített beszerzési ára.
 - ELÁBÉ: Eladott áruk beszerzési értéke. Az eddigi eladott összes termék beszerzési árának az összege. 
-**Raktárstatisztikák jelentése**
+#### Raktárstatisztikák jelentése
 - Összes termék: Az összes beszerzett termék.
-- A jelenleg raktárban lévő termékek
-- 
-## Verziók
+- Raktárban: A jelenleg raktárban lévő termékek.
+- Termékfajták: Hány különböző típusú termék van raktáron.
+- Szervezőnek eladott: Hány termék lett szervezőknek eladva.
+- Résztvevőnek eladott: Hány termék lett résztvevőnek eladva.
+- Kivett: Hány termék lett kivéve.
+### Címletek kezelése az irányítópulton
+A címleteket az "Irányítópult" oldalon (/dashboard) tudod módosítani és megtekinteni. A "Címletek" című rész bal felső sarkában írja az összes jelenleg raktáron lévő címlet összegét. A jobb felső sarokban van egy "Módosítás" feliratú gomb. Az összeg illetve a gomb alatt van egy táblázat, aminek a bal oszlopa kilistázza az összes magyar forint címletet, a jobb oszlop pedig, hogy adott címletből mennyi van.
+#### Módosítás
+A címleteket módosítani a jobb felső sarokban látható "Módosítás" feliratú gombra kattintva lehet. Ha rákattintasz, akkor a gomb átalakul két másik gombbá. A baloldalira az van írva, hogy "Mégsem", a jobboldalira az, hogy "Mentés". A "Módosítás" feliratú gomb megnyomása után továbbá megváltozik az alattuk lévő táblázat is. Most be lehet ütni a jobb oldali oszlopba, hogy melyik címletből mennyit tartson az alkalmazás nyilván. Ha mindegyikhez beütötted a megfelelő mennyiséget és el akarod menteni amit módosítottál, akkor nyomj a jobb felső sarokban található "Mentés" feliratú gombra. Ha mégsem szeretnéd megtartani a módosításokat, akkor válaszd a "Mégsem" feliratú gombot. Ha a "Mégsem" feliratú gombot nyomod meg, akkor az eredeti verzió fog visszaállni, és a változtatásaid elvesznek. Ha megnyomod az escape billentyűt, akkor azzal ugyan azt éred el, mintha a "Mégsem" feliratú gombot választod.
+### Eladások visszakeresése az irányítópulton
+Az eladásokat visszakeresni az "Irányítópult" oldalon (/dashboard) tudsz. Az "Eladások" részben, ha nincsenek betöltve az események, akkor egy "Események betöltése" feliratú gomb látható. Az eseményeket betölteni az "Események betöltése" feliratú gomb megnyomásával tudod. Ha még nem történt eladás akkor a "Még nem történtek eladások!" felirat lesz látható. Ha valamiért nem sikerült betölteni az eladásokat, akkor a "Nem sikerült az eladásokat betölteni!" felirat lesz látható. Ha történtek eladások és sikerült őket betölteni, akkor az "Eladások betöltése" feliratú gomb át fog alakulni "Eladások újratöltése" feliratú gombbá, illetve a gomb alatt meg fognak jelenni az eddig történt eladások időrendi sorrendben (legújabb legfelül). Ha nagyon sok eladás történt, előfordulhat, hogy a betöltés eltart egy darabig! Az eladások listája nem tölt újra automatikusan, ha az újabb eladásokat is szeretnéd látni, akkor kattints a lista tetején látható "Eladások újratöltése" feliratú gombra. Az eladások mutatják alapesetben a címüknél, hogy kinek lett eladva (szervező, résztvevő, kivett), hogy mikor lett eladva, illetve, hogy az adott kosárban milyen termékek voltak, ennél több információért kattints minden eladás jobb felső sarkában látható "Részletek" feliratú gombra.
+#### Az eladások részletei
+Miután rákattintottál a "Részletek" feliratú gombra, fel fog ugrani egy ablak, ahol az eladás részleteit tekintheted meg. Legfelül középen láthatod, hogy mikor lett adott kosár eladva. Még mindig a felső részen, de a jobb oldalon láthatsz egy "x" feliratú gombot. Ha erre rákattintasz akkor a részletek ablak bezáródik. Az ablakot bezárhatod az escape billentyű lenyomásával is. Ha a kijelződ elég nagy, akkor az ablak lebegő módban fog megjelenni. Ilyenkor, ha a külső, sötét, átlátszó részre kattintasz, akkor is bezár az ablak. A cím alatt három főbb statisztika látható először:
+- Eladás összprofitja: Az összes ilyenkor eladott termék eladásából származó bevétel és a beszerzési ár különbsége.
+- Eladás összbevétele: Az összes ilyenkor eladott termék után kapott pénz. Az ELÁBÉ és a Profit összege.
+- Eladva: Kinek lett eladva a kosár. (Résztvevőnek, Szervezőnek, Kivett).
+Az összefoglaló statisztikák alatt látható két táblázat: Fizető címletek és visszajárócímletek. Ha nem volt fizető címlet, akkor a "Fizető címletek" táblázat nem fog megjelenni. Ha nem volt visszajáró címlet, akkor a "Visszajáró címletek" táblázat nem fog megjelenni. Mindkét táblázatnak két oszlopa van. A bal oldali oszlop mutatja, hogy milyen címletek vettek részt a tranzakcióban. Ha egy címlet nem vett részt egy tranzakcióban, akkor az nem jelenik meg. A jobb oldali oszlop pedig mutatja, hogy melyik címletből mennyi volt használva.
+A címletezés után a termékek statisztikája jön. A termékstatisztika rész felső részén először látható a jelenleg látható termék neve. A termékek közt navigáláshoz használhatod a termékstatisztika két oldalán látható navigáló gombokat. Ugyan ezt elérheted a jobb vagy a bal nyíl billentyű lenyomásával is. A termék neve után van négy főbb statisztika:
+- Eladás profitja: A jelen látható termék eladásából származó bevétel és a beszerzési ár különbsége.
+- Összesen beszerzett: Hány lett beszerezve összesen a jelen látható termékből.
+- Eladott mennyiség: Hány lett eladva a jelen látható termékből ebben a kosárban.
+- Raktárban: A jelen látható termékből mennyi volt még a raktárban az eladás után.
+## Verziók 
 Ez jelenleg a büfés alkalmazás második iterációja.
 Ebben a verzióban nincs szükség internetre, mert mindent helyileg tárol az alkalmazás.
 Itt-ott lett optimalizálva egy-két dolog az előző iterációhoz képest,

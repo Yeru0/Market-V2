@@ -52,9 +52,8 @@ wss8083.on("connection", ws => {
     ws.on("message", async (data) => {
 
 
-
-        let value = JSON.parse(data).products;
-        let wsId = JSON.parse(data).id;
+        let value = JSON.parse(`${data}`).products;
+        let wsId = JSON.parse(`${data}`).id;
 
         clients8083.forEach(async (client) => {
             if (client.id !== wsId) {

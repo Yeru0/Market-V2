@@ -85,13 +85,13 @@
             const eventsFetch = await fetch("/api/events/read");
             DBEvents = await eventsFetch.json()
         } catch (error) {
-            toast.text = "Nem sikerült az eseményeket betölteni!"
+            toast.text = "Nem sikerült az eladásokat betölteni!"
             toast.show = true
             return
         }
 
         if (DBEvents.length == 0) {
-            toast.text = "Még nem törnténtek eladások!"
+            toast.text = "Még nem történtek eladások!"
             toast.show = true
             return
         }
@@ -182,8 +182,15 @@
                     <td class="value">{stats.partProfit} Ft</td>
                 </tr>
                 <tr>
-                    <td class="name">Összes profit:</td>
-                    <td class="value">{stats.profit} Ft</td>
+                    <td class="name">Pozitív profit:</td>
+                    <td class="value">{stats.positiveProfit} Ft</td>
+                </tr>
+                <tr>
+                    <td class="name profit">Összes profit:</td>
+                    <td class="value"
+                        class:red={stats.profit < 0}
+                        class:green={stats.profit >= 0}
+                    >{stats.profit} Ft</td>
                 </tr>
                 <tr>
                     <td class="name">Beszerzési ár:</td>
@@ -234,12 +241,12 @@
         <h2>Címletek</h2>
         <p class="sum">Összesen: {noteSum} Ft</p>
         <div class="buttons">
-            <button class="modify" onclick={modifyNotes}>
-                {input ? "Mentés" : "Módosítás"}
-            </button>
             {#if input}
                 <button onclick={cancelNotes}>Mégsem</button>
             {/if}
+            <button class="modify" onclick={modifyNotes}>
+                {input ? "Mentés" : "Módosítás"}
+            </button>
         </div>
         <div class="table">
             {#if input}
@@ -254,7 +261,7 @@
         <h2>Eladások</h2>
 
             <div class="body">
-                {#if events.length !==0}
+                {#if events.length !== 0}
                 
                     <button class="reload" onclick={renderEvents}>Eladások újratöltése</button>
                 

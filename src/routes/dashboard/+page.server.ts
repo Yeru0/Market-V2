@@ -5,7 +5,6 @@ export const load = async ({ fetch }) => {
 
     let notes: any = [];
     let products: any = [];
-    let events: any = [];
 
     try {
         //Products
@@ -22,8 +21,7 @@ export const load = async ({ fetch }) => {
 
     return {
         notes,
-        products,
-        events
+        products
     };
 
 };

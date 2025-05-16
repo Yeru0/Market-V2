@@ -286,7 +286,7 @@ table tbody tr td.center {
     grid-template-areas:
     "icon text";
 
-    & span {
+    & img {
         grid-area: icon;
     }
 

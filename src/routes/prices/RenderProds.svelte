@@ -27,9 +27,6 @@ import { priceListStateSellingToOrg } from "$lib/shared.svelte";
     else if (products.length <= 3 * fitInOneCol && products.length > 2 * fitInOneCol) colClass = "prices-col3"
     else if (products.length > 3 * fitInOneCol) colClass = "prices-col4"
 
-    console.log(products.length, "<=", 3 * fitInOneCol, "&&", products.length, ">", 2 * fitInOneCol)
-
-
 </script>
 
 <style>

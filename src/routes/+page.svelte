@@ -251,9 +251,7 @@
         </section>
     {:else}
         <section class="empty-product-list">
-            <span class="material-symbols-outlined">
-                shopping_cart_off
-            </span>
+            <img src="/icons/shopping_cart_off.svg" alt="shopping_cart_off">
             <h4>Nincsenek termékek raktáron</h4>
         </section>
     {/if}
@@ -263,7 +261,7 @@
         <section class="basket">
             <div class="header">
                 <div class="icon">
-                    <span class="material-symbols-outlined">shopping_cart</span>
+                    <img src="/icons/shopping_cart.svg" alt="shopping_cart">
                     <h2>Kosár</h2>
                 </div>
                 <button class="et" onclick={emptyBasket}>Kosár ürítése</button>
@@ -295,12 +293,12 @@
                             <p>{basket.returnSum} Ft</p>
                         {:else if !basket.enoughNotes}
                             <div class="not-enough-money">
-                                <span class="material-symbols-outlined">credit_card_off</span>
+                                <img src="/icons/credit_card_off.svg" alt="credit_card_off">
                                 <h4>A fizetett összeg még nem elég!</h4>
                             </div>
                         {:else if !basket.possibleChange}
                             <div class="no-change-possible">
-                                <span class="material-symbols-outlined">money_off</span>
+                                <img src="/icons/money_off.svg" alt="money_off">
                                 <h4>Nem lehet visszajárót adni!</h4>
                             </div>
                         {/if}

@@ -20,7 +20,7 @@ main.sell {
         flex-direction: row;
     }
 
-    & section.basket div.header div.icon span {
+    & section.basket div.header div.icon img {
         color: var(--c-highlight);
         margin-right: var(--n-xxs);
         place-self: center end;

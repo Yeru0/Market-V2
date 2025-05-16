@@ -122,9 +122,7 @@
     <h4 class="text">{text}</h4>
 
     <button onclick={() => { show = false }}>
-        <span class="material-symbols-outlined">
-            close
-        </span>
+        <img src="/icons/close.svg" alt="close">
     </button>
     
     <progress id="file" value="{progress}" max="100">{progress.toFixed(0)}</progress>

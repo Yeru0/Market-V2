@@ -249,9 +249,7 @@
 
 <div class="inner-overlay" class:extra-padding={basket.events.length == 1}>
     <button onclick={() => { basket.overlay = !basket.overlay }} class="close-button">
-        <span class="material-symbols-outlined">
-            close
-        </span>
+        <img src="/icons/close.svg" alt="close">
     </button>
     
     <div class="overlay-head">
@@ -288,7 +286,7 @@
     <div class="scroller">
         {#if basket.events.length > 1}
             <button onclick={previous} class="previous" disabled={activeIndex == 0}>
-                <span class="material-symbols-outlined"> arrow_back_ios_new </span>
+                <img src="/icons/arrow_back_ios_new.svg" alt="arrow_back_ios_new">
             </button>
         {/if}
         <div class="cards" ontouchstart={handleSwipeStart} ontouchmove={handleSwipeMove} ontouchend={handleSwipeEnd} bind:clientWidth={cardsWidth} style="height: {cardHeight}px;">
@@ -301,7 +299,7 @@
         </div>
         {#if basket.events.length > 1}
             <button onclick={next} class="next" disabled={activeIndex == basket.events.length - 1}>
-                <span class="material-symbols-outlined"> arrow_forward_ios </span>
+                <img src="/icons/arrow_forward_ios.svg" alt="arrow_forward_ios">
             </button>
         {/if}
     </div>

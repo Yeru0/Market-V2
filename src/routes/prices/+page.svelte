@@ -54,9 +54,7 @@
         </section>
     {:else}
         <section class="empty-product-list">
-            <span class="material-symbols-outlined">
-                shopping_cart_off
-            </span>
+            <img src="/icons/shopping_cart_off.svg" alt="shopping_cart_off">
             <h4>Nincsenek termékek raktáron</h4>
         </section>
     {/if}

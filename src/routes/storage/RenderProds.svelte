@@ -153,8 +153,8 @@
     <div class="head">
         <h3>{product.name}</h3>
         <div class="top-overlays">
-            <button onclick={() => { product.modOverlay = !product.modOverlay }}>Termék módosítása</button>
-            <button onclick={() => { product.delOverlay = !product.delOverlay }}>Termék törlése</button>
+            <button onclick={() => { product.modOverlay = true }}>Termék módosítása</button>
+            <button onclick={() => { product.delOverlay = true }}>Termék törlése</button>
         </div>
     </div>
     

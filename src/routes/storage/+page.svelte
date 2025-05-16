@@ -8,7 +8,6 @@
     let { data } = $props()
 
     //Render products
-    let parsedProds: Product[] = [] // This is needed so I can add the inactive products to the end
     let products: Product[] = $state([])
     let add: boolean = $state(false) // Show add overlay
     let toast = $state({
@@ -19,12 +18,10 @@
 
     for (const product of data.products) {
         // svelte-ignore state_referenced_locally
-        parsedProds.push(new Product(product))
+        products.push(new Product(product))
+        products = orderStorage(products)
     }
 
-    $effect(() => {
-        products = orderStorage(parsedProds)
-    })
 
 </script>
 

@@ -10,6 +10,8 @@
 
     const handleSubmit = async () => {
 
+        product.delOverlay = false
+
         // Remove the product from the database
         fetch("/api/product/delete", {
             method: "POST",
@@ -38,7 +40,7 @@
 
     // Hide body scrollbar
 	onMount(() => {
-		document.body.classList.add('noscroll');
+		document.body.classList.add('noscroll');       
     })
 	onDestroy(() => {
 		document.body.classList.remove('noscroll');

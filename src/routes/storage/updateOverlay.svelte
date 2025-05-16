@@ -70,13 +70,11 @@
                     prod.purchasePriceM = data.purchasePriceM,
                     prod.purchasedN = data.purchasedN,
                     prod.code = data.code
+                    prod.setProps()
                 }
-
-                prod.setProps()
-
             }                 
 
-            products = orderStorage(products)
+            products = orderStorage(products)            
             
             $priceListWebSocket.ws.send(JSON.stringify({products: {...products}, id: $priceListWebSocket.id})) // Update the price list
 
@@ -95,6 +93,7 @@
                     show: true
                 }
         }
+        
 
     }
 
@@ -139,8 +138,6 @@
                 data.organiserProfitMargin = parseFloat(((data.singleOrgPriceM / ((data.purchasePriceM / data.purchasedN) / 100)) - 100).toFixed(4))
                 break
         }
-        console.log(data.participantProfitMargin);
-        console.log(data.organiserProfitMargin);
         
     }
 

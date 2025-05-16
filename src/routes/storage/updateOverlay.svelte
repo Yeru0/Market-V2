@@ -1,6 +1,5 @@
 <script lang="ts">
 
-    import { Product } from "$lib/siteObjects.svelte"
 	import { priceListWebSocket } from "$lib/shared.svelte";
 	import { onDestroy, onMount } from "svelte";
 	import { orderStorage } from "$lib/siteMethods";
@@ -19,7 +18,7 @@
         text: ""
     })
 
-    const handleSubmit = async (formData: any) => {        
+    const handleSubmit = async () => {        
 
 
         try {
@@ -130,16 +129,19 @@
     const calcPercent = (to: "org" | "part" | "b") => {
         switch (to) {
             case "org":
-                data.organiserProfitMargin = Math.round((data.singleOrgPriceM / ((data.purchasePriceM / data.purchasedN) / 100)) - 100)
+                data.organiserProfitMargin = parseFloat(((data.singleOrgPriceM / ((data.purchasePriceM / data.purchasedN) / 100)) - 100).toFixed(4))
                 break
             case "part":
-                data.participantProfitMargin = Math.round((data.singlePartPriceM / ((data.purchasePriceM / data.purchasedN) / 100)) - 100)
+                data.participantProfitMargin = parseFloat(((data.singlePartPriceM / ((data.purchasePriceM / data.purchasedN) / 100)) - 100).toFixed(4))
                 break
             case "b":
-                data.participantProfitMargin = Math.round((data.singlePartPriceM / ((data.purchasePriceM / data.purchasedN) / 100)) - 100)
-                data.organiserProfitMargin = Math.round((data.singleOrgPriceM / ((data.purchasePriceM / data.purchasedN) / 100)) - 100)
+                data.participantProfitMargin = parseFloat(((data.singlePartPriceM / ((data.purchasePriceM / data.purchasedN) / 100)) - 100).toFixed(4))
+                data.organiserProfitMargin = parseFloat(((data.singleOrgPriceM / ((data.purchasePriceM / data.purchasedN) / 100)) - 100).toFixed(4))
                 break
         }
+        console.log(data.participantProfitMargin);
+        console.log(data.organiserProfitMargin);
+        
     }
 
     // Hide body scrollbar
@@ -277,14 +279,14 @@
                 <label for="organiser-profit-margin" class="organiser-profit-margin">
                     Szervezői haszonkulcs
                 </label>
-                <input type="number" name="organiser-profit-margin" required bind:value={data.organiserProfitMargin} onchange={() => {calcPrice("org")}}>
+                <input type="number" step="0.0001" name="organiser-profit-margin" required bind:value={data.organiserProfitMargin} onchange={() => {calcPrice("org")}}>
             </div>
 
             <div class="form-label">
                 <label for="participant-profit-margin" class="participant-profit-margin">
                     Résztvevői haszonkulcs
                 </label>
-                <input type="number" name="participant-profit-margin" required bind:value={data.participantProfitMargin} onchange={() => {calcPrice("part")}}>
+                <input type="number" step="0.0001" name="participant-profit-margin" required bind:value={data.participantProfitMargin} onchange={() => {calcPrice("part")}}>
             </div>
 
             

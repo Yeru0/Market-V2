@@ -59,9 +59,9 @@ export class Product {
         this.allSoldN = Math.round(this.soldToOrgN + this.soldToPartN);
         this.allRemainingN = Math.round(this.purchasedN - (this.allSoldN + this.takenOutN));
         this.singleProductValueM = Math.round(this.purchasePriceM / this.purchasedN);
-        this.singleOrgPriceM = Math.round(this.singleProductValueM / 100 * (100 + this.organiserProfitMargin));
+        this.singleOrgPriceM = 5 * Math.round((this.singleProductValueM / 100 * (100 + this.organiserProfitMargin)) / 5); // Rounded to the nearest five
         this.allOrgIncomeM = Math.round(this.singleOrgPriceM * this.soldToOrgN);
-        this.singlePartPriceM = Math.round(this.singleProductValueM / 100 * (100 + this.participantProfitMargin));
+        this.singlePartPriceM = 5 * Math.round((this.singleProductValueM / 100 * (100 + this.participantProfitMargin)) / 5); // Rounded to the nearest five
         this.allPartIncomeM = Math.round(this.singlePartPriceM * this.soldToPartN);
         this.allIncomeM = Math.round(this.allOrgIncomeM + this.allPartIncomeM);
         this.singleOrgProfitM = Math.round(this.singleOrgPriceM - this.singleProductValueM);

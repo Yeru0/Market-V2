@@ -160,14 +160,14 @@
     const calcPercent = (to: "org" | "part" | "b") => {
         switch (to) {
             case "org":
-                data.organiserProfitMargin = Math.round((data.organiserPrice / ((data.purchasedM / data.purchasedN) / 100)) - 100)
+                data.organiserProfitMargin = parseFloat(((data.organiserPrice / ((data.purchasedM / data.purchasedN) / 100)) - 100).toFixed(4))
                 break
             case "part":
-                data.participantProfitMargin = Math.round((data.participantPrice / ((data.purchasedM / data.purchasedN) / 100)) - 100)
+                data.participantProfitMargin = parseFloat(((data.participantPrice / ((data.purchasedM / data.purchasedN) / 100)) - 100).toFixed(4))
                 break
             case "b":
-                data.participantProfitMargin = Math.round((data.participantPrice / ((data.purchasedM / data.purchasedN) / 100)) - 100)
-                data.organiserProfitMargin = Math.round((data.organiserPrice / ((data.purchasedM / data.purchasedN) / 100)) - 100)
+                data.participantProfitMargin = parseFloat(((data.participantPrice / ((data.purchasedM / data.purchasedN) / 100)) - 100).toFixed(4))
+                data.organiserProfitMargin = parseFloat(((data.organiserPrice / ((data.purchasedM / data.purchasedN) / 100)) - 100).toFixed(4))
                 break
         }
     }
@@ -304,14 +304,14 @@
                 <label for="organiser-profit-margin" class="organiser-profit-margin">
                     Szervezői haszonkulcs
                 </label>
-                <input type="number" name="organiser-profit-margin" required bind:value={data.organiserProfitMargin} onchange={() => {calcPrice("org")}} min="1">
+                <input type="number" step="0.0001" name="organiser-profit-margin" required bind:value={data.organiserProfitMargin} onchange={() => {calcPrice("org")}} min="1">
             </div>
 
             <div class="form-label">
                 <label for="participant-profit-margin" class="participant-profit-margin">
                     Résztvevői haszonkulcs
                 </label>
-                <input type="number" name="participant-profit-margin" required bind:value={data.participantProfitMargin} onchange={() => {calcPrice("part")}} min="1">
+                <input type="number" step="0.0001" name="participant-profit-margin" required bind:value={data.participantProfitMargin} onchange={() => {calcPrice("part")}} min="1">
             </div>
 
             

@@ -142,6 +142,8 @@ A főbb statisztikák alatt vannak a változás statisztikái.
 - Résztvevői össz. bevétel: Résztvevői összes bevétel. Mennyi pénz jött be az ilyen termékek eladásából résztvevőknek.
 - Össz. bevétel: Az összes ilyen termék eladásából befolyó pénz összege eladás után.
 - Profit: Az összes ilyen termék eladásából származó bevétel és a beszerzési ár különbsége eladás után.
+### Árlista működése
+Az árlista az "Árlista" (/prices) oldalon érhető el. Ez az oldal arra való, hogy egy extra monitorra ki legyen rakva, és ez a monitor a vásárló felé néz. Az árlista oldalon minden hozzáadott termék meg fog jelenni a bal oldalon a jobb oldalon pedig az áruk. Ezt az árat is tudod módosítani a shift és a space egyidejű megnyomásával, vagy, ha nem ezen az oldalon vagy akkor a "Szervezői árlista" doboz pipálásával is. Az árlista akkor is frissülni fog, ha nem töltöd újra az oldalt, vagy, ha másik oldalról vagy akár másik eszközről változtatod meg az árakat. Továbbá az új termékek automatikusan hozzá lesznek adva a listához. Ha egy termék nevét beszerzési árát vagy haszonkulcsát módosítod, akkor a termék automatikusan frissülni fog. Ha egy terméket kitörölsz az automatikusan el fog tűnni. Ha egy termékből az összeset eladod akkor az a termék is automatikusan el fog tűnni. Ha több termék jelenik meg, mint 11, akkor automatikusan új oszlopban fogja megjeleníteni. Ha így még nem fér ki, vagy túl sok hely van a termékek alatt akkor ez a szám átállítható a "fitInOneCol" nevű változó megváltoztatásával.
 ## Verziók 
 Ez jelenleg a büfés alkalmazás második iterációja.
 Ebben a verzióban nincs szükség internetre, mert mindent helyileg tárol az alkalmazás.

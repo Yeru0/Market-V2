@@ -114,6 +114,34 @@ A címletezés után a termékek statisztikája jön. A termékstatisztika rész
 - Összesen beszerzett: Hány lett beszerezve összesen a jelen látható termékből.
 - Eladott mennyiség: Hány lett eladva a jelen látható termékből ebben a kosárban.
 - Raktárban: A jelen látható termékből mennyi volt még a raktárban az eladás után.
+A főbb statisztikák alatt vannak a változás statisztikái.
+#### Eladáskori statisztikák
+- Egység beszer. ár: Egység beszerzési ár. Egy ilyen termék beszerzési ára.
+- Össz. beszer. ár: Összes beszerzési ár. Az összes ilyen termék beszerzési ára.
+- Szervezői e. ár: Szervezői egység ár. Egy ilyen termék mennyibe kerül szervezőknek.
+- Résztvevői e. ár: Résztvevői egység ár. Egy ilyen termék mennyibe kerül résztvevőknek.
+- Szervezői hk.: Szervezői haszonkulcs. Mennyivel van megemelve a termék ára az Egység beszer. árhoz képest szervezőknek. A termék árát a következő képlettel számolja ki: `p = (n/a)*(1+(k/100))`, ahol `n` - a beszerzett mennyiség, `a` - a beszerzési ár, `k` - a megadott haszonkulcs, `p` - pedig a termék ára.
+- Résztvevői hk.: Résztvevői haszonkulcs. Mennyivel van megemelve a termék ára az Egység beszer. árhoz képest résztvevőnek. A termék árát a következő képlettel számolja ki: `p = (n/a)*(1+(k/100))`, ahol `n` - a beszerzett mennyiség, `a` - a beszerzési ár, `k` - a megadott haszonkulcs, `p` - pedig a termék ára.
+#### Eladás előtti statisztikák
+- Raktárban: Mennyi ilyen termék volt raktárban eladás előtt.
+- Szervezőnek eladott: Mennyi ilyen termék volt eladva szervezőknek az eladás előtt.
+- Résztvevőnek eladott: Mennyi ilyen termék volt eladva résztvevőknek az eladás előtt.
+- Összes eladott: Mennyi ilyen termék volt összesen eladva eladás előtt.
+- Kivett: Mennyi ilyen termék volt kivéve eladás előtt.
+- Szervezői össz. bevétel: Szervezői összes bevétel. Mennyi pénz jött be az ilyen termékek eladásából szervezőknek.
+- Résztvevői össz. bevétel: Résztvevői összes bevétel. Mennyi pénz jött be az ilyen termékek eladásából résztvevőknek.
+- Össz. bevétel: Az összes ilyen termék eladásából befolyó pénz összege eladás előtt.
+- Profit: Az összes ilyen termék eladásából származó bevétel és a beszerzési ár különbsége eladás előtt.
+#### Eladás utáni statisztikák
+- Raktárban: Mennyi ilyen termék volt raktárban eladás után.
+- Szervezőnek eladott: Mennyi ilyen termék volt eladva szervezőknek az eladás után.
+- Résztvevőnek eladott: Mennyi ilyen termék volt eladva résztvevőknek az eladás után.
+- Összes eladott: Mennyi ilyen termék volt összesen eladva eladás után.
+- Kivett: Mennyi ilyen termék volt kivéve eladás után.
+- Szervezői össz. bevétel: Szervezői összes bevétel. Mennyi pénz jött be az ilyen termékek eladásából szervezőknek.
+- Résztvevői össz. bevétel: Résztvevői összes bevétel. Mennyi pénz jött be az ilyen termékek eladásából résztvevőknek.
+- Össz. bevétel: Az összes ilyen termék eladásából befolyó pénz összege eladás után.
+- Profit: Az összes ilyen termék eladásából származó bevétel és a beszerzési ár különbsége eladás után.
 ## Verziók 
 Ez jelenleg a büfés alkalmazás második iterációja.
 Ebben a verzióban nincs szükség internetre, mert mindent helyileg tárol az alkalmazás.

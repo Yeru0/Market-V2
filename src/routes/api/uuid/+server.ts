@@ -1,6 +1,6 @@
-import crypto from "node:crypto";
-import { json } from "@sveltejs/kit";
+import crypto from 'node:crypto';
+import { json } from '@sveltejs/kit';
 
 export const GET = () => {
-    return json(crypto.randomUUID());
+	return json(crypto.randomUUID());
 };

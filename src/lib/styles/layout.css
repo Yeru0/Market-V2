@@ -1,140 +1,136 @@
 /* Header */
 header {
-    margin: auto;
-    transition: var(--t-default);
-    background-color: var(--c-g-scale-t20);
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, 0);
-    margin: auto;
-    display: grid;
-    place-items: center;
-    z-index: 10000;
+	margin: auto;
+	transition: var(--t-default);
+	background-color: var(--c-g-scale-t20);
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, 0);
+	margin: auto;
+	display: grid;
+	place-items: center;
+	z-index: 10000;
 }
 
 @media (min-width: 516px) {
-    header {
-        height: 60px;
-        grid-template-columns: fit-content(200px) auto fit-content(200px);
-        grid-template-rows: auto;
-        grid-template-areas:
-        "logo navbar price-list-button";
-    }
+	header {
+		height: 60px;
+		grid-template-columns: fit-content(200px) auto fit-content(200px);
+		grid-template-rows: auto;
+		grid-template-areas: 'logo navbar price-list-button';
+	}
 }
 
 @media (max-width: 515px) {
-    header {
-        height: 100px;
-        grid-template-columns: repeat(2, auto);
-        grid-template-rows: repeat(2, auto);
-        grid-template-areas:
-        "logo price-list-button"
-        "navbar navbar";
-    }
+	header {
+		height: 100px;
+		grid-template-columns: repeat(2, auto);
+		grid-template-rows: repeat(2, auto);
+		grid-template-areas:
+			'logo price-list-button'
+			'navbar navbar';
+	}
 }
 header.initial {
-    width: 100%;
-    top: 0;
+	width: 100%;
+	top: 0;
 }
 header.progressed {
-    background-color: rgba(33, 33, 33, .7);
-    backdrop-filter: blur(3px) grayscale(60%) brightness(60%);
+	background-color: rgba(33, 33, 33, 0.7);
+	backdrop-filter: blur(3px) grayscale(60%) brightness(60%);
 }
 
 @media (min-width: 1020px) {
-    header.progressed {
-        width: 60%;
-        top: var(--n-s);
-        border-radius: var(--n-xs);
-    }
+	header.progressed {
+		width: 60%;
+		top: var(--n-s);
+		border-radius: var(--n-xs);
+	}
 }
 
 @media (max-width: 1019px) {
-    header.progressed {
-        width: 95%;
-        top: var(--n-s);
-        border-radius: var(--n-xs);
-    }
+	header.progressed {
+		width: 95%;
+		top: var(--n-s);
+		border-radius: var(--n-xs);
+	}
 }
-
 
 /* Header icon */
 
 @media (min-width: 321px) {
-    header div.logo {
-        display: grid;
-    }
+	header div.logo {
+		display: grid;
+	}
 }
 
 @media (max-width: 321px) {
-    header div.logo {
-        display: none;
-    }
+	header div.logo {
+		display: none;
+	}
 }
 
 header div.logo {
-    grid-area: logo;
-    padding: var(--n-xs);
-    width: fit-content;
-    grid-template-columns: repeat(2, auto);
-    place-items: center;
+	grid-area: logo;
+	padding: var(--n-xs);
+	width: fit-content;
+	grid-template-columns: repeat(2, auto);
+	place-items: center;
 }
 
 header div.logo img {
-    width: var(--n-xl);
-    height: var(--n-xl);
+	width: var(--n-xl);
+	height: var(--n-xl);
 }
 
 header div.logo h3 {
-    margin: 0px;
-    margin-left: var(--n-xxs);
-    margin-top: var(--n-xs);
+	margin: 0px;
+	margin-left: var(--n-xxs);
+	margin-top: var(--n-xs);
 }
 
 /* Header navbar */
 
 header nav {
-    grid-area: navbar;
-    width: 100%;
-    max-width: 600px;
-    display: grid;
-    place-items: center;
+	grid-area: navbar;
+	width: 100%;
+	max-width: 600px;
+	display: grid;
+	place-items: center;
 }
 
 header nav ul {
-    padding: 0;
-    list-style-type: none;
-    place-content: space-around;
-    width: 80%;
-    display: grid;
-    grid-template-columns: repeat(4, auto);
+	padding: 0;
+	list-style-type: none;
+	place-content: space-around;
+	width: 80%;
+	display: grid;
+	grid-template-columns: repeat(4, auto);
 }
 
 header nav ul li a.active {
-    color: var(--c-highlight);
-    text-decoration: underline;
+	color: var(--c-highlight);
+	text-decoration: underline;
 }
-
 
 /* Header price list button */
 header div.form-label {
-    grid-area: price-list-button;
-    padding: var(--n-xs);
-    margin: 0;
-    display: grid;
-    grid-template-columns: repeat(2, auto);
-    grid-template-rows: auto;
-    grid-template-areas:
-    "label field";
+	grid-area: price-list-button;
+	padding: var(--n-xs);
+	margin: 0;
+	display: grid;
+	grid-template-columns: repeat(2, auto);
+	grid-template-rows: auto;
+	grid-template-areas: 'label field';
 }
 
 header div.form-label input {
-    margin-left: var(--n-xs);
+	margin-left: var(--n-xs);
 }
 
 header div.form-label label {
-    padding-bottom: 0;
-    display: grid;
-    place-items: center;
+	padding-bottom: 0;
+	display: grid;
+	place-items: center;
 }

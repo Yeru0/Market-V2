@@ -1,156 +1,145 @@
 main.dashboard {
+	/* === Default === */
+	& td.value {
+		text-align: right;
+	}
 
-    /* === Default === */
-    & td.value {
-        text-align: right;
-    }
+	& td.name {
+		text-align: left;
+	}
 
-    & td.name {
-        text-align: left;
-    }
+	/* === Stats === */
+	section.stats {
+		width: 100%;
+		display: grid;
+		gap: var(--n-m);
 
+		& h2 {
+			grid-area: title;
+		}
 
+		& table.money {
+			grid-area: money;
+		}
 
-    /* === Stats === */
-    section.stats {
-        width: 100%;
-        display: grid;
-        gap: var(--n-m);
-    
-        & h2 {
-            grid-area: title;
-        }
+		& table.storage {
+			grid-area: storage;
+		}
 
-        & table.money {
-            grid-area: money;
-        }
+		& td {
+			padding: var(--n-xxxs);
+		}
+	}
+	@media (min-width: 516px) {
+		section.stats {
+			grid-template-columns: repeat(2, 50%);
+			grid-template-rows: repeat(2, auto);
+			grid-template-areas:
+				'title title'
+				'money storage';
+		}
+	}
 
-        & table.storage {
-            grid-area: storage;
-        }
+	@media (max-width: 515px) {
+		section.stats {
+			grid-template-columns: auto;
+			grid-template-rows: repeat(3, auto);
+			grid-template-areas:
+				'title'
+				'money'
+				'storage';
+		}
+	}
 
-        & td {
-            padding: var(--n-xxxs);
-        }
+	/* === Notes === */
+	section.notes {
+		display: grid;
+		grid-template-columns: repeat(2, 50%);
+		grid-template-rows: repeat(3, auto);
+		grid-template-areas:
+			'title title'
+			'sum button'
+			'table table';
 
-    }
-    @media (min-width: 516px) {
-        section.stats {
-            grid-template-columns: repeat(2, 50%);
-            grid-template-rows: repeat(2, auto);
-            grid-template-areas: 
-            "title title"
-            "money storage";
-        }
-    }
-    
-    @media (max-width: 515px) {
-        section.stats {
-            grid-template-columns: auto;
-            grid-template-rows: repeat(3, auto);
-            grid-template-areas: 
-            "title"
-            "money"
-            "storage";
-        }
-    }
+		& h2 {
+			grid-area: title;
+		}
 
+		& p.sum {
+			grid-area: sum;
+			place-self: center;
+		}
 
+		& div.buttons {
+			grid-area: button;
+			place-self: center;
+			width: fit-content;
+			height: fit-content;
+		}
 
-    /* === Notes === */
-    section.notes {
-        display: grid;
-        grid-template-columns: repeat(2, 50%);
-        grid-template-rows: repeat(3, auto);
-        grid-template-areas: 
-        "title title"
-        "sum button"
-        "table table";
+		& div.table {
+			grid-area: table;
+			display: grid;
+			place-self: center;
+		}
+	}
 
-        & h2 {
-            grid-area: title;
-        }
+	/* === Events === */
+	section.sells {
+		display: grid;
+		grid-template-columns: auto;
+		grid-template-rows: repeat(2, auto);
+		grid-template-areas:
+			'title'
+			'body';
+	}
 
-        & p.sum {
-            grid-area: sum;
-            place-self: center;
-        }
+	& h2 {
+		grid-area: title;
+	}
 
-        & div.buttons {
-            grid-area: button;
-            place-self: center;
-            width: fit-content;
-            height: fit-content;
-        }
+	& .body {
+		grid-area: body;
+		display: grid;
 
-        & div.table {
-            grid-area: table;
-            display: grid;
-            place-self: center;
-        }
+		& button.load,
+		button.reload {
+			place-self: center;
+			width: fit-content;
+			height: fit-content;
+		}
+	}
 
-    }
+	& .body .sell-list {
+		margin: var(--n-m) 0;
+	}
 
-    /* === Events === */
-    section.sells {
-        display: grid;
-        grid-template-columns: auto;
-        grid-template-rows: repeat(2, auto);
-        grid-template-areas:
-        "title"
-        "body";
-    }
+	& .body .sell-list .sell-event {
+		border: 1px solid var(--c-g-scale-t9a);
+		margin-bottom: var(--n-m);
+		padding: var(--n-m);
+		border-radius: var(--n-m);
 
-    & h2 {
-        grid-area: title;
-    }
+		& div.head {
+			width: 100%;
+			display: grid;
+			grid-template-columns: repeat(2, auto);
+			grid-template-rows: auto;
+			grid-template-areas: 'title button';
 
-    & .body {
-        grid-area: body;
-        display: grid;
+			& h3 {
+				grid-area: title;
+				place-self: center start;
+			}
 
-        & button.load, button.reload {
-            place-self: center;
-            width: fit-content;
-            height: fit-content;
-        }
+			& button {
+				grid-area: button;
+				place-self: center end;
+			}
+		}
 
-    }
-
-    & .body .sell-list {
-        margin: var(--n-m) 0;
-    }
-
-    & .body .sell-list .sell-event {
-        border: 1px solid var(--c-g-scale-t9a);
-        margin-bottom: var(--n-m);
-        padding: var(--n-m);
-        border-radius: var(--n-m);
-
-        & div.head {
-            width: 100%;
-            display: grid;
-            grid-template-columns: repeat(2, auto);
-            grid-template-rows: auto;
-            grid-template-areas:
-            "title button";
-
-            & h3 {
-                grid-area: title;
-                place-self: center start;
-            }
-
-            & button {
-                grid-area: button;
-                place-self: center end;
-            }
-        }
-
-        & h3 {
-            margin: 0;
-        }
-
-    }
-
-
+		& h3 {
+			margin: 0;
+		}
+	}
 }

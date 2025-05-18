@@ -1,5 +1,4 @@
 import crypto from 'node:crypto';
-import { error, log } from 'node:console';
 
 export class Record {
 	id: string;

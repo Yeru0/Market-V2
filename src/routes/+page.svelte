@@ -155,6 +155,8 @@
 
                 product.prod.inBasket = false
 
+                product.prod.setProps()
+
             }
 
             for (const prod of productsToRemove) {

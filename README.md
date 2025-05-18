@@ -160,5 +160,6 @@ A MARKET V-3-ra tekintettel jótanácsok:
 - Kiszállításos rendeléses dolog?
 - Termék elrejtése ár listáról
 - Legyen az adatbázis adatokból egy store ami eltárolja őket az adott session alatt és nem kell őket újra olvasni navigáláskor
+- Borravalo beleszamitasa eladaskor
 ## Bugok
 - Az adatbázis van, hogy szar, ezért érdemes git-tel is figyelni főleg az adatbázistáblák változását

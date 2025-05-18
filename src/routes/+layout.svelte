@@ -189,8 +189,8 @@
         <ul>
             <li><a class="{page.url.pathname == "/" ? "active" : ""}" href="/">Eladás</a></li>
             <li><a class="{page.url.pathname == "/prices" ? "active" : ""}" href="/prices">Árlista</a></li>
-            <li><a class="{page.url.pathname == "/dashboard" ? "active" : ""}" href="/dashboard">Irányítópult</a></li>
-            <li><a class="{page.url.pathname == "/storage" ? "active" : ""}" href="/storage">Raktár</a></li>
+            <li><a class="{page.url.pathname == "/dashboard" ? "active" : ""}" href="/dashboard" data-sveltekit-reload>Irányítópult</a></li>
+            <li><a class="{page.url.pathname == "/storage" ? "active" : ""}" href="/storage" data-sveltekit-reload>Raktár</a></li>
         </ul>
     
     </nav>

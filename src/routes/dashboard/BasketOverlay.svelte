@@ -254,7 +254,7 @@
     
     <div class="overlay-head">
         <h1 class="title">Kosár eladva!</h1>
-        <p class="times">{basket.events[0].dateTime}:{basket.events[0].seconds}</p>
+        <p class="time">{basket.events[0].dateTime}:{basket.events[0].seconds}</p>
     </div>
     
     <ul class="data">

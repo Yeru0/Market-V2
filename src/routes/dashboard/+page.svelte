@@ -274,7 +274,7 @@
                             </div>
                             <ol>
                                 {#each basket.events as event}
-                                        <li><strong>{event.productA.name}</strong></li>
+                                        <li><strong>{event.productA.name}</strong> × {event.productB.allRemainingN - event.productA.allRemainingN}</li>
                                 {/each}
                             </ol>
                             {#if basket.overlay}

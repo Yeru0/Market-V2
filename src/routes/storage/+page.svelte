@@ -19,6 +19,7 @@
     for (const product of data.products) {
         // svelte-ignore state_referenced_locally
         products.push(new Product(product))
+        // svelte-ignore state_referenced_locally
         products = orderStorage(products)
     }
 

@@ -68,7 +68,7 @@ export class Product {
         this.singlePartProfitM = Math.round(this.singlePartPriceM - this.singleProductValueM);
         this.allOrgProfitM = Math.round(this.singleOrgProfitM * this.soldToOrgN);
         this.allPartProfitM = Math.round(this.singlePartProfitM * this.soldToPartN);
-        this.allProfitM = Math.round(this.allPartProfitM + this.allOrgProfitM - this.purchasePriceM);
+        this.allProfitM = Math.round(this.allIncomeM - this.purchasePriceM);
         this.valueOfSoldProductsM = this.allSoldN * this.singleProductValueM; //ELÁBÉ
         this.valueOfSoldProductsOrgM = this.soldToOrgN * this.singleProductValueM; //ELÁBÉ
         this.valueOfSoldProductsPartM = this.soldToPartN * this.singleProductValueM; //ELÁBÉ

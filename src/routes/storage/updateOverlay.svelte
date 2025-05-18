@@ -92,7 +92,7 @@
                     text: "A termék módosítása sikertelen volt!",
                     show: true
                 }
-        }
+    }
         
 
     }
@@ -138,7 +138,6 @@
                 data.organiserProfitMargin = parseFloat(((data.singleOrgPriceM / ((data.purchasePriceM / data.purchasedN) / 100)) - 100).toFixed(4))
                 break
         }
-        
     }
 
     // Hide body scrollbar
@@ -172,14 +171,10 @@
         display: grid;
         place-content: center;
         grid-template-columns: auto;
-        grid-template-rows: repeat(2, auto);
+        grid-template-rows: auto;
         grid-template-areas:
-        "p"
         "buttons";
 
-        & p {
-            grid-area: p;
-        }
         & .buttons {
             grid-area: buttons;
         }

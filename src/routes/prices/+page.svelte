@@ -35,8 +35,6 @@
 
         $priceListWebSocket.ws.onmessage = ((value) => {
             let data = JSON.parse(value.data)
-
-            if (Object.entries(data).length !== 2) return
             let prods = []
             
             

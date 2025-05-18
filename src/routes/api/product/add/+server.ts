@@ -22,9 +22,9 @@ export const POST = async ({ request }) => {
         data.name === "" ||
         data.organiserProfitMargin <= 0 ||
         data.participantProfitMargin <= 0 ||
-        data.purchasedM <= 0 ||
+        data.purchasePriceM <= 0 ||
         data.purchasedN <= 0 ||
-        data.barcode === ""
+        data.code === ""
     ) return new Response(null, { status: 204 });
 
     try {
@@ -40,8 +40,8 @@ export const POST = async ({ request }) => {
                 0,
                 0,
                 data.purchasedN,
-                data.purchasedM,
-                data.barcode
+                data.purchasePriceM,
+                data.code
             ],
             false
         );

@@ -26,13 +26,12 @@
         id,
         name: "",
         purchasedN: 0,
-        purchasedM: 0,
+        purchasePriceM: 0,
         organiserProfitMargin: 0,
         participantProfitMargin: 0,
-        organiserPrice: 0,
-        participantPrice: 0,
-        barcode: "",
-        free: false,
+        singleOrgPriceM: 0,
+        singlePartPriceM: 0,
+        code: "",
         priceInputType: "percent",
     })
 
@@ -62,15 +61,15 @@
     })
 
 
-    const handleSubmit = async (e: SubmitEvent) => {
+    const handleSubmit = async () => {
 
         try {
 
             if (
                 data.name === "" ||
-                data.purchasedM <= 0 ||
+                data.purchasePriceM <= 0 ||
                 data.purchasedN <= 0 ||
-                data.barcode === ""
+                data.code === ""
             ) {
                 innerToast.text = "Az összes mezőt töltsd ki!"
                 innerToast.show = true
@@ -92,7 +91,7 @@
                 return
             }
 
-            data.barcode = data.barcode.substring(1) // Remove first character cause of code reading reasonss
+            data.code = data.code.substring(1) // Remove first character cause of code reading reasonss
 
             // Send the added product to the database
             await fetch("/api/product/add", {
@@ -102,23 +101,19 @@
                 })
             });
             
-            let form = e.target as HTMLFormElement
-            if (form === null) return
-            let formData = new FormData(form)
-            
             products.push(new Product({
                 id: id,
-                name: formData.get("product-name"),
-                organiserProfitMargin: formData.get("organiser-profit-margin"),
-                participantProfitMargin: formData.get("participant-profit-margin"),
+                name: data.name,
+                organiserProfitMargin: data.organiserProfitMargin,
+                participantProfitMargin: data.participantProfitMargin,
                 soldToOrgN: 0,
                 soldToPartN: 0,
                 takenOutN: 0,
-                purchasedN: formData.get("purchased-amount"),
-                purchasePriceM: formData.get("purchase-price"),
-                code: formData.get("barcode"),
-            }))                    
-            
+                purchasedN: data.purchasedN,
+                purchasePriceM: data.purchasePriceM,
+                code: data.code,
+            }))
+
             products = orderStorage(products)
 
             $priceListWebSocket.ws.send(JSON.stringify({products: {...products}, id: $priceListWebSocket.id})) // Update the price list
@@ -145,14 +140,14 @@
     const calcPrice = (to: "org" | "part" | "b") => {
         switch (to) {
             case "org":
-                data.organiserPrice = Math.round((data.purchasedM / data.purchasedN) / 100 * (100 + data.organiserProfitMargin));
+                data.singleOrgPriceM = Math.round((data.purchasePriceM / data.purchasedN) / 100 * (100 + data.organiserProfitMargin));
                 break
             case "part":
-                data.participantPrice = Math.round((data.purchasedM / data.purchasedN) / 100 * (100 + data.participantProfitMargin));
+                data.singlePartPriceM = Math.round((data.purchasePriceM / data.purchasedN) / 100 * (100 + data.participantProfitMargin));
                 break
             case "b":
-                data.participantPrice = Math.round((data.purchasedM / data.purchasedN) / 100 * (100 + data.participantProfitMargin));
-                data.organiserPrice = Math.round((data.purchasedM / data.purchasedN) / 100 * (100 + data.organiserProfitMargin));
+                data.singlePartPriceM = Math.round((data.purchasePriceM / data.purchasedN) / 100 * (100 + data.participantProfitMargin));
+                data.singleOrgPriceM = Math.round((data.purchasePriceM / data.purchasedN) / 100 * (100 + data.organiserProfitMargin));
                 break
         }
     }
@@ -160,14 +155,14 @@
     const calcPercent = (to: "org" | "part" | "b") => {
         switch (to) {
             case "org":
-                data.organiserProfitMargin = parseFloat(((data.organiserPrice / ((data.purchasedM / data.purchasedN) / 100)) - 100).toFixed(4))
+                data.organiserProfitMargin = parseFloat(((data.singleOrgPriceM / ((data.purchasePriceM / data.purchasedN) / 100)) - 100).toFixed(4))
                 break
             case "part":
-                data.participantProfitMargin = parseFloat(((data.participantPrice / ((data.purchasedM / data.purchasedN) / 100)) - 100).toFixed(4))
+                data.participantProfitMargin = parseFloat(((data.singlePartPriceM / ((data.purchasePriceM / data.purchasedN) / 100)) - 100).toFixed(4))
                 break
             case "b":
-                data.participantProfitMargin = parseFloat(((data.participantPrice / ((data.purchasedM / data.purchasedN) / 100)) - 100).toFixed(4))
-                data.organiserProfitMargin = parseFloat(((data.organiserPrice / ((data.purchasedM / data.purchasedN) / 100)) - 100).toFixed(4))
+                data.participantProfitMargin = parseFloat(((data.singlePartPriceM / ((data.purchasePriceM / data.purchasedN) / 100)) - 100).toFixed(4))
+                data.organiserProfitMargin = parseFloat(((data.singleOrgPriceM / ((data.purchasePriceM / data.purchasedN) / 100)) - 100).toFixed(4))
                 break
         }
     }
@@ -203,14 +198,10 @@
         display: grid;
         place-content: center;
         grid-template-columns: auto;
-        grid-template-rows: repeat(2, auto);
+        grid-template-rows: auto;
         grid-template-areas:
-        "p"
         "buttons";
 
-        & p {
-            grid-area: p;
-        }
         & .buttons {
             grid-area: buttons;
         }
@@ -295,7 +286,7 @@
             <label for="purchase-price" class="purchase-price">
                 Beszerzési ár
             </label>
-            <input type="number" name="purchase-price" required bind:value={data.purchasedM} onchange={() => { calcPercent("b"); calcPrice("b") }} min="1">
+            <input type="number" name="purchase-price" required bind:value={data.purchasePriceM} onchange={() => { calcPercent("b"); calcPrice("b") }} min="1">
         </div>
 
         {#if data.priceInputType == "percent"}
@@ -321,23 +312,23 @@
                 <label for="organiser-price" class="organiser-price">
                     Szervezői ár
                 </label>
-                <input type="number" name="organiser-price" required bind:value={data.organiserPrice} onchange={() => {calcPercent("org")}} min="1">
+                <input type="number" name="organiser-price" required bind:value={data.singleOrgPriceM} onchange={() => {calcPercent("org")}} min="1">
             </div>
             
             <div class="form-label">
                 <label for="participant-price" class="participant-price">
                     Résztvevői ár
                 </label>
-                <input type="number" name="participant-price" required bind:value={data.participantPrice} onchange={() => {calcPercent("part")}} min="1">
+                <input type="number" name="participant-price" required bind:value={data.singlePartPriceM} onchange={() => {calcPercent("part")}} min="1">
             </div>
 
         {/if}
 
         <div class="form-label">
-            <label for="barcode" class="barcode">
+            <label for="code" class="code">
                 Vonalkód
             </label>
-            <input type="text" name="barcode" required bind:value={data.barcode}>
+            <input type="text" name="code" required bind:value={data.code}>
         </div>
 
         <div class="submit-buttons">

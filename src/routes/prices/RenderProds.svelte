@@ -10,8 +10,6 @@
         colClass
      } = $props()
 
-     $inspect(col1)
-
 </script>
 
 <style>

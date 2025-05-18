@@ -1,4 +1,3 @@
-import { error } from "@sveltejs/kit";
 import { readTable } from "$lib/db/db";
 import { redirect, error } from "@sveltejs/kit";
 

@@ -5,7 +5,7 @@ import readline from 'node:readline';
 export function readLbL(fileName: string): Promise<string[]> {
 	return new Promise((resolve: (value: string[]) => void, reject: (value: Error) => void) => {
 		try {
-			let fileStream = fs.createReadStream(`src/lib/db/tables/${fileName}`);
+			let fileStream = fs.createReadStream(`static/tables/${fileName}`);
 
 			const rl = readline.createInterface({
 				input: fileStream,
@@ -38,7 +38,7 @@ export function writeLbL(
 		let file: any;
 		let linesWritten: number = 0;
 		if (overwrite) {
-			await fs.writeFile(`src/lib/db/tables/${fileName}`, `${header[0]}`, (err) => {
+			await fs.writeFile(`static/tables/${fileName}`, `${header[0]}`, (err) => {
 				if (err) {
 					reject(err);
 				}
@@ -53,7 +53,7 @@ export function writeLbL(
 		//I need to slow this down to avoid conflicts
 		let writingToFile = setInterval(async () => {
 			let line = linesToWrite[linesWritten];
-			await fs.appendFile(`src/lib/db/tables/${fileName}`, `\n${line}`, (err) => {
+			await fs.appendFile(`static/tables/${fileName}`, `\n${line}`, (err) => {
 				if (err) {
 					reject(err);
 				}

@@ -6,7 +6,6 @@ Ez itt [Horváth Péter Benedek](https://github.com/Yeru0) által készített é
 
 - 100% organikus, termelői, kézzel készült stílusok 🥀
 - 100% organikus, termelői, kézzel készült kód 🌸
-- Jót tesz a léleknek 😌
 
 ## License
 
